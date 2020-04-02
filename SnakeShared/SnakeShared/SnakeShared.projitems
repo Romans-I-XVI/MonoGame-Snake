@@ -23,5 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteFontExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomMain.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomPlay.cs" />
   </ItemGroup>
 </Project>
