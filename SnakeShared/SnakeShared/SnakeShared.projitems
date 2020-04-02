@@ -15,7 +15,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Engine\SaveDataHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlBack.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\GameplaySpeeds.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\BoolExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\RandomExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\RectangleExtensions.cs" />
@@ -24,5 +26,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteFontExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomPlay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
   </ItemGroup>
 </Project>
