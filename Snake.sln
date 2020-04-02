@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snake", "Snake\Snake.csproj", "{DDE37F7B-0CEC-419E-8572-7B5471554374}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoEngine", "monoEngine\MonoEngine\MonoEngine.shproj", "{21B5F966-179F-4871-A25A-FE80FAE9AFCF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SnakeShared", "SnakeShared\SnakeShared\SnakeShared.shproj", "{23D7538D-5B16-4996-B403-39E690723E54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDE37F7B-0CEC-419E-8572-7B5471554374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE37F7B-0CEC-419E-8572-7B5471554374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE37F7B-0CEC-419E-8572-7B5471554374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE37F7B-0CEC-419E-8572-7B5471554374}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>23d7538d-5b16-4996-b403-39e690723e54</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SnakeShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\AvailableContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\ContentHolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\SnakeGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Engine\SaveDataHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlBack.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\BoolExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RandomExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RectangleExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteBatchExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteFontExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomMain.cs" />
+  </ItemGroup>
+</Project>
