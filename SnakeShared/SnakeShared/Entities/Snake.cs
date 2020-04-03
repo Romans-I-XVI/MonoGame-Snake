@@ -101,6 +101,24 @@ namespace Snake.Entities
 				this.CurrentLocation.Y += this.CurrentSpeed;
 
 			if (this.CurrentLocation.X != previous_x || this.CurrentLocation.Y != previous_y) {
+				if (this.CurrentLocation.X - 8 < 0) {
+					this.CurrentLocation.X = 854 - 8;
+					this.InternalLocation.X = this.CurrentLocation.X;
+				}
+				else if (this.CurrentLocation.X + 8 > 854) {
+					this.CurrentLocation.X = 8;
+					this.InternalLocation.X = this.CurrentLocation.X;
+				}
+
+				if (this.CurrentLocation.Y - 8 < 0) {
+					this.CurrentLocation.Y = 480 - 8;
+					this.InternalLocation.Y = this.CurrentLocation.Y;
+				}
+				else if (this.CurrentLocation.Y + 8 > 480) {
+					this.CurrentLocation.Y = 8;
+					this.InternalLocation.Y = this.CurrentLocation.Y;
+				}
+
 				this.SnakeLocations["x"].Insert(0, this.CurrentLocation.X);
 				this.SnakeLocations["y"].Insert(0, this.CurrentLocation.Y);
 				this.Position = this.CurrentLocation.ToVector2();
