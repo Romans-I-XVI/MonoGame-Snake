@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
@@ -15,21 +16,24 @@ namespace Snake.Entities
 			[GameplaySpeeds.Medium] = 2,
 			[GameplaySpeeds.Fast] = 4,
 		});
-		private ReadOnlyDictionary<string, List<int>> SnakeLocations = new ReadOnlyDictionary<string, List<int>>(new Dictionary<string, List<int>> {
+		private readonly ReadOnlyDictionary<string, List<int>> SnakeLocations = new ReadOnlyDictionary<string, List<int>>(new Dictionary<string, List<int>> {
 			["x"] = new List<int>(),
 			["y"] = new List<int>(),
 		});
 		private readonly List<SnakeTail> Tail = new List<SnakeTail>();
+		private readonly List<Directions> QueuedInput = new List<Directions>();
 
 		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
 		private Directions Direction;
 		private Vector2 InternalLocation;
 		private Point CurrentLocation;
+		private Point DirectionChangeLocation;
 
 		public Snake() : this(new Point(170 - 8, 480 / 2), Directions.Right) {}
 
 		public Snake(Point position, Directions direction) {
 			this.CurrentLocation = position;
+			this.DirectionChangeLocation = this.CurrentLocation;
 			this.InternalLocation = position.ToVector2();
 			this.Position = this.InternalLocation;
 			this.Direction = direction;
@@ -61,6 +65,11 @@ namespace Snake.Entities
 
 		public override void onUpdate(float dt) {
 			base.onUpdate(dt);
+
+			if (this.QueuedInput.Count > 0 && this.IsReadyToChangeDirections()) {
+				this.ChangeDirection(this.QueuedInput[0]);
+				this.QueuedInput.RemoveAt(0);
+			}
 
 			switch (this.Direction) {
 				case Directions.Left:
@@ -124,38 +133,48 @@ namespace Snake.Entities
 #endif
 			switch (e.Key) {
 				case Keys.W:
-					this.TryChangeDirection(Directions.Up);
+					this.OnInputDirection(Directions.Up);
 					break;
 				case Keys.S:
-					this.TryChangeDirection(Directions.Down);
+					this.OnInputDirection(Directions.Down);
 					break;
 				case Keys.A:
-					this.TryChangeDirection(Directions.Left);
+					this.OnInputDirection(Directions.Left);
 					break;
 				case Keys.D:
-					this.TryChangeDirection(Directions.Right);
+					this.OnInputDirection(Directions.Right);
 					break;
 			}
 		}
 
-		private void TryChangeDirection(Directions direction) {
-			if (direction == this.Direction)
+		private void OnInputDirection(Directions direction) {
+			var previous_direction = (this.QueuedInput.Count > 0) ? this.QueuedInput[this.QueuedInput.Count - 1] : this.Direction;
+			if (direction == previous_direction)
 				return;
 
 			bool can_change;
 			if (direction == Directions.Right)
-				can_change = this.Direction != Directions.Left;
+				can_change = previous_direction != Directions.Left;
 			else if (direction == Directions.Left)
-				can_change = this.Direction != Directions.Right;
+				can_change = previous_direction != Directions.Right;
 			else if (direction == Directions.Up)
-				can_change = this.Direction != Directions.Down;
+				can_change = previous_direction != Directions.Down;
 			else
-				can_change = this.Direction != Directions.Up;
+				can_change = previous_direction != Directions.Up;
 
 			if (can_change) {
-				this.Direction = direction;
-				this.InternalLocation = this.CurrentLocation.ToVector2();
+				if (this.IsReadyToChangeDirections()) {
+					this.ChangeDirection(direction);
+				} else {
+					this.QueuedInput.Add(direction);
+				}
 			}
+		}
+
+		private void ChangeDirection(Directions direction) {
+			this.Direction = direction;
+			this.InternalLocation = this.CurrentLocation.ToVector2();
+			this.DirectionChangeLocation = this.CurrentLocation;
 		}
 
 		private void AddToSnake() {
@@ -166,6 +185,10 @@ namespace Snake.Entities
 			};
 			Engine.SpawnInstance(tail);
 			this.Tail.Add(tail);
+		}
+
+		private bool IsReadyToChangeDirections() {
+			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= 18 || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= 18);
 		}
 
 		internal class SnakeTail : Entity
