@@ -57,7 +57,7 @@ namespace Snake.Entities
 				this.Tail.Add(tail);
 			}
 
-			for (int i = 0; i < this.Tail.Count * this.CurrentSpeed; i++) {
+			for (int i = 0; i < this.Tail.Count * (16 / this.CurrentSpeed); i++) {
 				this.SnakeLocations["x"].Add(this.CurrentLocation.X - (i * this.CurrentSpeed));
 				this.SnakeLocations["y"].Add(this.CurrentLocation.Y);
 			}
