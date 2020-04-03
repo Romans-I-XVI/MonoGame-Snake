@@ -11,6 +11,7 @@ namespace Snake.Rooms
 			Engine.SpawnInstance<Entities.Snake>();
 			Engine.SpawnInstance<ControlPause>();
 			Engine.SpawnInstance<ControlFoodSpawner>();
+			Engine.SpawnInstance<Background>();
 		}
 
 		public override void onSwitchAway(Room next_room) {

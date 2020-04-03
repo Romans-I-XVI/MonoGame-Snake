@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Engine\ContentHolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engine\SnakeGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engine\SaveDataHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Background.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlBack.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFoodSpawner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
