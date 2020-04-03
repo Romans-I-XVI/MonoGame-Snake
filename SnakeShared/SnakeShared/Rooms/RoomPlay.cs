@@ -10,6 +10,7 @@ namespace Snake.Rooms
 		public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
 			Engine.SpawnInstance<Entities.Snake>();
 			Engine.SpawnInstance<ControlPause>();
+			Engine.SpawnInstance<ControlFoodSpawner>();
 		}
 
 		public override void onSwitchAway(Room next_room) {
