@@ -65,6 +65,15 @@ namespace Snake.Entities
 			}
 		}
 
+		public override void onUpdate(float dt) {
+			base.onUpdate(dt);
+
+			if (this.Alive)
+				this.onUpdate_Alive(dt);
+			else
+				this.onUpdate_Dead(dt);
+		}
+
 		private void onUpdate_Alive(float dt) {
 			if (this.QueuedInput.Count > 0 && this.IsReadyToChangeDirections()) {
 				this.ChangeDirection(this.QueuedInput[0]);
@@ -141,15 +150,6 @@ namespace Snake.Entities
 
 		private void onUpdate_Dead(float dt) {
 			// TODO: Add death sequence
-		}
-
-		public override void onUpdate(float dt) {
-			base.onUpdate(dt);
-
-			if (this.Alive)
-				this.onUpdate_Alive(dt);
-			else
-				this.onUpdate_Dead(dt);
 		}
 
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
