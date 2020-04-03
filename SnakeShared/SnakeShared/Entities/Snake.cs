@@ -12,6 +12,8 @@ namespace Snake.Entities
 {
 	public class Snake : Entity
 	{
+		public const int Size = 16;
+
 		private readonly ReadOnlyDictionary<GameplaySpeeds, int> MoveSpeeds = new ReadOnlyDictionary<GameplaySpeeds, int>(new Dictionary<GameplaySpeeds, int> {
 			[GameplaySpeeds.Slow] = 1,
 			[GameplaySpeeds.Medium] = 2,
@@ -31,7 +33,7 @@ namespace Snake.Entities
 		private Point CurrentLocation;
 		private Point DirectionChangeLocation;
 
-		public Snake() : this(new Point(170 - 8, 480 / 2), Directions.Right) {}
+		public Snake() : this(new Point(170 - Snake.Size / 2, 480 / 2), Directions.Right) {}
 
 		public Snake(Point position, Directions direction) {
 			this.CurrentLocation = position;
@@ -52,15 +54,15 @@ namespace Snake.Entities
 
 			for (int i = 0; i < 2; i++) {
 				var tail = new SnakeTail {
-					Position = new Vector2(this.Position.X - (i + 1) * 16, this.Position.Y),
+					Position = new Vector2(this.Position.X - (i + 1) * Snake.Size, this.Position.Y),
 					Depth = this.Depth + 1 + i
 				};
 				Engine.SpawnInstance(tail);
 				this.Tail.Add(tail);
 			}
 
-			for (int i = 0; i < this.Tail.Count * (16 / this.CurrentSpeed); i++) {
-				this.SnakeLocations["x"].Add(this.CurrentLocation.X - (i * this.CurrentSpeed));
+			for (int i = 0; i < this.Tail.Count * Snake.Size; i++) {
+				this.SnakeLocations["x"].Add(this.CurrentLocation.X - i);
 				this.SnakeLocations["y"].Add(this.CurrentLocation.Y);
 			}
 		}
@@ -95,35 +97,36 @@ namespace Snake.Entities
 					break;
 			}
 
-			int previous_x = this.CurrentLocation.X;
-			int previous_y = this.CurrentLocation.Y;
+			while (this.InternalLocation.X <= this.CurrentLocation.X - 1 ||
+				this.InternalLocation.X >= this.CurrentLocation.X + 1 ||
+				this.InternalLocation.Y <= this.CurrentLocation.Y - 1 ||
+				this.InternalLocation.Y >= this.CurrentLocation.Y + 1) {
 
-			if (this.InternalLocation.X <= this.CurrentLocation.X - this.CurrentSpeed)
-				this.CurrentLocation.X -= this.CurrentSpeed;
-			else if (this.InternalLocation.X >= this.CurrentLocation.X + this.CurrentSpeed)
-				this.CurrentLocation.X += this.CurrentSpeed;
+				if (this.InternalLocation.X <= this.CurrentLocation.X - 1)
+					this.CurrentLocation.X -= 1;
+				else if (this.InternalLocation.X >= this.CurrentLocation.X + 1)
+					this.CurrentLocation.X += 1;
 
-			if (this.InternalLocation.Y <= this.CurrentLocation.Y - this.CurrentSpeed)
-				this.CurrentLocation.Y -= this.CurrentSpeed;
-			else if (this.InternalLocation.Y >= this.CurrentLocation.Y + this.CurrentSpeed)
-				this.CurrentLocation.Y += this.CurrentSpeed;
+				if (this.InternalLocation.Y <= this.CurrentLocation.Y - 1)
+					this.CurrentLocation.Y -= 1;
+				else if (this.InternalLocation.Y >= this.CurrentLocation.Y + 1)
+					this.CurrentLocation.Y += 1;
 
-			if (this.CurrentLocation.X != previous_x || this.CurrentLocation.Y != previous_y) {
-				if (this.CurrentLocation.X - 8 < 0) {
-					this.CurrentLocation.X = 854 - 8;
+				if (this.CurrentLocation.X - Snake.Size / 2 < 0) {
+					this.CurrentLocation.X = 854 - Snake.Size / 2;
 					this.InternalLocation.X = this.CurrentLocation.X;
 				}
-				else if (this.CurrentLocation.X + 8 > 854) {
-					this.CurrentLocation.X = 8;
+				else if (this.CurrentLocation.X + Snake.Size / 2 > 854) {
+					this.CurrentLocation.X = Snake.Size / 2;
 					this.InternalLocation.X = this.CurrentLocation.X;
 				}
 
-				if (this.CurrentLocation.Y - 8 < 0) {
-					this.CurrentLocation.Y = 480 - 8;
+				if (this.CurrentLocation.Y - Snake.Size / 2 < 0) {
+					this.CurrentLocation.Y = 480 - Snake.Size / 2;
 					this.InternalLocation.Y = this.CurrentLocation.Y;
 				}
-				else if (this.CurrentLocation.Y + 8 > 480) {
-					this.CurrentLocation.Y = 8;
+				else if (this.CurrentLocation.Y + Snake.Size / 2 > 480) {
+					this.CurrentLocation.Y = Snake.Size / 2;
 					this.InternalLocation.Y = this.CurrentLocation.Y;
 				}
 
@@ -133,16 +136,14 @@ namespace Snake.Entities
 			}
 
 			for (int i = 0; i < this.Tail.Count; i++) {
-				int j = 16 / this.CurrentSpeed;
-
-				int array_pos = (i + 1) * j;
+				int array_pos = (i + 1) * Snake.Size;
 				if (this.SnakeLocations["x"].Count > array_pos) {
 					this.Tail[i].Position.X = this.SnakeLocations["x"][array_pos];
 					this.Tail[i].Position.Y = this.SnakeLocations["y"][array_pos];
 				}
 			}
 
-			while (this.SnakeLocations["x"].Count > this.Tail.Count * (16 / this.CurrentSpeed)) {
+			while (this.SnakeLocations["x"].Count > this.Tail.Count * Snake.Size) {
 				this.SnakeLocations["x"].RemoveAt(this.SnakeLocations["x"].Count - 1);
 				this.SnakeLocations["y"].RemoveAt(this.SnakeLocations["y"].Count - 1);
 			}
@@ -236,7 +237,7 @@ namespace Snake.Entities
 		}
 
 		private bool IsReadyToChangeDirections() {
-			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= 18 || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= 18);
+			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= Snake.Size + 2 || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= Snake.Size + 2);
 		}
 
 		internal class SnakeTail : Entity
