@@ -191,6 +191,30 @@ namespace Snake.Entities
 			}
 		}
 
+		public override void onButtonDown(GamePadEventArgs e) {
+			base.onButtonDown(e);
+#if DEBUG
+			if (e.Button == Buttons.Y) {
+				Engine.ResetRoom();
+			}
+#endif
+
+			switch (e.Button) {
+			case Buttons.DPadUp:
+				this.OnInputDirection(Directions.Up);
+				break;
+			case Buttons.DPadDown:
+				this.OnInputDirection(Directions.Down);
+				break;
+			case Buttons.DPadLeft:
+				this.OnInputDirection(Directions.Left);
+				break;
+			case Buttons.DPadRight:
+				this.OnInputDirection(Directions.Right);
+				break;
+			}
+		}
+
 		private void OnInputDirection(Directions direction) {
 			var previous_direction = (this.QueuedInput.Count > 0) ? this.QueuedInput[this.QueuedInput.Count - 1] : this.Direction;
 			if (direction == previous_direction)
