@@ -24,6 +24,7 @@ namespace Snake.Entities
 		private readonly List<SnakeTail> Tail = new List<SnakeTail>();
 		private readonly List<Directions> QueuedInput = new List<Directions>();
 
+		private bool Alive = true;
 		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
 		private Directions Direction;
 		private Vector2 InternalLocation;
@@ -64,9 +65,7 @@ namespace Snake.Entities
 			}
 		}
 
-		public override void onUpdate(float dt) {
-			base.onUpdate(dt);
-
+		private void onUpdate_Alive(float dt) {
 			if (this.QueuedInput.Count > 0 && this.IsReadyToChangeDirections()) {
 				this.ChangeDirection(this.QueuedInput[0]);
 				this.QueuedInput.RemoveAt(0);
@@ -140,6 +139,19 @@ namespace Snake.Entities
 			}
 		}
 
+		private void onUpdate_Dead(float dt) {
+			// TODO: Add death sequence
+		}
+
+		public override void onUpdate(float dt) {
+			base.onUpdate(dt);
+
+			if (this.Alive)
+				this.onUpdate_Alive(dt);
+			else
+				this.onUpdate_Dead(dt);
+		}
+
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
 			base.onCollision(collider, other_collider, other_instance);
 
@@ -147,6 +159,8 @@ namespace Snake.Entities
 				this.AddToSnake();
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
+			} else if (other_instance is SnakeTail) {
+				this.Alive = false;
 			}
 		}
 
