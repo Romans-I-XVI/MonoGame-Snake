@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MonoEngine;
+using Snake.Entities;
 using Snake.Entities.Controls;
 
 namespace Snake.Rooms

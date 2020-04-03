@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoEngine;
 using Snake.SnakeShared;
 using Snake.SnakeShared.Enums;
+using Snake.SnakeShared.GameEvents;
 
 namespace Snake.Entities
 {
@@ -46,7 +47,7 @@ namespace Snake.Entities
 			this.AddColliderRectangle(Directions.Up.ToString(), -texture.Width / 2, -texture.Height / 2, texture.Width, 1, false);
 			this.AddColliderRectangle(Directions.Down.ToString(), -texture.Width / 2, texture.Height / 2 - 1, texture.Width, 1, false);
 			this.AddColliderRectangle(Directions.Left.ToString(), -texture.Width / 2, -texture.Height / 2, 1, texture.Height, false);
-			this.AddColliderRectangle(Directions.Right.ToString(), texture.Width / 2 - 1, -texture.Height / 2, 1, texture.Height, false);
+			this.AddColliderRectangle(Directions.Right.ToString(), texture.Width / 2 - 1, -texture.Height / 2, 1, texture.Height, true);
 
 			for (int i = 0; i < 2; i++) {
 				var tail = new SnakeTail {
@@ -121,6 +122,16 @@ namespace Snake.Entities
 			}
 		}
 
+		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
+			base.onCollision(collider, other_collider, other_instance);
+
+			if (other_instance is Food) {
+				this.AddToSnake();
+				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
+				other_instance.IsExpired = true;
+			}
+		}
+
 		public override void onKeyDown(KeyboardEventArgs e) {
 			base.onKeyDown(e);
 
@@ -175,6 +186,11 @@ namespace Snake.Entities
 			this.Direction = direction;
 			this.InternalLocation = this.CurrentLocation.ToVector2();
 			this.DirectionChangeLocation = this.CurrentLocation;
+
+			foreach (var collider in this.Colliders) {
+				collider.Enabled = false;
+			}
+			this.GetCollider(direction.ToString()).Enabled = true;
 		}
 
 		private void AddToSnake() {
