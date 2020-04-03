@@ -22,13 +22,15 @@ namespace Snake.Entities
 
 		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
 		private Directions Direction;
+		private Vector2 InternalLocation;
 		private Point CurrentLocation;
 
 		public Snake() : this(new Point(170 - 8, 480 / 2), Directions.Right) {}
 
 		public Snake(Point position, Directions direction) {
 			this.CurrentLocation = position;
-			this.Position = position.ToVector2();
+			this.InternalLocation = position.ToVector2();
+			this.Position = this.InternalLocation;
 			this.Direction = direction;
 
 			var texture = ContentHolder.Get(Settings.CurrentSnake);
@@ -47,24 +49,36 @@ namespace Snake.Entities
 
 			switch (this.Direction) {
 				case Directions.Left:
-					this.Position.X -= this.CurrentSpeed * 60 * dt;
+					this.InternalLocation.X -= this.CurrentSpeed * 60 * dt;
 					break;
 				case Directions.Right:
-					this.Position.X += this.CurrentSpeed * 60 * dt;
+					this.InternalLocation.X += this.CurrentSpeed * 60 * dt;
 					break;
 				case Directions.Up:
-					this.Position.Y -= this.CurrentSpeed * 60 * dt;
+					this.InternalLocation.Y -= this.CurrentSpeed * 60 * dt;
 					break;
 				case Directions.Down:
-					this.Position.Y += this.CurrentSpeed * 60 * dt;
+					this.InternalLocation.Y += this.CurrentSpeed * 60 * dt;
 					break;
 			}
 
-			if ((int)this.Position.X != this.CurrentLocation.X || (int)this.Position.Y != this.CurrentLocation.Y) {
-				this.CurrentLocation = new Point((int)this.Position.X, (int)this.Position.Y);
+			int previous_x = this.CurrentLocation.X;
+			int previous_y = this.CurrentLocation.Y;
 
+			if (this.InternalLocation.X <= this.CurrentLocation.X - this.CurrentSpeed)
+				this.CurrentLocation.X -= this.CurrentSpeed;
+			else if (this.InternalLocation.X >= this.CurrentLocation.X + this.CurrentSpeed)
+				this.CurrentLocation.X += this.CurrentSpeed;
+
+			if (this.InternalLocation.Y <= this.CurrentLocation.Y - this.CurrentSpeed)
+				this.CurrentLocation.Y -= this.CurrentSpeed;
+			else if (this.InternalLocation.Y >= this.CurrentLocation.Y + this.CurrentSpeed)
+				this.CurrentLocation.Y += this.CurrentSpeed;
+
+			if (this.CurrentLocation.X != previous_x || this.CurrentLocation.Y != previous_y) {
 				// this.SnakeLocations["x"].Insert(0, this.CurrentLocation.X);
 				// this.SnakeLocations["y"].Insert(0, this.CurrentLocation.Y);
+				this.Position = this.CurrentLocation.ToVector2();
 			}
 		}
 
@@ -73,17 +87,37 @@ namespace Snake.Entities
 
 			switch (e.Key) {
 				case Keys.W:
-					this.Direction = Directions.Up;
+					this.TryChangeDirection(Directions.Up);
 					break;
 				case Keys.S:
-					this.Direction = Directions.Down;
+					this.TryChangeDirection(Directions.Down);
 					break;
 				case Keys.A:
-					this.Direction = Directions.Left;
+					this.TryChangeDirection(Directions.Left);
 					break;
 				case Keys.D:
-					this.Direction = Directions.Right;
+					this.TryChangeDirection(Directions.Right);
 					break;
+			}
+		}
+
+		private void TryChangeDirection(Directions direction) {
+			if (direction == this.Direction)
+				return;
+
+			bool can_change;
+			if (direction == Directions.Right)
+				can_change = this.Direction != Directions.Left;
+			else if (direction == Directions.Left)
+				can_change = this.Direction != Directions.Right;
+			else if (direction == Directions.Up)
+				can_change = this.Direction != Directions.Down;
+			else
+				can_change = this.Direction != Directions.Up;
+
+			if (can_change) {
+				this.Direction = direction;
+				this.InternalLocation = this.CurrentLocation.ToVector2();
 			}
 		}
 
