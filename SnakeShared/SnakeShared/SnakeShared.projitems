@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Engine\SaveDataHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlBack.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPause.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameplaySpeeds.cs" />

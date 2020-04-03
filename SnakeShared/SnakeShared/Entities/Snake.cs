@@ -19,6 +19,7 @@ namespace Snake.Entities
 			["x"] = new List<int>(),
 			["y"] = new List<int>(),
 		});
+		private readonly List<SnakeTail> Tail = new List<SnakeTail>();
 
 		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
 		private Directions Direction;
@@ -76,9 +77,24 @@ namespace Snake.Entities
 				this.CurrentLocation.Y += this.CurrentSpeed;
 
 			if (this.CurrentLocation.X != previous_x || this.CurrentLocation.Y != previous_y) {
-				// this.SnakeLocations["x"].Insert(0, this.CurrentLocation.X);
-				// this.SnakeLocations["y"].Insert(0, this.CurrentLocation.Y);
+				this.SnakeLocations["x"].Insert(0, this.CurrentLocation.X);
+				this.SnakeLocations["y"].Insert(0, this.CurrentLocation.Y);
 				this.Position = this.CurrentLocation.ToVector2();
+			}
+
+			for (int i = 0; i < this.Tail.Count; i++) {
+				int j = 16 / this.CurrentSpeed;
+
+				int array_pos = (i + 1) * j;
+				if (this.SnakeLocations["x"].Count > array_pos) {
+					this.Tail[i].Position.X = this.SnakeLocations["x"][array_pos];
+					this.Tail[i].Position.Y = this.SnakeLocations["y"][array_pos];
+				}
+			}
+
+			while (this.SnakeLocations["x"].Count > this.Tail.Count * (16 / this.CurrentSpeed)) {
+				this.SnakeLocations["x"].RemoveAt(this.SnakeLocations["x"].Count - 1);
+				this.SnakeLocations["y"].RemoveAt(this.SnakeLocations["y"].Count - 1);
 			}
 		}
 
