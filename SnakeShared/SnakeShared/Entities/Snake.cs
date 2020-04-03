@@ -43,6 +43,20 @@ namespace Snake.Entities
 			this.AddColliderRectangle(Directions.Down.ToString(), -texture.Width / 2, texture.Height / 2 - 1, texture.Width, 1, false);
 			this.AddColliderRectangle(Directions.Left.ToString(), -texture.Width / 2, -texture.Height / 2, 1, texture.Height, false);
 			this.AddColliderRectangle(Directions.Right.ToString(), texture.Width / 2 - 1, -texture.Height / 2, 1, texture.Height, false);
+
+			for (int i = 0; i < 2; i++) {
+				var tail = new SnakeTail {
+					Position = new Vector2(this.Position.X - (i + 1) * 16, this.Position.Y),
+					Depth = this.Depth + 1 + i
+				};
+				Engine.SpawnInstance(tail);
+				this.Tail.Add(tail);
+			}
+
+			for (int i = 0; i < this.Tail.Count * this.CurrentSpeed; i++) {
+				this.SnakeLocations["x"].Add(this.CurrentLocation.X - (i * this.CurrentSpeed));
+				this.SnakeLocations["y"].Add(this.CurrentLocation.Y);
+			}
 		}
 
 		public override void onUpdate(float dt) {
@@ -101,6 +115,13 @@ namespace Snake.Entities
 		public override void onKeyDown(KeyboardEventArgs e) {
 			base.onKeyDown(e);
 
+#if DEBUG
+			if (e.Key == Keys.R) {
+				Engine.ResetRoom();
+			} else if (e.Key == Keys.Space) {
+				this.AddToSnake();
+			}
+#endif
 			switch (e.Key) {
 				case Keys.W:
 					this.TryChangeDirection(Directions.Up);
@@ -135,6 +156,16 @@ namespace Snake.Entities
 				this.Direction = direction;
 				this.InternalLocation = this.CurrentLocation.ToVector2();
 			}
+		}
+
+		private void AddToSnake() {
+			var previous_tail = this.Tail[this.Tail.Count - 1];
+			var tail = new SnakeTail() {
+				Position = previous_tail.Position,
+				Depth = previous_tail.Depth + 1
+			};
+			Engine.SpawnInstance(tail);
+			this.Tail.Add(tail);
 		}
 
 		internal class SnakeTail : Entity
