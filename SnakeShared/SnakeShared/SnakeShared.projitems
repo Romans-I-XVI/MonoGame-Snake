@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameplaySpeeds.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\GameRooms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\Sides.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\BoolExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\RandomExtensions.cs" />

@@ -24,6 +24,12 @@ namespace Snake.Entities
 
 			this.BackgroundRegion = new Region(ContentHolder.Get(Settings.CurrentBackground), (int)this.Position.X, (int)this.Position.Y, Scoreboard.Width, Scoreboard.Height, 0, 0);
 			this.SnakeRegion = new Region(ContentHolder.Get(Settings.CurrentSnake));
+
+			string data = SaveDataHandler.LoadData(Settings.CurrentSaveFilePath);
+			bool success = (data != null && int.TryParse(data, out this.HighScore));
+			if (!success) {
+				this.SaveHighscore();
+			}
 		}
 
 		public override void onDraw(SpriteBatch sprite_batch) {
@@ -98,7 +104,7 @@ namespace Snake.Entities
 		}
 
 		private void SaveHighscore() {
-			
+			SaveDataHandler.SaveData(this.HighScore.ToString(), Settings.CurrentSaveFilePath);
 		}
 
 		private Vector2[] GetNumberDrawOffsets(Sides side, int digits) {

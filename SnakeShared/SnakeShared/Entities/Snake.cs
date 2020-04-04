@@ -225,15 +225,19 @@ namespace Snake.Entities
 
 			switch (e.Key) {
 				case Keys.W:
+				case Keys.Up:
 					this.OnInputDirection(Directions.Up);
 					break;
 				case Keys.S:
+				case Keys.Down:
 					this.OnInputDirection(Directions.Down);
 					break;
 				case Keys.A:
+				case Keys.Left:
 					this.OnInputDirection(Directions.Left);
 					break;
 				case Keys.D:
+				case Keys.Right:
 					this.OnInputDirection(Directions.Right);
 					break;
 			}
