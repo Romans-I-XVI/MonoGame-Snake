@@ -159,7 +159,7 @@ namespace Snake.Entities
 				this.AddToSnake();
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
-			} else if (other_instance is SnakeTail) {
+			} else if (other_instance is SnakeTail || other_instance is Wall) {
 				this.Alive = false;
 			}
 		}
