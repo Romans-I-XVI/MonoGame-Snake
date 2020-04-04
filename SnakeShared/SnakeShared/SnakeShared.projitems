@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFoodSpawner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPause.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\DeveloperLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Food.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
