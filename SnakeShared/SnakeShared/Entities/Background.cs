@@ -1,5 +1,4 @@
 using MonoEngine;
-using Snake.SnakeShared;
 
 namespace Snake.Entities
 {

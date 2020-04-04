@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using MonoEngine;
-using Snake.SnakeShared;
 
 namespace Snake.Entities
 {

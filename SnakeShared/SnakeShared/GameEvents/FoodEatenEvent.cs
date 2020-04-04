@@ -1,7 +1,6 @@
-using Microsoft.Xna.Framework;
 using MonoEngine;
 
-namespace Snake.SnakeShared.GameEvents
+namespace Snake.GameEvents
 {
 	public class FoodEatenEvent : GameEvent
 	{

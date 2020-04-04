@@ -1,8 +1,7 @@
 using System;
-using Microsoft.Xna.Framework.Graphics;
-using Snake.SnakeShared.Enums;
+using Snake.Enums;
 
-namespace Snake.SnakeShared
+namespace Snake
 {
 	public static class Settings
 	{

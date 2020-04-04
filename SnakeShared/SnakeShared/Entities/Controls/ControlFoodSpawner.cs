@@ -1,8 +1,6 @@
-using System.Linq;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using MonoEngine;
-using Snake.SnakeShared.GameEvents;
+using Snake.GameEvents;
 
 namespace Snake.Entities.Controls
 {
@@ -36,7 +34,7 @@ namespace Snake.Entities.Controls
 			for (int i = 0; i < entities.Count; i++) {
 				if (entities[i].IsExpired)
 					continue;;
-				
+
 				for (int j = 0; j < entities[i].Colliders.Count; j++) {
 					var collider = entities[i].Colliders[j];
 					if (!collider.Enabled)

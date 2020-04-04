@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoEngine;
-using Snake.SnakeShared;
-using Snake.SnakeShared.Enums;
-using Snake.SnakeShared.GameEvents;
+using Snake.Enums;
+using Snake.GameEvents;
 
 namespace Snake.Entities
 {

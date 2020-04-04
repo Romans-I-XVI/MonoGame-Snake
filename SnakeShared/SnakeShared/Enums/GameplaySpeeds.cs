@@ -1,4 +1,4 @@
-namespace Snake.SnakeShared.Enums
+namespace Snake.Enums
 {
 	public enum GameplaySpeeds
 	{
