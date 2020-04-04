@@ -14,9 +14,7 @@ namespace Snake.Rooms
 			Engine.SpawnInstance<ControlFoodSpawner>();
 			Engine.SpawnInstance<Background>();
 
-#if DEBUG
 			Engine.SpawnInstance(new ControlReset());
-#endif
 		}
 
 		public override void onSwitchAway(Room next_room) {
@@ -27,7 +25,7 @@ namespace Snake.Rooms
 			public override void onKeyDown(KeyboardEventArgs e) {
 				base.onKeyDown(e);
 
-				if (e.Key == Keys.R) {
+				if (e.Key == Keys.R || e.Key == Keys.Space) {
 					Engine.ResetRoom();
 				}
 			}
