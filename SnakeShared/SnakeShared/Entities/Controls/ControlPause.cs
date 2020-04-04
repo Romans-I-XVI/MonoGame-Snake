@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoEngine;
 
@@ -9,6 +11,18 @@ namespace Snake.Entities.Controls
 			this.Depth = -int.MaxValue + 1;
 			this.IsPauseable = false;
 			this.InputLayer = InputLayer.One | InputLayer.Two | InputLayer.Three | InputLayer.Four | InputLayer.Five;
+		}
+
+		public override void onDraw(SpriteBatch sprite_batch) {
+			base.onDraw(sprite_batch);
+
+			if (Engine.IsPaused()) {
+				var texture = ContentHolder.Get(Settings.CurrentFood);
+				for (int i = 0; i < LogoDrawData.PausedLogoLocations.Length; i++) {
+					var pos = LogoDrawData.PausedLogoLocations[i];
+					sprite_batch.Draw(texture, pos, Color.White);
+				}
+			}
 		}
 
 		public override void onKeyDown(KeyboardEventArgs e) {
