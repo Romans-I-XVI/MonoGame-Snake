@@ -1,0 +1,126 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Microsoft.Xna.Framework;
+
+namespace Snake
+{
+	public static class LogoDrawData
+	{
+		public static ReadOnlyDictionary<int, Vector2[]> ScoreNumberLocations = new ReadOnlyDictionary<int, Vector2[]>(new Dictionary<int, Vector2[]> {
+			[1] = new[] {
+				new Vector2(4, 3),
+				new Vector2(9, 15),
+				new Vector2(9, 10),
+				new Vector2(9, 5),
+				new Vector2(9, 0)
+			},
+			[2] = new[] {
+				new Vector2(15, 15),
+				new Vector2(10, 15),
+				new Vector2(5, 15),
+				new Vector2(0, 15),
+				new Vector2(0, 10),
+				new Vector2(5, 7),
+				new Vector2(10, 7),
+				new Vector2(15, 4),
+				new Vector2(10, 0),
+				new Vector2(5, 0),
+				new Vector2(0, 0),
+			},
+			[3] = new[] {
+				new Vector2(0, 12),
+				new Vector2(5, 15),
+				new Vector2(10, 15),
+				new Vector2(15, 12),
+				new Vector2(10, 8),
+				new Vector2(15, 4),
+				new Vector2(10, 0),
+				new Vector2(0, 3),
+				new Vector2(5, 0),
+			},
+			[4] = new[] {
+				new Vector2(0, 5),
+				new Vector2(5, 7),
+				new Vector2(10, 7),
+				new Vector2(15, 15),
+				new Vector2(15, 10),
+				new Vector2(15, 5),
+				new Vector2(15, 0),
+				new Vector2(0, 0),
+			},
+			[5] = new[] {
+				new Vector2(0, 15),
+				new Vector2(5, 15),
+				new Vector2(10, 15),
+				new Vector2(15, 11),
+				new Vector2(10, 7),
+				new Vector2(5, 7),
+				new Vector2(0, 5),
+				new Vector2(15, 0),
+				new Vector2(10, 0),
+				new Vector2(5, 0),
+				new Vector2(0, 0),
+			},
+			[6] = new[] {
+				new Vector2(5, 15),
+				new Vector2(10, 15),
+				new Vector2(15, 11),
+				new Vector2(10, 7),
+				new Vector2(5, 7),
+				new Vector2(0, 12),
+				new Vector2(0, 7),
+				new Vector2(0, 2),
+				new Vector2(5, 0),
+				new Vector2(10, 0),
+				new Vector2(15, 0),
+			},
+			[7] = new[] {
+				new Vector2(5, 10),
+				new Vector2(5, 15),
+				new Vector2(10, 8),
+				new Vector2(15, 5),
+				new Vector2(15, 0),
+				new Vector2(10, 0),
+				new Vector2(5, 0),
+				new Vector2(0, 0),
+			},
+			[8] = new[] {
+				new Vector2(10, 15),
+				new Vector2(5, 15),
+				new Vector2(0, 11),
+				new Vector2(15, 11),
+				new Vector2(10, 7),
+				new Vector2(5, 7),
+				new Vector2(0, 3),
+				new Vector2(15, 3),
+				new Vector2(10, 0),
+				new Vector2(5, 0),
+			},
+			[9] = new[] {
+				new Vector2(15, 13),
+				new Vector2(10, 8),
+				new Vector2(5, 8),
+				new Vector2(0, 4),
+				new Vector2(5, 0),
+				new Vector2(10, 0),
+				new Vector2(0, 15),
+				new Vector2(5, 15),
+				new Vector2(10, 15),
+				new Vector2(15, 8),
+				new Vector2(15, 3),
+			},
+			[0] = new[] {
+				new Vector2(0, 8),
+				new Vector2(0, 13),
+				new Vector2(15, 8),
+				new Vector2(15, 13),
+				new Vector2(10, 15),
+				new Vector2(5, 15),
+				new Vector2(0, 3),
+				new Vector2(15, 3),
+				new Vector2(10, 0),
+				new Vector2(5, 0),
+			}
+		});
+	}
+}

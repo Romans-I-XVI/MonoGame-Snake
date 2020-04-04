@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoEngine;
+using Snake.Enums;
 
 namespace Snake.Entities
 {
@@ -9,6 +11,8 @@ namespace Snake.Entities
 		private const int Width = 380;
 		private const int Height = 80;
 		private const float SnakePartSize = 5;
+		private int CurrentScore = 0;
+		private int HighScore = 0;
 		private readonly Region BackgroundRegion;
 		private readonly Region SnakeRegion;
 
@@ -40,9 +44,78 @@ namespace Snake.Entities
 			for (int i = 0; i < Scoreboard.LetterLocations.Length; i++) {
 				sprite_batch.Draw(this.SnakeRegion, this.Position + Scoreboard.LetterLocations[i], Color.White, 0, scale);
 			}
+
+			var scores = new Dictionary<Sides, int> {
+				[Sides.Left] = this.CurrentScore,
+				[Sides.Right] = this.HighScore,
+			};
+
+			foreach (var kv in scores) {
+				var side = kv.Key;
+				int score = kv.Value;
+
+				string score_text = score.ToString();
+				int[] score_numbers = new int[score_text.Length];
+				for (int i = 0; i < score_text.Length; i++) {
+					char c = score_text[i];
+					score_numbers[i] = int.Parse(c.ToString());
+				}
+
+				var center_x = this.Position + new Vector2(Scoreboard.Width / 2f, 0);
+				var offsets = this.GetNumberDrawOffsets(side, score_numbers.Length);
+				if (offsets == null)
+					continue;
+
+				for (int i = 0; i < score_numbers.Length; i++) {
+					int number = score_numbers[i];
+					var offset = offsets[i];
+					foreach (var part_offset in LogoDrawData.ScoreNumberLocations[number]) {
+						sprite_batch.Draw(this.SnakeRegion, center_x + offset + part_offset, Color.White, 0, scale);
+					}
+				}
+			}
 		}
 
-		private static Vector2[] LetterLocations = {
+		private Vector2[] GetNumberDrawOffsets(Sides side, int digits) {
+			var base_offset = new Vector2(94 * (int)side, 45);
+
+			switch (digits) {
+				case 1:
+					return new[] {
+						base_offset + new Vector2(-10, 0)
+					};
+				case 2:
+					return new[] {
+						base_offset + new Vector2(-21, 0),
+						base_offset + new Vector2(2, 0)
+					};
+				case 3:
+					return new[] {
+						base_offset + new Vector2(-10 - 23, 0),
+						base_offset + new Vector2(-10, 0),
+						base_offset + new Vector2(-10 + 23, 0)
+					};
+				case 4:
+					return new[] {
+						base_offset + new Vector2(-21 - 23, 0),
+						base_offset + new Vector2(-21, 0),
+						base_offset + new Vector2(-21 + 23, 0),
+						base_offset + new Vector2(-21 + 23 * 2, 0)
+					};
+				case 5:
+					return new[] {
+						base_offset + new Vector2(-10 - 23 * 2, 0),
+						base_offset + new Vector2(-10 - 23, 0),
+						base_offset + new Vector2(-10, 0),
+						base_offset + new Vector2(-10 + 23, 0),
+						base_offset + new Vector2(-10 + 23 * 2, 0)
+					};
+				default:
+					return null;
+			}
+		}
+
+		private static readonly Vector2[] LetterLocations = {
 			// Current
 			new Vector2(166, 30),
 			new Vector2(166, 25),
