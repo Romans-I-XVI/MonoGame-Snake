@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoEngine;
 using Snake.Enums;
+using Snake.GameEvents;
 
 namespace Snake.Entities
 {
@@ -13,6 +14,7 @@ namespace Snake.Entities
 		private const float SnakePartSize = 5;
 		private int CurrentScore = 0;
 		private int HighScore = 0;
+		private bool IsNewHighscore = false;
 		private readonly Region BackgroundRegion;
 		private readonly Region SnakeRegion;
 
@@ -29,6 +31,7 @@ namespace Snake.Entities
 
 			var scale = new Vector2(Scoreboard.SnakePartSize / this.SnakeRegion.GetWidth());
 
+			// Draw the borders
 			sprite_batch.Draw(this.BackgroundRegion, this.Position + new Vector2(0, 0), Color.White);
 			for (int x = 0; x < 76; x++) {
 				sprite_batch.Draw(this.SnakeRegion, this.Position + new Vector2(x * Scoreboard.SnakePartSize, 0), Color.White, 0, scale);
@@ -41,10 +44,12 @@ namespace Snake.Entities
 				sprite_batch.Draw(this.SnakeRegion, this.Position + new Vector2(Scoreboard.Width - Scoreboard.SnakePartSize, y * Scoreboard.SnakePartSize), Color.White, 0, scale);
 			}
 
+			// Draw the words "Current" and "Best"
 			for (int i = 0; i < Scoreboard.LetterLocations.Length; i++) {
 				sprite_batch.Draw(this.SnakeRegion, this.Position + Scoreboard.LetterLocations[i], Color.White, 0, scale);
 			}
 
+			// Draw the scores
 			var scores = new Dictionary<Sides, int> {
 				[Sides.Left] = this.CurrentScore,
 				[Sides.Right] = this.HighScore,
@@ -74,6 +79,26 @@ namespace Snake.Entities
 					}
 				}
 			}
+		}
+
+		public override void onGameEvent(GameEvent game_event) {
+			base.onGameEvent(game_event);
+
+			if (game_event is SnakePartDestroyedEvent) {
+				this.CurrentScore++;
+				if (this.CurrentScore > this.HighScore) {
+					this.HighScore = this.CurrentScore;
+					this.IsNewHighscore = true;
+				}
+			} else if (game_event is SnakeDestructionDoneEvent) {
+				if (this.IsNewHighscore) {
+					this.SaveHighscore();
+				}
+			}
+		}
+
+		private void SaveHighscore() {
+			
 		}
 
 		private Vector2[] GetNumberDrawOffsets(Sides side, int digits) {

@@ -13,6 +13,7 @@ namespace Snake.Entities
 	{
 		public const int Size = 16;
 
+		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
 		private readonly ReadOnlyDictionary<GameplaySpeeds, int> MoveSpeeds = new ReadOnlyDictionary<GameplaySpeeds, int>(new Dictionary<GameplaySpeeds, int> {
 			[GameplaySpeeds.Slow] = 1,
 			[GameplaySpeeds.Medium] = 2,
@@ -26,7 +27,10 @@ namespace Snake.Entities
 		private readonly List<Directions> QueuedInput = new List<Directions>();
 
 		private bool Alive = true;
-		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
+		private int DeathPartsDestroyed = 0;
+		private float DeathDestroyPartDelay;
+		private bool DeathSpawnedScoreboard = false;
+		private readonly GameTimeSpan DeathSequenceTimer = new GameTimeSpan();
 		private Directions Direction;
 		private Vector2 InternalLocation;
 		private Point CurrentLocation;
@@ -149,7 +153,57 @@ namespace Snake.Entities
 		}
 
 		private void onUpdate_Dead(float dt) {
-			// TODO: Add death sequence
+			float current_time = this.DeathSequenceTimer.TotalMilliseconds;
+			const int initial_delay = 1000;
+			const int blink_duration = 300;
+			const int final_delay = 200;
+			const int blink_count = 7;
+			const int blinking_finish_time = initial_delay + blink_duration * (blink_count - 1) + final_delay;
+
+			if (!this.DeathSpawnedScoreboard && current_time >= blinking_finish_time - final_delay) {
+				Engine.SpawnInstance(new Scoreboard());
+				this.DeathSpawnedScoreboard = true;
+			}
+
+			if (current_time < blinking_finish_time) {
+				for (int i = 0; i < blink_count; i++) {
+					if (current_time < initial_delay + blink_duration * i) {
+						if (i == 0)
+							break;
+
+						bool enable_drawing = (i % 2 == 0);
+
+						this.GetSprite("main").Enabled = enable_drawing;
+						foreach (var tail in this.Tail) {
+							tail.GetSprite("main").Enabled = enable_drawing;
+						}
+
+						break;
+					}
+				}
+			} else {
+				// Extra checking that sprites are on in case of hangup
+				if (!this.GetSprite("main").Enabled) {
+					this.GetSprite("main").Enabled = true;
+					foreach (var tail in this.Tail) {
+						tail.GetSprite("main").Enabled = true;
+					}
+				}
+
+				if (current_time >= blinking_finish_time + this.DeathDestroyPartDelay * this.DeathPartsDestroyed) {
+					this.DeathPartsDestroyed++;
+
+					if (this.Tail.Count > 0) {
+						this.Tail[this.Tail.Count - 1].Destroy();
+						this.Tail.RemoveAt(this.Tail.Count - 1);
+						Engine.PostGameEvent(new SnakePartDestroyedEvent());
+					} else {
+						Engine.PostGameEvent(new SnakePartDestroyedEvent());
+						Engine.PostGameEvent(new SnakeDestructionDoneEvent());
+						this.Destroy();
+					}
+				}
+			}
 		}
 
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
@@ -160,20 +214,15 @@ namespace Snake.Entities
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
 			} else if (other_instance is SnakeTail || other_instance is Wall) {
-				this.Alive = false;
+				if (this.Alive) {
+					this.BeginDeath();
+				}
 			}
 		}
 
 		public override void onKeyDown(KeyboardEventArgs e) {
 			base.onKeyDown(e);
 
-#if DEBUG
-			if (e.Key == Keys.R) {
-				Engine.ResetRoom();
-			} else if (e.Key == Keys.Space) {
-				this.AddToSnake();
-			}
-#endif
 			switch (e.Key) {
 				case Keys.W:
 					this.OnInputDirection(Directions.Up);
@@ -192,11 +241,6 @@ namespace Snake.Entities
 
 		public override void onButtonDown(GamePadEventArgs e) {
 			base.onButtonDown(e);
-#if DEBUG
-			if (e.Button == Buttons.Y) {
-				Engine.ResetRoom();
-			}
-#endif
 
 			switch (e.Button) {
 			case Buttons.DPadUp:
@@ -212,6 +256,11 @@ namespace Snake.Entities
 				this.OnInputDirection(Directions.Right);
 				break;
 			}
+		}
+
+		public override void onResume(int pause_time) {
+			base.onResume(pause_time);
+			this.DeathSequenceTimer.RemoveTime(pause_time);
 		}
 
 		private void OnInputDirection(Directions direction) {
@@ -257,6 +306,14 @@ namespace Snake.Entities
 			};
 			Engine.SpawnInstance(tail);
 			this.Tail.Add(tail);
+		}
+
+		private void BeginDeath() {
+			this.Alive = false;
+			this.DeathDestroyPartDelay = 2000 / (float)(this.Tail.Count + 1);
+			if (this.DeathDestroyPartDelay < 1000 / 60f)
+				this.DeathDestroyPartDelay = 1000 / 60f;
+			this.DeathSequenceTimer.Mark();
 		}
 
 		private bool IsReadyToChangeDirections() {
