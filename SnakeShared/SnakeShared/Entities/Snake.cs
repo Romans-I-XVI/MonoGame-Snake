@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoEngine;
 using Snake.Enums;
 using Snake.GameEvents;
+using Snake.Rooms;
 
 namespace Snake.Entities
 {
@@ -26,7 +28,9 @@ namespace Snake.Entities
 		private readonly List<SnakeTail> Tail = new List<SnakeTail>();
 		private readonly List<Directions> QueuedInput = new List<Directions>();
 
-		private bool Alive = true;
+		private States State;
+		private readonly int InitialWaitDelay = 0;
+		private readonly GameTimeSpan InitialWaitTimer = new GameTimeSpan();
 		private int DeathPartsDestroyed = 0;
 		private float DeathDestroyPartDelay;
 		private bool DeathSpawnedScoreboard = false;
@@ -36,14 +40,16 @@ namespace Snake.Entities
 		private Point CurrentLocation;
 		private Point DirectionChangeLocation;
 
-		public Snake() : this(new Point(170 - Snake.Size / 2, 480 / 2), Directions.Right) {}
+		public Snake(int start_delay) : this(start_delay, new Point(170 - Snake.Size / 2, 480 / 2), Directions.Right) {}
 
-		public Snake(Point position, Directions direction) {
+		public Snake(int start_delay, Point position, Directions direction) {
+			this.InitialWaitDelay = start_delay;
 			this.CurrentLocation = position;
 			this.DirectionChangeLocation = this.CurrentLocation;
 			this.InternalLocation = position.ToVector2();
 			this.Position = this.InternalLocation;
 			this.Direction = direction;
+			this.State = (this.InitialWaitDelay == 0) ? States.Alive : States.Waiting;
 
 			var texture = ContentHolder.Get(Settings.CurrentSnake);
 			var region = new Region(texture, 0, 0, texture.Width, texture.Height, texture.Width / 2, texture.Height / 2);
@@ -73,10 +79,18 @@ namespace Snake.Entities
 		public override void onUpdate(float dt) {
 			base.onUpdate(dt);
 
-			if (this.Alive)
+			if (this.State == States.Waiting)
+				this.onUpdate_Waiting(dt);
+			if (this.State == States.Alive)
 				this.onUpdate_Alive(dt);
 			else
 				this.onUpdate_Dead(dt);
+		}
+
+		private void onUpdate_Waiting(float dt) {
+			if (this.InitialWaitTimer.TotalMilliseconds >= this.InitialWaitDelay) {
+				this.State = States.Alive;
+			}
 		}
 
 		private void onUpdate_Alive(float dt) {
@@ -201,6 +215,11 @@ namespace Snake.Entities
 					} else {
 						Engine.PostGameEvent(new SnakePartDestroyedEvent());
 						Engine.PostGameEvent(new SnakeDestructionDoneEvent());
+						Engine.SpawnInstance(new TimedExecution(2000, () => {
+							Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
+								["start_delay"] = 1000
+							});
+						}));
 						this.Destroy();
 					}
 				}
@@ -216,7 +235,8 @@ namespace Snake.Entities
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
 			} else if (other_instance is SnakeTail || other_instance is Wall) {
-				if (this.Alive) {
+				if (this.State == States.Alive) {
+					MediaPlayer.Stop();
 					SFXPlayer.Play(AvailableSounds.death_hit, 0.75f);
 					Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
 					this.BeginDeath();
@@ -317,7 +337,7 @@ namespace Snake.Entities
 		}
 
 		private void BeginDeath() {
-			this.Alive = false;
+			this.State = States.Dead;
 			this.DeathDestroyPartDelay = 2000 / (float)(this.Tail.Count + 1);
 			if (this.DeathDestroyPartDelay < 1000 / 60f)
 				this.DeathDestroyPartDelay = 1000 / 60f;
@@ -326,6 +346,12 @@ namespace Snake.Entities
 
 		private bool IsReadyToChangeDirections() {
 			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= Snake.Size + 2 || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= Snake.Size + 2);
+		}
+
+		internal enum States {
+			Waiting,
+			Alive,
+			Dead
 		}
 
 		internal class SnakeTail : Entity
