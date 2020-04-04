@@ -48,9 +48,19 @@ namespace Snake
 
 	public enum AvailableFonts {}
 
-	public enum AvailableMusic {}
+	public enum AvailableMusic
+	{
+		background_music
+	}
 
-	public enum AvailableSounds {}
+	public enum AvailableSounds
+	{
+		create_block,
+		death,
+		death_hit,
+		destroy_part,
+		eat
+	}
 
 	public static class CustomContentLocations
 	{

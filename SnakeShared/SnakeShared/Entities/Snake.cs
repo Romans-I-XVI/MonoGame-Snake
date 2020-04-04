@@ -192,6 +192,7 @@ namespace Snake.Entities
 
 				if (current_time >= blinking_finish_time + this.DeathDestroyPartDelay * this.DeathPartsDestroyed) {
 					this.DeathPartsDestroyed++;
+					SFXPlayer.Play(AvailableSounds.destroy_part, 0.75f);
 
 					if (this.Tail.Count > 0) {
 						this.Tail[this.Tail.Count - 1].Destroy();
@@ -211,10 +212,13 @@ namespace Snake.Entities
 
 			if (other_instance is Food) {
 				this.AddToSnake();
+				SFXPlayer.Play(AvailableSounds.eat, 0.7f);
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
 			} else if (other_instance is SnakeTail || other_instance is Wall) {
 				if (this.Alive) {
+					SFXPlayer.Play(AvailableSounds.death_hit, 0.75f);
+					Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
 					this.BeginDeath();
 				}
 			}
