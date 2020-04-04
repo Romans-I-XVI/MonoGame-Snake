@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\TitleLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameplaySpeeds.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameRooms.cs" />
