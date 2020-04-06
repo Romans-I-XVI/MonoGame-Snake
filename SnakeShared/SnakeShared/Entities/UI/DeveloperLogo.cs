@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoEngine;
 
-namespace Snake.Entities
+namespace Snake.Entities.UI
 {
 	public class DeveloperLogo : Entity
 	{

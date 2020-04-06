@@ -18,12 +18,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFoodSpawner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPause.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\DeveloperLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Food.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\TitleLogo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonClassic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonGameMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\DeveloperLogo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\TitleLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameplaySpeeds.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameRooms.cs" />
