@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,11 +8,7 @@ namespace Snake.Entities.UI
 {
 	public abstract class ButtonGameMode : Entity
 	{
-		protected abstract Vector2[] LogoLocations { get; }
-		protected abstract Vector2 LogoLocationsScale { get; }
-		protected abstract Vector2[] SnakeLocations { get; }
-		protected abstract Vector2[] WallLocations { get; }
-		protected abstract Vector2? FoodLocation { get; }
+		protected abstract DrawLocations[] DrawData { get; }
 		protected const int BaseWidth = 215;
 		protected const int BaseHeight = 120;
 		protected readonly int BaseX = Engine.Game.CanvasWidth / 2;
@@ -31,9 +28,11 @@ namespace Snake.Entities.UI
 			float scaled_width = ButtonGameMode.BaseWidth * this.Scale;
 			float scaled_height = ButtonGameMode.BaseHeight * this.Scale;
 			var vector_zero = Vector2.Zero;
-			var snake_texture = ContentHolder.Get(Settings.CurrentSnake);
-			var food_texture = ContentHolder.Get(Settings.CurrentFood);
-			var wall_texture = ContentHolder.Get(Settings.CurrentWall);
+			var textures = new Dictionary<DrawDataTextures, Texture2D> {
+				[DrawDataTextures.Snake] = ContentHolder.Get(Settings.CurrentSnake),
+				[DrawDataTextures.Food] = ContentHolder.Get(Settings.CurrentFood),
+				[DrawDataTextures.Wall] = ContentHolder.Get(Settings.CurrentWall),
+			};
 			var food_scale = new Vector2(0.5f);
 			var wall_scale = new Vector2(1f / 3f);
 			var snake_scale = new Vector2(0.5f);
@@ -51,29 +50,34 @@ namespace Snake.Entities.UI
 			RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
 			RectangleDrawer.Draw(sprite_batch, scaled_pos.X + scaled_width - edge, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
 
-			// Draw food if exists
-			if (this.FoodLocation != null) {
-				sprite_batch.Draw(food_texture, scaled_pos + FoodLocation.Value * this.Scale, null, Color.White, 0, vector_zero, food_scale * this.Scale, SpriteEffects.None, 0);
-			}
-
-			// Draw snake texture at all logo locations
-			for (int i = 0; i < this.LogoLocations.Length; i++) {
-				var pos = this.LogoLocations[i];
-				sprite_batch.Draw(snake_texture, scaled_pos + pos * this.Scale, null, Color.White, 0, vector_zero, this.LogoLocationsScale * this.Scale, SpriteEffects.None, 0);
-			}
-
-			// Draw all wall locations
-			for (int i = 0; i < this.WallLocations.Length; i++) {
-				var pos = this.WallLocations[i];
-				sprite_batch.Draw(wall_texture, scaled_pos + pos * this.Scale, null, Color.White, 0, vector_zero, wall_scale * this.Scale, SpriteEffects.None, 0);
-			}
-
-			// Draw all snake locations
-			for (int i = 0; i < this.SnakeLocations.Length; i++) {
-				var pos = this.SnakeLocations[i];
-				sprite_batch.Draw(snake_texture, scaled_pos + pos * this.Scale, null, Color.White, 0, vector_zero, snake_scale * this.Scale, SpriteEffects.None, 0);
+			for (int i = 0; i < this.DrawData.Length; i++) {
+				var data = this.DrawData[i];
+				var texture = textures[data.DrawDataTexture];
+				for (int j = 0; j < data.Locations.Length; j++) {
+					var pos = data.Locations[j];
+					sprite_batch.Draw(texture, scaled_pos + pos * this.Scale, null, Color.White, 0, vector_zero, data.Scale * this.Scale, SpriteEffects.None, 0);
+				}
 			}
 		}
 
+		protected class DrawLocations
+		{
+			internal readonly DrawDataTextures DrawDataTexture;
+			internal readonly float Scale;
+			internal readonly Vector2[] Locations;
+
+			internal DrawLocations(DrawDataTextures draw_data_texture, float scale, Vector2[] locations) {
+				this.DrawDataTexture = draw_data_texture;
+				this.Scale = scale;
+				this.Locations = locations;
+			}
+		}
+
+		protected enum DrawDataTextures
+		{
+			Snake,
+			Wall,
+			Food,
+		}
 	}
 }
