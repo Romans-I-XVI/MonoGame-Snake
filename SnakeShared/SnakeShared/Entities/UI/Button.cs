@@ -10,6 +10,10 @@ namespace Snake.Entities.UI
 	public abstract class Button : Entity
 	{
 		protected abstract DrawLocations[] DrawData { get; }
+		protected virtual Texture2D BackgroundTexture => ContentHolder.Get(Settings.CurrentBackground);
+		protected virtual Texture2D WallTexture => ContentHolder.Get(Settings.CurrentWall);
+		protected virtual Texture2D SnakeTexture => ContentHolder.Get(Settings.CurrentSnake);
+		protected virtual Texture2D FoodTexture => ContentHolder.Get(Settings.CurrentFood);
 		protected Action<SpriteBatch> ExtraDrawingBegin = null;
 		protected Action<SpriteBatch> ExtraDrawingEnd = null;
 		protected readonly int BaseWidth;
@@ -36,13 +40,13 @@ namespace Snake.Entities.UI
 			float scaled_height = this.BaseHeight * this.Scale;
 			var vector_zero = Vector2.Zero;
 			var textures = new Dictionary<DrawDataTextures, Texture2D> {
-				[DrawDataTextures.Snake] = ContentHolder.Get(Settings.CurrentSnake),
-				[DrawDataTextures.Food] = ContentHolder.Get(Settings.CurrentFood),
-				[DrawDataTextures.Wall] = ContentHolder.Get(Settings.CurrentWall),
+				[DrawDataTextures.Snake] = this.SnakeTexture,
+				[DrawDataTextures.Food] = this.FoodTexture,
+				[DrawDataTextures.Wall] = this.WallTexture,
 			};
 
 			// Cut out the base position from background and redraw (applicable for user imported themes)
-			var background = new Region(ContentHolder.Get(Settings.CurrentBackground), this.BaseX - this.BaseWidth / 2, this.BaseY - this.BaseHeight / 2, this.BaseWidth, this.BaseHeight, 0, 0);
+			var background = new Region(this.BackgroundTexture, this.BaseX - this.BaseWidth / 2, this.BaseY - this.BaseHeight / 2, this.BaseWidth, this.BaseHeight, 0, 0);
 			sprite_batch.Draw(background, scaled_pos, Color.White, 0, new Vector2(this.Scale));
 
 			// Draw transparent overlay and borders

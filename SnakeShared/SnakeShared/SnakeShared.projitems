@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonMedium.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonOpen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonSlow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonTheme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\DeveloperLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\TitleLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Wall.cs" />
