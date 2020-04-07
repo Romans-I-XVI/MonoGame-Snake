@@ -21,7 +21,6 @@ namespace Snake.Rooms
 			Engine.SpawnInstance(new Entities.Snake(start_delay));
 			Engine.SpawnInstance<ControlPause>();
 			Engine.SpawnInstance<ControlFoodSpawner>();
-			Engine.SpawnInstance<Background>();
 		}
 
 		public override void onSwitchAway(Room next_room) {

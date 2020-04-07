@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using MonoEngine;
+using Snake.Entities;
 using Snake.Entities.Controls;
 using Snake.Rooms;
 
@@ -64,6 +65,7 @@ namespace Snake
 			Engine.SpawnInstance<ControlFullscreen>();
 #endif
 			Engine.SpawnInstance<ControlBack>();
+			Engine.SpawnInstance<Background>();
 
 			Engine.ChangeRoom<RoomMain>();
 		}

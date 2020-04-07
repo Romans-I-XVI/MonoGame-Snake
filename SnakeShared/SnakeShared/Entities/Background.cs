@@ -5,6 +5,7 @@ namespace Snake.Entities
 	public class Background : Entity
 	{
 		public Background() {
+			this.IsPersistent = true;
 			this.Depth = int.MaxValue;
 			var texture = ContentHolder.Get(Settings.CurrentBackground);
 			var region = new Region(texture, 0, 0, texture.Width, texture.Height, 0, 0);
