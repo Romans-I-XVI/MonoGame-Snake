@@ -2,8 +2,10 @@ using Microsoft.Xna.Framework;
 
 namespace Snake.Entities.UI
 {
-	public class ButtonOpen : ButtonGameMode
+	public class ButtonOpen : Button
 	{
+		public ButtonOpen() : base(215, 120) {}
+
 		protected override DrawLocations[] DrawData { get; } = {
 			new DrawLocations(DrawDataTextures.Food, 0.5f, new[] {
 				new Vector2(120, 72)

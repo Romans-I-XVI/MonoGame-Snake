@@ -6,16 +6,16 @@ using MonoEngine;
 
 namespace Snake.Entities.UI
 {
-	public class ButtonLevels : ButtonGameMode
+	public class ButtonLevels : Button
 	{
-		public ButtonLevels() {
+		public ButtonLevels() : base(215, 120) {
 			this.ExtraDrawingBegin = sprite_batch => {
 				const float extra_rect_alpha = (48 / 255f);
 				const float rect_width = 60;
 				const float rect_height = 34;
 				var scaled_pos = new Vector2(
-					this.Position.X - (ButtonGameMode.BaseWidth / 2f) * this.Scale,
-					this.Position.Y - (ButtonGameMode.BaseHeight / 2f) * this.Scale);
+					this.Position.X - (this.BaseWidth / 2f) * this.Scale,
+					this.Position.Y - (this.BaseHeight / 2f) * this.Scale);
 				foreach (var lock_location in ButtonLevels.LockLocations) {
 					RectangleDrawer.Draw(sprite_batch, scaled_pos.X + lock_location.X * this.Scale, scaled_pos.Y + lock_location.Y * this.Scale, rect_width * this.Scale, rect_height * this.Scale, Color.Black * extra_rect_alpha);
 				}

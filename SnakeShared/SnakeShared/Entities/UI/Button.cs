@@ -7,18 +7,20 @@ using MonoEngine;
 
 namespace Snake.Entities.UI
 {
-	public abstract class ButtonGameMode : Entity
+	public abstract class Button : Entity
 	{
 		protected abstract DrawLocations[] DrawData { get; }
 		protected Action<SpriteBatch> ExtraDrawingBegin = null;
 		protected Action<SpriteBatch> ExtraDrawingEnd = null;
-		protected const int BaseWidth = 215;
-		protected const int BaseHeight = 120;
+		protected readonly int BaseWidth;
+		protected readonly int BaseHeight;
 		protected readonly int BaseX = Engine.Game.CanvasWidth / 2;
 		protected readonly int BaseY = Engine.Game.CanvasHeight / 2 + 20;
 		protected float Scale = 1f;
 
-		protected ButtonGameMode() {
+		protected Button(int width, int height) {
+			this.BaseWidth = width;
+			this.BaseHeight = height;
 			this.Position = new Vector2(this.BaseX, this.BaseY);
 		}
 
@@ -26,10 +28,10 @@ namespace Snake.Entities.UI
 			base.onDraw(sprite_batch);
 
 			var scaled_pos = new Vector2(
-				this.Position.X - (ButtonGameMode.BaseWidth / 2f) * this.Scale,
-				this.Position.Y - (ButtonGameMode.BaseHeight / 2f) * this.Scale);
-			float scaled_width = ButtonGameMode.BaseWidth * this.Scale;
-			float scaled_height = ButtonGameMode.BaseHeight * this.Scale;
+				this.Position.X - (this.BaseWidth / 2f) * this.Scale,
+				this.Position.Y - (this.BaseHeight / 2f) * this.Scale);
+			float scaled_width = this.BaseWidth * this.Scale;
+			float scaled_height = this.BaseHeight * this.Scale;
 			var vector_zero = Vector2.Zero;
 			var textures = new Dictionary<DrawDataTextures, Texture2D> {
 				[DrawDataTextures.Snake] = ContentHolder.Get(Settings.CurrentSnake),
@@ -38,7 +40,7 @@ namespace Snake.Entities.UI
 			};
 
 			// Cut out the base position from background and redraw (applicable for user imported themes)
-			var background = new Region(ContentHolder.Get(Settings.CurrentBackground), this.BaseX - ButtonGameMode.BaseWidth / 2, this.BaseY - ButtonGameMode.BaseHeight / 2, ButtonGameMode.BaseWidth, ButtonGameMode.BaseHeight, 0, 0);
+			var background = new Region(ContentHolder.Get(Settings.CurrentBackground), this.BaseX - this.BaseWidth / 2, this.BaseY - this.BaseHeight / 2, this.BaseWidth, this.BaseHeight, 0, 0);
 			sprite_batch.Draw(background, scaled_pos, Color.White, 0, new Vector2(this.Scale));
 
 			// Draw transparent overlay and borders
