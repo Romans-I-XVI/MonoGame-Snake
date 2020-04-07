@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,6 +10,8 @@ namespace Snake.Entities.UI
 	public abstract class ButtonGameMode : Entity
 	{
 		protected abstract DrawLocations[] DrawData { get; }
+		protected Action<SpriteBatch> ExtraDrawingBegin = null;
+		protected Action<SpriteBatch> ExtraDrawingEnd = null;
 		protected const int BaseWidth = 215;
 		protected const int BaseHeight = 120;
 		protected readonly int BaseX = Engine.Game.CanvasWidth / 2;
@@ -33,13 +36,10 @@ namespace Snake.Entities.UI
 				[DrawDataTextures.Food] = ContentHolder.Get(Settings.CurrentFood),
 				[DrawDataTextures.Wall] = ContentHolder.Get(Settings.CurrentWall),
 			};
-			var food_scale = new Vector2(0.5f);
-			var wall_scale = new Vector2(1f / 3f);
-			var snake_scale = new Vector2(0.5f);
 
 			// Cut out the base position from background and redraw (applicable for user imported themes)
 			var background = new Region(ContentHolder.Get(Settings.CurrentBackground), this.BaseX - ButtonGameMode.BaseWidth / 2, this.BaseY - ButtonGameMode.BaseHeight / 2, ButtonGameMode.BaseWidth, ButtonGameMode.BaseHeight, 0, 0);
-			sprite_batch.Draw(background, Vector2.Zero, Color.White);
+			sprite_batch.Draw(background, scaled_pos, Color.White, 0, new Vector2(this.Scale));
 
 			// Draw transparent overlay and borders
 			float edge = 2 * this.Scale;
@@ -50,6 +50,8 @@ namespace Snake.Entities.UI
 			RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
 			RectangleDrawer.Draw(sprite_batch, scaled_pos.X + scaled_width - edge, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
 
+			this.ExtraDrawingBegin?.Invoke(sprite_batch);
+
 			for (int i = 0; i < this.DrawData.Length; i++) {
 				var data = this.DrawData[i];
 				var texture = textures[data.DrawDataTexture];
@@ -58,6 +60,8 @@ namespace Snake.Entities.UI
 					sprite_batch.Draw(texture, scaled_pos + pos * this.Scale, null, Color.White, 0, vector_zero, data.Scale * this.Scale, SpriteEffects.None, 0);
 				}
 			}
+
+			this.ExtraDrawingEnd?.Invoke(sprite_batch);
 		}
 
 		protected class DrawLocations

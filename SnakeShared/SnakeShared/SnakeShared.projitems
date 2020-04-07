@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonClassic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonGameMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonLevels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonOpen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\DeveloperLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\TitleLogo.cs" />
