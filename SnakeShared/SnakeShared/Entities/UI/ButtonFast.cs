@@ -5,7 +5,7 @@ namespace Snake.Entities.UI
 {
 	public class ButtonFast : Button
 	{
-		public ButtonFast() : base(Engine.Game.CanvasWidth - 180, Engine.Game.CanvasHeight / 2 + 40, 215, 80) {}
+		public ButtonFast() : base(Engine.Game.CanvasWidth - 180, Engine.Game.CanvasHeight / 2 + 20, 215, 80) {}
 
 		protected override DrawLocations[] DrawData { get; } = {
 			new DrawLocations(DrawDataTextures.Snake, 0.625f, new[] {
