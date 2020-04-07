@@ -1,10 +1,11 @@
 using Microsoft.Xna.Framework;
+using MonoEngine;
 
 namespace Snake.Entities.UI
 {
 	public class ButtonOpen : Button
 	{
-		public ButtonOpen() : base(215, 120) {}
+		public ButtonOpen() : base(Engine.Game.CanvasWidth / 2, Engine.Game.CanvasHeight / 2 + 20, 215, 120) {}
 
 		protected override DrawLocations[] DrawData { get; } = {
 			new DrawLocations(DrawDataTextures.Food, 0.5f, new[] {

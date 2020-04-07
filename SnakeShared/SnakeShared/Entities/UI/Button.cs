@@ -14,11 +14,13 @@ namespace Snake.Entities.UI
 		protected Action<SpriteBatch> ExtraDrawingEnd = null;
 		protected readonly int BaseWidth;
 		protected readonly int BaseHeight;
-		protected readonly int BaseX = Engine.Game.CanvasWidth / 2;
-		protected readonly int BaseY = Engine.Game.CanvasHeight / 2 + 20;
+		protected readonly int BaseX;
+		protected readonly int BaseY;
 		protected float Scale = 1f;
 
-		protected Button(int width, int height) {
+		protected Button(int x, int y, int width, int height) {
+			this.BaseX = x;
+			this.BaseY = y;
 			this.BaseWidth = width;
 			this.BaseHeight = height;
 			this.Position = new Vector2(this.BaseX, this.BaseY);

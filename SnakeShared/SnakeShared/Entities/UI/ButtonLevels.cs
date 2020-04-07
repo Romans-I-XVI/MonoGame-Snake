@@ -8,7 +8,7 @@ namespace Snake.Entities.UI
 {
 	public class ButtonLevels : Button
 	{
-		public ButtonLevels() : base(215, 120) {
+		public ButtonLevels() : base(Engine.Game.CanvasWidth / 2, Engine.Game.CanvasHeight / 2 + 20, 215, 120) {
 			this.ExtraDrawingBegin = sprite_batch => {
 				const float extra_rect_alpha = (48 / 255f);
 				const float rect_width = 60;
