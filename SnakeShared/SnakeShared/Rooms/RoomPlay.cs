@@ -24,6 +24,7 @@ namespace Snake.Rooms
 		}
 
 		public override void onSwitchAway(Room next_room) {
+			MediaPlayer.Stop();
 		}
 	}
 }

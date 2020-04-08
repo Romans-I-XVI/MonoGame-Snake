@@ -9,6 +9,10 @@ namespace Snake.Entities.UI
 {
 	public abstract class Button : Entity
 	{
+		public readonly int BaseWidth;
+		public readonly int BaseHeight;
+		public readonly int BaseX;
+		public readonly int BaseY;
 		protected abstract DrawLocations[] DrawData { get; }
 		protected virtual Texture2D BackgroundTexture => ContentHolder.Get(Settings.CurrentBackground);
 		protected virtual Texture2D WallTexture => ContentHolder.Get(Settings.CurrentWall);
@@ -16,10 +20,6 @@ namespace Snake.Entities.UI
 		protected virtual Texture2D FoodTexture => ContentHolder.Get(Settings.CurrentFood);
 		protected Action<SpriteBatch> ExtraDrawingBegin = null;
 		protected Action<SpriteBatch> ExtraDrawingEnd = null;
-		protected readonly int BaseWidth;
-		protected readonly int BaseHeight;
-		protected readonly int BaseX;
-		protected readonly int BaseY;
 		protected float Scale = 1f;
 
 		protected Button(int x, int y, int width, int height) {
