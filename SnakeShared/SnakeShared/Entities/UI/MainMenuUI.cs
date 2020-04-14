@@ -21,13 +21,23 @@ namespace Snake.Entities.Controls
 
 		public MainMenuUI() {
 			int rolodex_y = Engine.Game.CanvasHeight / 2 + 20;
-			// var themes = new Button[] {
-			// 	new ButtonTheme(0),
-			// };
-			// foreach (var button in themes) {
-			// 	Engine.SpawnInstance(button);
-			// }
-			// this.Rolodexes[0] = new Rolodex(themes);
+			var themes = new RolodexEntry[] {
+				new RolodexEntry(new ButtonTheme(0), 180, rolodex_y, 1, 0),
+				new RolodexEntry(new ButtonTheme(1), 180, rolodex_y + 90, 0.5f, 1),
+				new RolodexEntry(new ButtonTheme(2), 180, rolodex_y + 70, 0.4f, 2),
+				new RolodexEntry(new ButtonTheme(3), 180, rolodex_y + 44, 0.3f, 3),
+				new RolodexEntry(new ButtonTheme(4), 180, rolodex_y + 26, 0.2f, 4),
+				// new RolodexEntry(new ButtonTheme(0), 180, rolodex_y + 0, 0.1f, 5),
+				new RolodexEntry(new ButtonTheme(5), 180, rolodex_y - 26, 0.2f, 4),
+				new RolodexEntry(new ButtonTheme(6), 180, rolodex_y - 44, 0.3f, 3),
+				new RolodexEntry(new ButtonTheme(7), 180, rolodex_y - 70, 0.4f, 2),
+				new RolodexEntry(new ButtonTheme(8), 180, rolodex_y - 90, 0.5f, 1),
+			};
+			foreach (var entry in themes) {
+				Engine.SpawnInstance(entry.Button);
+			}
+			this.Rolodexes[0] = new Rolodex(themes);
+			this.Rolodexes[0].Collapse(0);
 
 			var game_modes = new RolodexEntry[] {
 				new RolodexEntry(new ButtonClassic(), Engine.Game.CanvasWidth / 2, rolodex_y, 1, 0),
@@ -119,6 +129,8 @@ namespace Snake.Entities.Controls
 					this.Index++;
 					if (this.Index == 2) {
 						this.Rolodexes[2].UnCollapse();
+					} else if (this.Index == 1) {
+						this.Rolodexes[0].Collapse();
 					}
 				}
 			}
@@ -128,6 +140,8 @@ namespace Snake.Entities.Controls
 					this.Index--;
 					if (this.Index == 1) {
 						this.Rolodexes[2].Collapse();
+					} else if (this.Index == 0) {
+						this.Rolodexes[0].UnCollapse();
 					}
 				}
 			}

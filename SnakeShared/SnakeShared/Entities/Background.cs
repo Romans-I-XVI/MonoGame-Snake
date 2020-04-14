@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoEngine;
 
 namespace Snake.Entities
@@ -7,10 +9,11 @@ namespace Snake.Entities
 		public Background() {
 			this.IsPersistent = true;
 			this.Depth = int.MaxValue;
-			var texture = ContentHolder.Get(Settings.CurrentBackground);
-			var region = new Region(texture, 0, 0, texture.Width, texture.Height, 0, 0);
-			var sprite = new Sprite(region);
-			this.AddSprite("main", sprite);
+		}
+
+		public override void onDraw(SpriteBatch sprite_batch) {
+			base.onDraw(sprite_batch);
+			sprite_batch.Draw(ContentHolder.Get(Settings.CurrentBackground), this.Position, Color.White);
 		}
 	}
 }
