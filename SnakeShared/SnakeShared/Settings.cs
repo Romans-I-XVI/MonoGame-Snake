@@ -6,7 +6,7 @@ namespace Snake
 	public static class Settings
 	{
 		public static int CurrentTheme = 0;
-		public static GameplaySpeeds CurrentGameplaySpeed = GameplaySpeeds.Fast;
+		public static GameplaySpeeds CurrentGameplaySpeed = GameplaySpeeds.Medium;
 		public static GameRooms CurrentGameRoom = GameRooms.Open;
 
 		public static AvailableTextures CurrentBackground => Enum.Parse<AvailableTextures>("theme_" + Settings.CurrentTheme + "_background");

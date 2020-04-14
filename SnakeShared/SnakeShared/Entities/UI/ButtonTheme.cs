@@ -7,6 +7,7 @@ namespace Snake.Entities.UI
 {
 	public class ButtonTheme : Button
 	{
+		public readonly int Theme;
 		private readonly AvailableTextures _background;
 		private readonly AvailableTextures _wall;
 		private readonly AvailableTextures _snake;
@@ -17,6 +18,7 @@ namespace Snake.Entities.UI
 		protected override Texture2D FoodTexture => ContentHolder.Get(this._food);
 
 		public ButtonTheme(int theme) : base(180, Engine.Game.CanvasHeight / 2 + 20, 215, 80) {
+			this.Theme = theme;
 			this._background = Enum.Parse<AvailableTextures>("theme_" + theme + "_background");
 			this._wall = Enum.Parse<AvailableTextures>("theme_" + theme + "_wall");
 			this._snake = Enum.Parse<AvailableTextures>("theme_" + theme + "_snake");

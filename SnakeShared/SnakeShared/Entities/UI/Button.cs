@@ -13,6 +13,13 @@ namespace Snake.Entities.UI
 		public readonly int BaseHeight;
 		public readonly int BaseX;
 		public readonly int BaseY;
+		public float StartScale = 1f;
+		public float DestScale = 1f;
+		public Vector2 StartPosition;
+		public Vector2 DestPosition;
+		public GameTimeSpan AdjustTimer = new GameTimeSpan();
+		public int AdjustDuration = 0;
+		public Tween AdjustTween = Tween.LinearTween;
 		protected abstract DrawLocations[] DrawData { get; }
 		protected virtual Texture2D BackgroundTexture => ContentHolder.Get(Settings.CurrentBackground);
 		protected virtual Texture2D WallTexture => ContentHolder.Get(Settings.CurrentWall);
@@ -28,6 +35,17 @@ namespace Snake.Entities.UI
 			this.BaseWidth = width;
 			this.BaseHeight = height;
 			this.Position = new Vector2(this.BaseX, this.BaseY);
+			this.StartPosition = this.Position;
+			this.DestPosition = this.Position;
+		}
+
+		public override void onUpdate(float dt) {
+			base.onUpdate(dt);
+
+			float current_time = this.AdjustTimer.TotalMilliseconds;
+			this.Scale = Tweening.SwitchTween(this.AdjustTween, this.StartScale, this.DestScale, current_time, this.AdjustDuration);
+			this.Position.X = Tweening.SwitchTween(this.AdjustTween, this.StartPosition.X, this.DestPosition.X, current_time, this.AdjustDuration);
+			this.Position.Y = Tweening.SwitchTween(this.AdjustTween, this.StartPosition.Y, this.DestPosition.Y, current_time, this.AdjustDuration);
 		}
 
 		public override void onDraw(SpriteBatch sprite_batch) {
@@ -70,6 +88,16 @@ namespace Snake.Entities.UI
 			}
 
 			this.ExtraDrawingEnd?.Invoke(sprite_batch);
+		}
+
+		public void Adjust(Vector2 position, float scale, int duration, Tween tween) {
+			this.StartPosition = this.Position;
+			this.DestPosition = position;
+			this.StartScale = this.Scale;
+			this.DestScale = scale;
+			this.AdjustDuration = duration;
+			this.AdjustTween = tween;
+			this.AdjustTimer.Mark();
 		}
 
 		protected class DrawLocations
