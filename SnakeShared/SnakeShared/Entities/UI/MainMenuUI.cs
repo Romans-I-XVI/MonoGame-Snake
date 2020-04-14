@@ -11,13 +11,20 @@ namespace Snake.Entities.Controls
 {
 	public class MainMenuUI : Entity
 	{
-		private Rolodex[] Rolodexes = new Rolodex[3];
+		internal const int UIMovementDuration = 200;
+		internal const Tween UIMovementTween = Tween.SquareEaseOut;
 		private int Index = 1;
-		private VirtualButton ButtonLeft = new VirtualButton();
-		private VirtualButton ButtonRight = new VirtualButton();
-		private VirtualButton ButtonUp = new VirtualButton();
-		private VirtualButton ButtonDown = new VirtualButton();
-		private VirtualButton ButtonSelect = new VirtualButton();
+		private readonly Rolodex[] Rolodexes = new Rolodex[3];
+		private readonly VirtualButton ButtonLeft = new VirtualButton();
+		private readonly VirtualButton ButtonRight = new VirtualButton();
+		private readonly VirtualButton ButtonUp = new VirtualButton();
+		private readonly VirtualButton ButtonDown = new VirtualButton();
+		private readonly VirtualButton ButtonSelect = new VirtualButton();
+		private readonly GameTimeSpan SelectorMoveTimer = new GameTimeSpan();
+		private Vector2 PreviousSelectorPosition;
+		private Vector2 PreviousSelectorSize;
+		private Vector2 SelectorPosition;
+		private Vector2 SelectorSize;
 
 		public MainMenuUI() {
 			int rolodex_y = Engine.Game.CanvasHeight / 2 + 20;
@@ -98,6 +105,9 @@ namespace Snake.Entities.Controls
 			this.ButtonSelect.AddKey(Keys.Enter);
 			this.ButtonSelect.AddButton(Buttons.A);
 			this.ButtonSelect.AddButton(Buttons.Start);
+
+			this.MoveCurrentSelector();
+			this.SelectorMoveTimer.AddTime(MainMenuUI.UIMovementDuration);
 		}
 
 		public override void onUpdate(float dt) {
@@ -133,6 +143,7 @@ namespace Snake.Entities.Controls
 			if (this.ButtonRight.IsPressed()) {
 				if (this.Index < this.Rolodexes.Length - 1) {
 					this.Index++;
+					this.MoveCurrentSelector();
 					if (this.Index == 2) {
 						this.Rolodexes[2].UnCollapse();
 					} else if (this.Index == 1) {
@@ -144,6 +155,7 @@ namespace Snake.Entities.Controls
 			if (this.ButtonLeft.IsPressed()) {
 				if (this.Index > 0) {
 					this.Index--;
+					this.MoveCurrentSelector();
 					if (this.Index == 1) {
 						this.Rolodexes[2].Collapse();
 					} else if (this.Index == 0) {
@@ -171,19 +183,30 @@ namespace Snake.Entities.Controls
 		public override void onDraw(SpriteBatch sprite_batch) {
 			base.onDraw(sprite_batch);
 
+			float current_time = this.SelectorMoveTimer.TotalMilliseconds;
+			float x = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.X, this.SelectorPosition.X, current_time, MainMenuUI.UIMovementDuration);
+			float y = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.Y, this.SelectorPosition.Y, current_time, MainMenuUI.UIMovementDuration);
+			float width = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.X, this.SelectorSize.X, current_time, MainMenuUI.UIMovementDuration);
+			float height = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.Y, this.SelectorSize.Y, current_time, MainMenuUI.UIMovementDuration);
+			RectangleDrawer.DrawAround(sprite_batch, x, y, width, height, Color.Black * 0.5f, 5);
+		}
+
+		private void MoveCurrentSelector() {
 			var current_button = this.Rolodexes[this.Index].CurrentButton;
 			float width = current_button.BaseWidth;
 			float height = current_button.BaseHeight;
 			float x = current_button.DestPosition.X - width / 2;
 			float y = current_button.DestPosition.Y - height / 2;
 
-			RectangleDrawer.DrawAround(sprite_batch, x, y, width, height, Color.Black * 0.5f, 5);
+			this.PreviousSelectorPosition = this.SelectorPosition;
+			this.PreviousSelectorSize = this.SelectorSize;
+			this.SelectorPosition = new Vector2(x, y);
+			this.SelectorSize = new Vector2(width, height);
+			this.SelectorMoveTimer.Mark();
 		}
 
 		internal class Rolodex
 		{
-			private const int AdjustDuration = 200;
-			private const Tween AdjustTween = Tween.SquareEaseOut;
 			private readonly float CenterX;
 			private readonly float CenterY;
 			private readonly int LowestDepth;
@@ -213,7 +236,7 @@ namespace Snake.Entities.Controls
 				}
 
 				this.Entries[0].Button = last_button;
-				this.AdjustAllButtons(Rolodex.AdjustDuration);
+				this.AdjustAllButtons(MainMenuUI.UIMovementDuration);
 			}
 
 			internal void RollUp() {
@@ -223,22 +246,22 @@ namespace Snake.Entities.Controls
 				}
 
 				this.Entries[this.Entries.Length - 1].Button = first_button;
-				this.AdjustAllButtons(Rolodex.AdjustDuration);
+				this.AdjustAllButtons(MainMenuUI.UIMovementDuration);
 			}
 
-			internal void Collapse(int duration = Rolodex.AdjustDuration) {
+			internal void Collapse(int duration = MainMenuUI.UIMovementDuration) {
 				foreach (var entry in this.Entries) {
-					entry.Button.Adjust(new Vector2(this.CenterX, this.CenterY), entry.Scale, duration, Rolodex.AdjustTween);
+					entry.Button.Adjust(new Vector2(this.CenterX, this.CenterY), entry.Scale, duration, MainMenuUI.UIMovementTween);
 				}
 			}
 
-			internal void UnCollapse(int duration = Rolodex.AdjustDuration) {
+			internal void UnCollapse(int duration = MainMenuUI.UIMovementDuration) {
 				this.AdjustAllButtons(duration);
 			}
 
 			private void AdjustAllButtons(int duration) {
 				foreach (var entry in this.Entries) {
-					entry.Button.Adjust(new Vector2(entry.X, entry.Y), entry.Scale, duration, Rolodex.AdjustTween);
+					entry.Button.Adjust(new Vector2(entry.X, entry.Y), entry.Scale, duration, MainMenuUI.UIMovementTween);
 
 					float start_y = entry.Button.StartPosition.Y;
 					float dest_y = entry.Button.DestPosition.Y;
