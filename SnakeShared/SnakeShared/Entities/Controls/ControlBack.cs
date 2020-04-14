@@ -11,6 +11,7 @@ namespace Snake.Entities.Controls
 		private readonly Dictionary<Type, Action> RoomBackActions = new Dictionary<Type, Action> {
 			[typeof(RoomMain)] = () => ((SnakeGame)Engine.Game).ExitGame = true,
 			[typeof(RoomPlay)] = () => Engine.ChangeRoom<RoomMain>(),
+			[typeof(RoomLevels)] = () => Engine.ChangeRoom<RoomMain>(),
 		};
 
 		public ControlBack() {

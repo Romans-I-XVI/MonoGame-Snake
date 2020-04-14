@@ -121,6 +121,12 @@ namespace Snake.Entities.Controls
 					Settings.CurrentGameplaySpeed = GameplaySpeeds.Slow;
 				} else if (current_button is ButtonTheme) {
 					Settings.CurrentTheme = ((ButtonTheme)current_button).Theme;
+				} else if (current_button is ButtonClassic) {
+					Settings.CurrentGameRoom = GameRooms.Classic;
+				} else if (current_button is ButtonOpen) {
+					Settings.CurrentGameRoom = GameRooms.Open;
+				} else if (current_button is ButtonLevels) {
+					Settings.CurrentGameRoom = GameRooms.Level1;
 				}
 			}
 
