@@ -20,11 +20,7 @@ namespace Snake.Entities.Controls
 		private readonly VirtualButton ButtonUp = new VirtualButton();
 		private readonly VirtualButton ButtonDown = new VirtualButton();
 		private readonly VirtualButton ButtonSelect = new VirtualButton();
-		private readonly GameTimeSpan SelectorMoveTimer = new GameTimeSpan();
-		private Vector2 PreviousSelectorPosition;
-		private Vector2 PreviousSelectorSize;
-		private Vector2 SelectorPosition;
-		private Vector2 SelectorSize;
+		private readonly Selector Selector;
 
 		public MainMenuUI() {
 			int rolodex_y = Engine.Game.CanvasHeight / 2 + 20;
@@ -106,8 +102,8 @@ namespace Snake.Entities.Controls
 			this.ButtonSelect.AddButton(Buttons.A);
 			this.ButtonSelect.AddButton(Buttons.Start);
 
-			this.MoveCurrentSelector();
-			this.SelectorMoveTimer.AddTime(MainMenuUI.UIMovementDuration);
+			this.Selector = Engine.SpawnInstance<Selector>();
+			this.MoveSelector(0);
 		}
 
 		public override void onUpdate(float dt) {
@@ -143,7 +139,7 @@ namespace Snake.Entities.Controls
 			if (this.ButtonRight.IsPressed()) {
 				if (this.Index < this.Rolodexes.Length - 1) {
 					this.Index++;
-					this.MoveCurrentSelector();
+					this.MoveSelector();
 					if (this.Index == 2) {
 						this.Rolodexes[2].UnCollapse();
 					} else if (this.Index == 1) {
@@ -155,7 +151,7 @@ namespace Snake.Entities.Controls
 			if (this.ButtonLeft.IsPressed()) {
 				if (this.Index > 0) {
 					this.Index--;
-					this.MoveCurrentSelector();
+					this.MoveSelector();
 					if (this.Index == 1) {
 						this.Rolodexes[2].Collapse();
 					} else if (this.Index == 0) {
@@ -180,64 +176,18 @@ namespace Snake.Entities.Controls
 			}
 		}
 
-		public override void onDraw(SpriteBatch sprite_batch) {
-			base.onDraw(sprite_batch);
-
-			// Set up variables for drawing selector
-			float current_time = this.SelectorMoveTimer.TotalMilliseconds;
-			float x = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.X, this.SelectorPosition.X, current_time, MainMenuUI.UIMovementDuration);
-			float y = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.Y, this.SelectorPosition.Y, current_time, MainMenuUI.UIMovementDuration);
-			float width = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.X, this.SelectorSize.X, current_time, MainMenuUI.UIMovementDuration);
-			float height = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.Y, this.SelectorSize.Y, current_time, MainMenuUI.UIMovementDuration);
-			var texture = ContentHolder.Get(Settings.CurrentSnake);
-			var scale = new Vector2(0.3125f);
-			float draw_width = texture.Width * scale.X;
-			float draw_height = texture.Height * scale.Y;
-
-			// Draw horizontal selector parts
-			float draw_x = x;
-			while (draw_x < x + width) {
-				sprite_batch.Draw(texture, new Vector2(draw_x, y - draw_height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-				sprite_batch.Draw(texture, new Vector2(draw_x, y + height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-				draw_x += draw_width;
-			}
-
-			// Draw vertical selector parts
-			float draw_start_y = y - draw_height;
-			float draw_y = draw_start_y;
-			float total_height = draw_start_y + height + draw_height * 2;
-			while (draw_y < total_height) {
-				Rectangle? source_rectangle = null;
-				if (draw_y + draw_height > total_height) {
-					float remaining_space = total_height - draw_y;
-					float draw_percent = remaining_space / draw_height;
-					source_rectangle = new Rectangle(0, 0, texture.Width, (int)(texture.Height * draw_percent));
-				}
-
-				sprite_batch.Draw(texture, new Vector2(x - draw_width, draw_y), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-				sprite_batch.Draw(texture, new Vector2(x + width, draw_y), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-				draw_y += draw_height;
-			}
+		public override void onDestroy() {
+			base.onDestroy();
+			this.Selector.Destroy();
 		}
 
-		private void MoveCurrentSelector() {
-			float current_time = this.SelectorMoveTimer.TotalMilliseconds;
-			float current_x = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.X, this.SelectorPosition.X, current_time, MainMenuUI.UIMovementDuration);
-			float current_y = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.Y, this.SelectorPosition.Y, current_time, MainMenuUI.UIMovementDuration);
-			float current_width = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.X, this.SelectorSize.X, current_time, MainMenuUI.UIMovementDuration);
-			float current_height = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.Y, this.SelectorSize.Y, current_time, MainMenuUI.UIMovementDuration);
-
+		private void MoveSelector(int duration = MainMenuUI.UIMovementDuration) {
 			var current_button = this.Rolodexes[this.Index].CurrentButton;
 			float dest_width = current_button.BaseWidth;
 			float dest_height = current_button.BaseHeight;
 			float dest_x = current_button.DestPosition.X - dest_width / 2;
 			float dest_y = current_button.DestPosition.Y - dest_height / 2;
-
-			this.PreviousSelectorPosition = new Vector2(current_x, current_y);
-			this.PreviousSelectorSize = new Vector2(current_width, current_height);
-			this.SelectorPosition = new Vector2(dest_x, dest_y);
-			this.SelectorSize = new Vector2(dest_width, dest_height);
-			this.SelectorMoveTimer.Mark();
+			this.Selector.Move(dest_x, dest_y, dest_width, dest_height, duration, MainMenuUI.UIMovementTween);
 		}
 
 		internal class Rolodex

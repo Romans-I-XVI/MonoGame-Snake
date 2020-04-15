@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonTheme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\DeveloperLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\MainMenuUI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\Selector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\TitleLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Wall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\GameplaySpeeds.cs" />
