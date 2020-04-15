@@ -9,6 +9,7 @@
     <Import_RootNamespace>SnakeShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ClassicLevelData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engine\AvailableContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engine\ContentHolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Engine\SnakeGame.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\FoodEatenEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeDestructionDoneEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakePartDestroyedEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogoDrawData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomLevels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomMain.cs" />

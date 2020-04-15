@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Media;
 using MonoEngine;
 using Snake.Entities;
 using Snake.Entities.Controls;
+using Snake.Enums;
 
 namespace Snake.Rooms
 {
@@ -21,6 +22,22 @@ namespace Snake.Rooms
 			Engine.SpawnInstance(new Entities.Snake(start_delay));
 			Engine.SpawnInstance<ControlPause>();
 			Engine.SpawnInstance<ControlFoodSpawner>();
+
+			LevelData level_data = null;
+			if (Settings.CurrentGameRoom == GameRooms.Classic) {
+				level_data = new ClassicLevelData();
+			}
+
+			if (level_data != null) {
+				if (level_data.ObjectSpawns != null) {
+					foreach (var spawn in level_data.ObjectSpawns) {
+						if (spawn is WallSpawn) {
+							var wall_spawn = (WallSpawn)spawn;
+							Engine.SpawnInstance(new Wall(wall_spawn.X, wall_spawn.Y, wall_spawn.Scale));
+						}
+					}
+				}
+			}
 		}
 
 		public override void onSwitchAway(Room next_room) {

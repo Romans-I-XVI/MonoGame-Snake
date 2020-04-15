@@ -162,14 +162,8 @@ namespace Snake.Entities.Controls
 
 			if (this.ButtonSelect.IsPressed()) {
 				var current_button = this.Rolodexes[this.Index].CurrentButton;
-				if (current_button is ButtonOpen) {
-					Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
-						["mode"] = "open"
-					});
-				} else if (current_button is ButtonClassic) {
-					Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
-						["mode"] = "classic"
-					});
+				if (current_button is ButtonOpen || current_button is ButtonClassic) {
+					Engine.ChangeRoom<RoomPlay>();
 				} else if (current_button is ButtonLevels) {
 					Engine.ChangeRoom<RoomLevels>();
 				}
