@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoEngine;
 
 namespace Snake.Entities.Controls
@@ -54,10 +55,17 @@ namespace Snake.Entities.Controls
 				return;
 #endif
 
-			if (!Engine.IsPaused())
+			if (!Engine.IsPaused()) {
 				Engine.Pause();
-			else
+				if (MediaPlayer.State == MediaState.Playing) {
+					MediaPlayer.Pause();
+				}
+			} else {
 				Engine.Resume();
+				if (MediaPlayer.State == MediaState.Paused) {
+					MediaPlayer.Resume();
+				}
+			}
 		}
 
 		private void Dispose() {
