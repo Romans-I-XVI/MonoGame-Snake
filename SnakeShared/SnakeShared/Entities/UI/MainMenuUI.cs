@@ -183,25 +183,60 @@ namespace Snake.Entities.Controls
 		public override void onDraw(SpriteBatch sprite_batch) {
 			base.onDraw(sprite_batch);
 
+			// Set up variables for drawing selector
 			float current_time = this.SelectorMoveTimer.TotalMilliseconds;
 			float x = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.X, this.SelectorPosition.X, current_time, MainMenuUI.UIMovementDuration);
 			float y = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.Y, this.SelectorPosition.Y, current_time, MainMenuUI.UIMovementDuration);
 			float width = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.X, this.SelectorSize.X, current_time, MainMenuUI.UIMovementDuration);
 			float height = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.Y, this.SelectorSize.Y, current_time, MainMenuUI.UIMovementDuration);
-			RectangleDrawer.DrawAround(sprite_batch, x, y, width, height, Color.Black * 0.5f, 5);
+			var texture = ContentHolder.Get(Settings.CurrentSnake);
+			var scale = new Vector2(0.3125f);
+			float draw_width = texture.Width * scale.X;
+			float draw_height = texture.Height * scale.Y;
+
+			// Draw horizontal selector parts
+			float draw_x = x;
+			while (draw_x < x + width) {
+				sprite_batch.Draw(texture, new Vector2(draw_x, y - draw_height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+				sprite_batch.Draw(texture, new Vector2(draw_x, y + height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+				draw_x += draw_width;
+			}
+
+			// Draw vertical selector parts
+			float draw_start_y = y - draw_height;
+			float draw_y = draw_start_y;
+			float total_height = draw_start_y + height + draw_height * 2;
+			while (draw_y < total_height) {
+				Rectangle? source_rectangle = null;
+				if (draw_y + draw_height > total_height) {
+					float remaining_space = total_height - draw_y;
+					float draw_percent = remaining_space / draw_height;
+					source_rectangle = new Rectangle(0, 0, texture.Width, (int)(texture.Height * draw_percent));
+				}
+
+				sprite_batch.Draw(texture, new Vector2(x - draw_width, draw_y), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+				sprite_batch.Draw(texture, new Vector2(x + width, draw_y), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+				draw_y += draw_height;
+			}
 		}
 
 		private void MoveCurrentSelector() {
-			var current_button = this.Rolodexes[this.Index].CurrentButton;
-			float width = current_button.BaseWidth;
-			float height = current_button.BaseHeight;
-			float x = current_button.DestPosition.X - width / 2;
-			float y = current_button.DestPosition.Y - height / 2;
+			float current_time = this.SelectorMoveTimer.TotalMilliseconds;
+			float current_x = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.X, this.SelectorPosition.X, current_time, MainMenuUI.UIMovementDuration);
+			float current_y = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorPosition.Y, this.SelectorPosition.Y, current_time, MainMenuUI.UIMovementDuration);
+			float current_width = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.X, this.SelectorSize.X, current_time, MainMenuUI.UIMovementDuration);
+			float current_height = Tweening.SwitchTween(MainMenuUI.UIMovementTween, this.PreviousSelectorSize.Y, this.SelectorSize.Y, current_time, MainMenuUI.UIMovementDuration);
 
-			this.PreviousSelectorPosition = this.SelectorPosition;
-			this.PreviousSelectorSize = this.SelectorSize;
-			this.SelectorPosition = new Vector2(x, y);
-			this.SelectorSize = new Vector2(width, height);
+			var current_button = this.Rolodexes[this.Index].CurrentButton;
+			float dest_width = current_button.BaseWidth;
+			float dest_height = current_button.BaseHeight;
+			float dest_x = current_button.DestPosition.X - dest_width / 2;
+			float dest_y = current_button.DestPosition.Y - dest_height / 2;
+
+			this.PreviousSelectorPosition = new Vector2(current_x, current_y);
+			this.PreviousSelectorSize = new Vector2(current_width, current_height);
+			this.SelectorPosition = new Vector2(dest_x, dest_y);
+			this.SelectorSize = new Vector2(dest_width, dest_height);
 			this.SelectorMoveTimer.Mark();
 		}
 
