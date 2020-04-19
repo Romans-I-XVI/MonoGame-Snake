@@ -11,7 +11,6 @@ namespace Snake.Rooms
 	{
 		public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
 			Engine.SpawnInstance<ControlPause>();
-			Engine.SpawnInstance<ControlFoodSpawner>();
 
 			int start_delay = 0;
 			if (args != null && args.ContainsKey("start_delay")) {
@@ -35,6 +34,11 @@ namespace Snake.Rooms
 					Engine.SpawnInstance(new ControlLevelConstructor(level_data));
 				}
 			}
+
+			if (level_data?.FoodSpawn != null)
+				Engine.SpawnInstance(new ControlFoodSpawner(level_data.FoodSpawn.X, level_data.FoodSpawn.Y));
+			else
+				Engine.SpawnInstance<ControlFoodSpawner>();
 
 			Engine.SpawnInstance(new TimedExecution(start_delay, () => {
 				MediaPlayer.IsRepeating = true;

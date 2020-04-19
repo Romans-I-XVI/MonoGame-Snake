@@ -6,9 +6,11 @@ namespace Snake.Entities.Controls
 {
 	public class ControlFoodSpawner : Entity
 	{
-		public ControlFoodSpawner() {
-			Engine.SpawnInstance(new Food(854 / 2, 480 / 2));
+		public ControlFoodSpawner(int first_x, int first_y) {
+			Engine.SpawnInstance(new Food(first_x, first_y));
 		}
+
+		public ControlFoodSpawner() : this(854 / 2, 480 / 2) {}
 
 		public override void onGameEvent(GameEvent game_event) {
 			base.onGameEvent(game_event);
