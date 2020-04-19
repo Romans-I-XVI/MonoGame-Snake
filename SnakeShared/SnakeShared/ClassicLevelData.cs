@@ -5,7 +5,7 @@ namespace Snake
 	public class ClassicLevelData : LevelData
 	{
 		public ClassicLevelData() {
-			var walls = new List<ObjectSpawn>();
+			var walls = new List<WallSpawn>();
 			for (int i = 0; i < 25; i++) {
 				walls.Add(new WallSpawn(52 + 30 * i, 30, 1));
 			}
@@ -19,7 +19,7 @@ namespace Snake
 				walls.Add(new WallSpawn(52, 480 - 30 - 30 - 30 * i, 1));
 			}
 
-			this.ObjectSpawns = walls.ToArray();
+			this.WallSpawns = walls.ToArray();
 		}
 	}
 }

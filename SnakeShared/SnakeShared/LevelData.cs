@@ -2,12 +2,10 @@ namespace Snake
 {
 	public class LevelData
 	{
-		public ObjectSpawn[] ObjectSpawns;
+		public WallSpawn[] WallSpawns;
 	}
 
-	public class ObjectSpawn {}
-
-	public class WallSpawn : ObjectSpawn
+	public class WallSpawn
 	{
 		public readonly int X;
 		public readonly int Y;
