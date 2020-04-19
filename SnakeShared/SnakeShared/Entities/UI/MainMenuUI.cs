@@ -39,7 +39,7 @@ namespace Snake.Entities.Controls
 			foreach (var entry in themes) {
 				Engine.SpawnInstance(entry.Button);
 			}
-			this.Rolodexes[0] = new Rolodex(themes);
+			this.Rolodexes[0] = new Rolodex(themes, Settings.CurrentTheme);
 			this.Rolodexes[0].Collapse(0);
 
 			var game_modes = new RolodexEntry[] {
