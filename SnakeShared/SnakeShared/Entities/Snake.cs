@@ -81,7 +81,7 @@ namespace Snake.Entities
 
 			if (this.State == States.Waiting)
 				this.onUpdate_Waiting(dt);
-			if (this.State == States.Alive)
+			else if (this.State == States.Alive)
 				this.onUpdate_Alive(dt);
 			else
 				this.onUpdate_Dead(dt);
