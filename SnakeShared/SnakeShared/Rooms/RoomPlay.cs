@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
 using MonoEngine;
 using Snake.Entities;
@@ -29,22 +30,35 @@ namespace Snake.Rooms
 							Engine.SpawnInstance(new Wall(spawn.X, spawn.Y, spawn.Scale));
 						}
 					}
+					if (level_data.PortalSpawns != null) {
+						foreach (var spawn in level_data.PortalSpawns) {
+							Engine.SpawnInstance(new Portal(spawn));
+						}
+					}
 				} else {
 					start_delay += ControlLevelConstructor.TotalTimeToSpawnLevel(level_data);
 					Engine.SpawnInstance(new ControlLevelConstructor(level_data));
 				}
 			}
 
-			if (level_data?.FoodSpawn != null)
-				Engine.SpawnInstance(new ControlFoodSpawner(level_data.FoodSpawn.X, level_data.FoodSpawn.Y));
-			else
+			if (level_data?.FoodSpawn != null) {
+				var spawn = level_data.FoodSpawn.Value;
+				Engine.SpawnInstance(new ControlFoodSpawner(spawn.X, spawn.Y));
+			} else {
 				Engine.SpawnInstance<ControlFoodSpawner>();
+			}
+
+			if (level_data?.SnakeSpawn != null) {
+				var spawn = level_data.SnakeSpawn.Value;
+				Engine.SpawnInstance(new Entities.Snake(start_delay, spawn));
+			} else {
+				Engine.SpawnInstance(new Entities.Snake(start_delay));
+			}
 
 			Engine.SpawnInstance(new TimedExecution(start_delay, () => {
 				MediaPlayer.IsRepeating = true;
 				MediaPlayer.Play(ContentHolder.Get(AvailableMusic.background_music));
 			}));
-			Engine.SpawnInstance(new Entities.Snake(start_delay));
 		}
 
 		public override void onSwitchAway(Room next_room) {

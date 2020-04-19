@@ -40,15 +40,15 @@ namespace Snake.Entities
 		private Point CurrentLocation;
 		private Point DirectionChangeLocation;
 
-		public Snake(int start_delay) : this(start_delay, new Point(170 - Snake.Size / 2, 480 / 2), Directions.Right) {}
+		public Snake(int start_delay) : this(start_delay, new Point(170 - Snake.Size / 2, 480 / 2)) {}
 
-		public Snake(int start_delay, Point position, Directions direction) {
+		public Snake(int start_delay, Point position) {
 			this.InitialWaitDelay = start_delay;
 			this.CurrentLocation = position;
 			this.DirectionChangeLocation = this.CurrentLocation;
 			this.InternalLocation = position.ToVector2();
 			this.Position = this.InternalLocation;
-			this.Direction = direction;
+			this.Direction = Directions.Right;
 			this.State = (this.InitialWaitDelay == 0) ? States.Alive : States.Waiting;
 
 			var texture = ContentHolder.Get(Settings.CurrentSnake);
@@ -241,6 +241,24 @@ namespace Snake.Entities
 					Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
 					this.BeginDeath();
 				}
+			} else if (other_instance is Portal) {
+				var entrance_portal = (Portal)other_instance;
+				var exit_portal = entrance_portal.GetDestination(this.Direction);
+				float travel_x = exit_portal.Position.X - entrance_portal.Position.X;
+				float travel_y = exit_portal.Position.Y - entrance_portal.Position.Y;
+				if (this.Direction == Directions.Up)
+					travel_y -= Portal.Size + Snake.Size;
+				else if (this.Direction == Directions.Down) {
+					travel_y += Portal.Size + Snake.Size;
+				} else if (this.Direction == Directions.Left) {
+					travel_x -= Portal.Size + Snake.Size;
+				} else if (this.Direction == Directions.Right) {
+					travel_x += Portal.Size + Snake.Size;
+				}
+
+				this.InternalLocation += new Vector2(travel_x, travel_y);
+				this.Position = this.InternalLocation;
+				this.CurrentLocation = this.InternalLocation.ToPoint();
 			}
 		}
 
