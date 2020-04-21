@@ -17,6 +17,12 @@
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Include="..\SnakeContent\json\level_1.json">
+        <Link>Content/json/level_1.json</Link>
+      </EmbeddedResource>
+    </ItemGroup>
+
     <Import Project="..\monoEngine\MonoEngine\MonoEngine.projitems" Label="Shared" />
     <Import Project="..\SnakeShared\SnakeShared\SnakeShared.projitems" Label="Shared" />
 

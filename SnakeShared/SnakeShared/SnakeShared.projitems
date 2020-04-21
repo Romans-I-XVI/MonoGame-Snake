@@ -51,6 +51,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeDestructionDoneEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakePartDestroyedEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Levels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogoDrawData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomLevels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomMain.cs" />

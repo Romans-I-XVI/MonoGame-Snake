@@ -61,6 +61,7 @@ namespace Snake
 			base.LoadContent();
 
 			ContentHolder.Init(this, CustomContentLocations.TextureLocations);
+			Levels.Init();
 #if !ANDROID && !IOS
 			Engine.SpawnInstance<ControlFullscreen>();
 #endif

@@ -21,6 +21,8 @@ namespace Snake.Rooms
 			LevelData level_data = null;
 			if (Settings.CurrentGameRoom == GameRooms.Classic) {
 				level_data = new ClassicLevelData();
+			} else if (Settings.CurrentGameRoom != GameRooms.Open) {
+				level_data = Levels.Load((int)Settings.CurrentGameRoom);
 			}
 
 			if (level_data != null) {
