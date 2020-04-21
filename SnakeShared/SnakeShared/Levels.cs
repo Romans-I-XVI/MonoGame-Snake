@@ -15,7 +15,7 @@ namespace Snake
 			if (Levels.Initialized)
 				return;
 
-			const int level_count = 1;
+			const int level_count = 2;
 			Levels.LevelJSON = new string[level_count];
 			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
