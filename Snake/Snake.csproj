@@ -77,6 +77,12 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Include="..\SnakeContent\json\level_11.json">
+        <Link>Content/json/level_11.json</Link>
+      </EmbeddedResource>
+    </ItemGroup>
+
     <Import Project="..\monoEngine\MonoEngine\MonoEngine.projitems" Label="Shared" />
     <Import Project="..\SnakeShared\SnakeShared\SnakeShared.projitems" Label="Shared" />
 
