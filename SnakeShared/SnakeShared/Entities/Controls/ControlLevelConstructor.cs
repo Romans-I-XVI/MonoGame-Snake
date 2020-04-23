@@ -45,8 +45,13 @@ namespace Snake.Entities.Controls
 
 		public static int TotalTimeToSpawnLevel(LevelData level_data) {
 			int time = 0;
+
 			if (level_data.WallSpawns != null) {
 				time += ControlLevelConstructor.ObjectSpawnDelay * level_data.WallSpawns.Length;
+			}
+
+			if (level_data.PortalSpawns != null) {
+				time += ControlLevelConstructor.ObjectSpawnDelay * level_data.PortalSpawns.Length;
 			}
 
 			return time;
