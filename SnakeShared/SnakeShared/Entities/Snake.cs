@@ -247,6 +247,7 @@ namespace Snake.Entities
 				var original_direction = this.Direction;
 				this.Direction = entrance_portal.GetDirection(this.Direction);
 
+				// Move the snake to the portal exit and reverse direction if necessary
 				float travel_x = exit_portal.Position.X - entrance_portal.Position.X;
 				float travel_y = exit_portal.Position.Y - entrance_portal.Position.Y;
 				if (this.Direction == original_direction) {
@@ -267,6 +268,32 @@ namespace Snake.Entities
 				this.InternalLocation += new Vector2(travel_x, travel_y);
 				this.Position = this.InternalLocation;
 				this.CurrentLocation = this.InternalLocation.ToPoint();
+
+				// Do extra checking to see if snake is immediately colliding with wall when exiting portal and adjust if so
+				var head_collider = (ColliderRectangle)this.GetCollider(this.Direction.ToString());
+				var walls = Engine.GetAllInstances<Wall>();
+				for (int i = 0; i < walls.Count; i++) {
+					var wall_collider = (ColliderRectangle)walls[i].GetCollider("main");
+					if (CollisionChecking.Check(head_collider.Rectangle, wall_collider.Rectangle)) {
+						if (this.Direction == Directions.Right || this.Direction == Directions.Left) {
+							if (wall_collider.Rectangle.Center.Y < exit_portal.Position.Y) {
+								this.InternalLocation.Y = wall_collider.Rectangle.Bottom + Snake.Size / 2;
+							} else {
+								this.InternalLocation.Y = wall_collider.Rectangle.Top - Snake.Size / 2;
+							}
+						} else {
+							if (wall_collider.Rectangle.Center.X < exit_portal.Position.X) {
+								this.InternalLocation.X = wall_collider.Rectangle.Right + Snake.Size / 2;
+							} else {
+								this.InternalLocation.X = wall_collider.Rectangle.Left - Snake.Size / 2;
+							}
+						}
+
+						this.Position = this.InternalLocation;
+						this.CurrentLocation = this.InternalLocation.ToPoint();
+						break;
+					}
+				}
 			}
 		}
 
