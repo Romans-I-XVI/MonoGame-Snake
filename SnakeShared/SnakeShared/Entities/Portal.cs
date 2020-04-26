@@ -38,5 +38,24 @@ namespace Snake.Entities
 		public Portal(PortalSpawn spawn) : this(spawn.X, spawn.Y, spawn.ID, spawn.GotoUp, spawn.GotoDown, spawn.GotoLeft, spawn.GotoRight, spawn.ReverseDirection) {}
 
 		public Portal GetDestination(Directions direction) => Engine.GetAllInstances<Portal>().First(portal => portal.ID == this.DestinationIDs[direction]);
+
+		public Directions GetDirection(Directions direction) {
+			bool need_to_reverse = (this.ReverseDirection != null && this.ReverseDirection[direction]);
+
+			if (need_to_reverse) {
+				switch (direction) {
+					case Directions.Up:
+						return Directions.Down;
+					case Directions.Down:
+						return Directions.Up;
+					case Directions.Left:
+						return Directions.Right;
+					case Directions.Right:
+						return Directions.Left;
+				}
+			}
+
+			return direction;
+		}
 	}
 }

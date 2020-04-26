@@ -244,16 +244,24 @@ namespace Snake.Entities
 			} else if (other_instance is Portal) {
 				var entrance_portal = (Portal)other_instance;
 				var exit_portal = entrance_portal.GetDestination(this.Direction);
+				var original_direction = this.Direction;
+				this.Direction = entrance_portal.GetDirection(this.Direction);
+
 				float travel_x = exit_portal.Position.X - entrance_portal.Position.X;
 				float travel_y = exit_portal.Position.Y - entrance_portal.Position.Y;
-				if (this.Direction == Directions.Up)
-					travel_y -= Portal.Size + Snake.Size;
-				else if (this.Direction == Directions.Down) {
-					travel_y += Portal.Size + Snake.Size;
-				} else if (this.Direction == Directions.Left) {
-					travel_x -= Portal.Size + Snake.Size;
-				} else if (this.Direction == Directions.Right) {
-					travel_x += Portal.Size + Snake.Size;
+				if (this.Direction == original_direction) {
+					if (this.Direction == Directions.Up) {
+						travel_y -= Portal.Size + Snake.Size;
+					} else if (this.Direction == Directions.Down) {
+						travel_y += Portal.Size + Snake.Size;
+					} else if (this.Direction == Directions.Left) {
+						travel_x -= Portal.Size + Snake.Size;
+					} else if (this.Direction == Directions.Right) {
+						travel_x += Portal.Size + Snake.Size;
+					}
+				} else {
+					foreach (var c in this.Colliders) c.Enabled = false;
+					this.GetCollider(this.Direction.ToString()).Enabled = true;
 				}
 
 				this.InternalLocation += new Vector2(travel_x, travel_y);
