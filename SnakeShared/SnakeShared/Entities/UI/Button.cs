@@ -87,7 +87,31 @@ namespace Snake.Entities.UI
 				var texture = textures[data.DrawDataTexture];
 				for (int j = 0; j < data.Locations.Length; j++) {
 					var pos = data.Locations[j];
-					sprite_batch.Draw(texture, scaled_pos + pos * this.Scale, null, Color.White, 0, vector_zero, data.Scale * this.Scale, SpriteEffects.None, 0);
+					var source_rectangle = new Rectangle(0, 0, texture.Width, texture.Height);;
+
+					// Cut off left and top if necessary
+					if (pos.X < 0) {
+						source_rectangle.X = (int)(-pos.X / data.Scale);
+						source_rectangle.Width -= source_rectangle.X;
+						pos.X += source_rectangle.X * data.Scale;
+					}
+					if (pos.Y < 0) {
+						source_rectangle.Y = (int)(-pos.Y / data.Scale);
+						source_rectangle.Height -= source_rectangle.Y;
+						pos.Y += source_rectangle.Y * data.Scale;
+					}
+
+					// Cut off right and bottom if necessary
+					float right_x = pos.X + source_rectangle.Width * data.Scale;
+					if (right_x > this.BaseWidth) {
+						source_rectangle.Width -= (int)((right_x - this.BaseWidth) / data.Scale);
+					}
+					float bottom_y = pos.Y + source_rectangle.Height * data.Scale;
+					if (bottom_y > this.BaseHeight) {
+						source_rectangle.Height -= (int)((bottom_y - this.BaseHeight) / data.Scale);
+					}
+
+					sprite_batch.Draw(texture, scaled_pos + pos * this.Scale, source_rectangle, Color.White, 0, vector_zero, data.Scale * this.Scale, SpriteEffects.None, 0);
 				}
 			}
 

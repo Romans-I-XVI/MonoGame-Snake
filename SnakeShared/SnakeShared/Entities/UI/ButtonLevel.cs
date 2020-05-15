@@ -21,8 +21,8 @@ namespace Snake.Entities.UI
 				if (this._drawData == null) {
 					if (this.IsUnlocked) {
 						const float master_scale = 0.1792f;
-						const float offset_mod_x = -1;
-						const float offset_mod_y = -1;
+						const float offset_mod_x = -1.5f;
+						const float offset_mod_y = -1f;
 						var draw_data = new List<DrawLocations>();
 						var level_data = Levels.Load((int)this.GameRoom);
 
