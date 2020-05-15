@@ -11,6 +11,7 @@ namespace Snake.Rooms
 		public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
 			Engine.SpawnInstance<TitleLogo>();
 			Engine.SpawnInstance<DeveloperLogo>();
+			Engine.SpawnInstance<WallDecoration>();
 			Engine.SpawnInstance<MainMenuUI>();
 		}
 
