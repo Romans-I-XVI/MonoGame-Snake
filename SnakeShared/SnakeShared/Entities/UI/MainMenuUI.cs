@@ -15,11 +15,7 @@ namespace Snake.Entities.Controls
 		internal const Tween UIMovementTween = Tween.SquareEaseOut;
 		private int Index = 1;
 		private readonly Rolodex[] Rolodexes = new Rolodex[3];
-		private readonly VirtualButton ButtonLeft = new VirtualButton();
-		private readonly VirtualButton ButtonRight = new VirtualButton();
-		private readonly VirtualButton ButtonUp = new VirtualButton();
-		private readonly VirtualButton ButtonDown = new VirtualButton();
-		private readonly VirtualButton ButtonSelect = new VirtualButton();
+		private readonly VirtualInputButtons Input = new VirtualInputButtons();
 		private readonly Selector Selector;
 
 		public MainMenuUI() {
@@ -77,31 +73,6 @@ namespace Snake.Entities.Controls
 			this.Rolodexes[2] = new Rolodex(speeds, speed_index);
 			this.Rolodexes[2].Collapse(0);
 
-			this.ButtonLeft.AddKey(Keys.Left);
-			this.ButtonLeft.AddKey(Keys.A);
-			this.ButtonLeft.AddButton(Buttons.DPadLeft);
-			this.ButtonLeft.AddButton(Buttons.LeftThumbstickLeft);
-
-			this.ButtonRight.AddKey(Keys.Right);
-			this.ButtonRight.AddKey(Keys.D);
-			this.ButtonRight.AddButton(Buttons.DPadRight);
-			this.ButtonRight.AddButton(Buttons.LeftThumbstickRight);
-
-			this.ButtonUp.AddKey(Keys.Up);
-			this.ButtonUp.AddKey(Keys.W);
-			this.ButtonUp.AddButton(Buttons.DPadUp);
-			this.ButtonUp.AddButton(Buttons.LeftThumbstickUp);
-
-			this.ButtonDown.AddKey(Keys.Down);
-			this.ButtonDown.AddKey(Keys.S);
-			this.ButtonDown.AddButton(Buttons.DPadDown);
-			this.ButtonDown.AddButton(Buttons.LeftThumbstickDown);
-
-			this.ButtonSelect.AddKey(Keys.Space);
-			this.ButtonSelect.AddKey(Keys.Enter);
-			this.ButtonSelect.AddButton(Buttons.A);
-			this.ButtonSelect.AddButton(Buttons.Start);
-
 			this.Selector = Engine.SpawnInstance<Selector>();
 			this.MoveSelector(0);
 		}
@@ -109,12 +80,12 @@ namespace Snake.Entities.Controls
 		public override void onUpdate(float dt) {
 			base.onUpdate(dt);
 
-			if (this.ButtonUp.IsPressed() || this.ButtonDown.IsPressed()) {
-				if (this.ButtonUp.IsPressed()) {
+			if (this.Input.ButtonUp.IsPressed() || this.Input.ButtonDown.IsPressed()) {
+				if (this.Input.ButtonUp.IsPressed()) {
 					this.Rolodexes[this.Index].RollDown();
 				}
 
-				if (this.ButtonDown.IsPressed()) {
+				if (this.Input.ButtonDown.IsPressed()) {
 					this.Rolodexes[this.Index].RollUp();
 				}
 
@@ -136,7 +107,7 @@ namespace Snake.Entities.Controls
 				}
 			}
 
-			if (this.ButtonRight.IsPressed()) {
+			if (this.Input.ButtonRight.IsPressed()) {
 				if (this.Index < this.Rolodexes.Length - 1) {
 					this.Index++;
 					this.MoveSelector();
@@ -148,7 +119,7 @@ namespace Snake.Entities.Controls
 				}
 			}
 
-			if (this.ButtonLeft.IsPressed()) {
+			if (this.Input.ButtonLeft.IsPressed()) {
 				if (this.Index > 0) {
 					this.Index--;
 					this.MoveSelector();
@@ -160,7 +131,7 @@ namespace Snake.Entities.Controls
 				}
 			}
 
-			if (this.ButtonSelect.IsPressed()) {
+			if (this.Input.ButtonSelect.IsPressed()) {
 				var current_button = this.Rolodexes[this.Index].CurrentButton;
 				if (current_button is ButtonOpen) {
 					Engine.ChangeRoom<RoomPlay>();

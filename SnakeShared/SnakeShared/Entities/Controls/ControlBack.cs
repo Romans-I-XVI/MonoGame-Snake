@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 using MonoEngine;
+using Snake.Enums;
 using Snake.Rooms;
 
 namespace Snake.Entities.Controls
@@ -10,8 +11,16 @@ namespace Snake.Entities.Controls
 	{
 		private readonly Dictionary<Type, Action> RoomBackActions = new Dictionary<Type, Action> {
 			[typeof(RoomMain)] = () => ((SnakeGame)Engine.Game).ExitGame = true,
-			[typeof(RoomPlay)] = () => Engine.ChangeRoom<RoomMain>(),
-			[typeof(RoomLevels)] = () => Engine.ChangeRoom<RoomMain>(),
+			[typeof(RoomPlay)] = () => {
+				if (Settings.CurrentGameRoom == GameRooms.Classic || Settings.CurrentGameRoom == GameRooms.Open)
+					Engine.ChangeRoom<RoomMain>();
+				else
+					Engine.ChangeRoom<RoomLevels>();
+			},
+			[typeof(RoomLevels)] = () => {
+				Settings.CurrentGameRoom = GameRooms.Level1;
+				Engine.ChangeRoom<RoomMain>();
+			}
 		};
 
 		public ControlBack() {

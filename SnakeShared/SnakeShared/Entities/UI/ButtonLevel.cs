@@ -1,9 +1,17 @@
+using Snake.Enums;
+
 namespace Snake.Entities.UI
 {
 	public class ButtonLevel : Button
 	{
-		public ButtonLevel(int x, int y, int width, int height) : base(x, y, width, height) {}
+		public readonly GameRooms GameRoom;
 
-		protected override DrawLocations[] DrawData { get; }
+		public ButtonLevel(int x, int y, GameRooms game_room) : base(x, y, 150, 84) {
+			this.GameRoom = game_room;
+		}
+
+		protected override DrawLocations[] DrawData { get; } = new DrawLocations[0];
+
+
 	}
 }
