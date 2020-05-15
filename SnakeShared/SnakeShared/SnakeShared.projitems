@@ -35,6 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonSlow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonTheme.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\DeveloperLogo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\LevelRequirementsLogo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\LevelSelectUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\MainMenuUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\Selector.cs" />

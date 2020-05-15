@@ -15,9 +15,25 @@ namespace Snake.Entities.UI
 		private const Tween UIMovementTween = Tween.SquareEaseOut;
 		private Point Index = Point.Zero;
 		private readonly ButtonLevel[][] Buttons;
-		private ButtonLevel CurrentButton => this.Buttons[this.Index.Y][this.Index.X];
 		private readonly Selector Selector;
 		private readonly VirtualInputButtons Input = new VirtualInputButtons();
+		public ButtonLevel CurrentButton => this.Buttons[this.Index.Y][this.Index.X];
+		public ButtonLevel NextLevelButton {
+			get {
+				int index_x = this.Index.X + 1;
+				int index_y = this.Index.Y;
+				if (index_x > this.Buttons[this.Index.Y].Length - 1) {
+					index_x = 0;
+					index_y += 1;
+				}
+
+				if (index_y < this.Buttons.Length && index_x < this.Buttons[index_y].Length) {
+					return this.Buttons[index_y][index_x];
+				}
+
+				return null;
+			}
+		}
 
 		public LevelSelectUI() {
 			// Create the level buttons
