@@ -28,6 +28,7 @@ namespace Snake.Entities.UI
 		protected Action<SpriteBatch> ExtraDrawingBegin = null;
 		protected Action<SpriteBatch> ExtraDrawingEnd = null;
 		protected float Scale = 1f;
+		protected bool ShouldDrawBorder = true;
 
 		protected Button(int x, int y, int width, int height) {
 			this.BaseX = x;
@@ -61,6 +62,7 @@ namespace Snake.Entities.UI
 				[DrawDataTextures.Snake] = this.SnakeTexture,
 				[DrawDataTextures.Food] = this.FoodTexture,
 				[DrawDataTextures.Wall] = this.WallTexture,
+				[DrawDataTextures.Portal] = ContentHolder.Get(AvailableTextures.portal_0)
 			};
 
 			// Cut out the base position from background and redraw (applicable for user imported themes)
@@ -71,10 +73,12 @@ namespace Snake.Entities.UI
 			float edge = 2 * this.Scale;
 			const float alpha = (28 / 255f);
 			RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y, scaled_width, scaled_height, Color.Black * alpha);
-			RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y, scaled_width, edge, Color.Black * alpha);
-			RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y + scaled_height - edge, scaled_width, edge, Color.Black * alpha);
-			RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
-			RectangleDrawer.Draw(sprite_batch, scaled_pos.X + scaled_width - edge, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
+			if (this.ShouldDrawBorder) {
+				RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y, scaled_width, edge, Color.Black * alpha);
+				RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y + scaled_height - edge, scaled_width, edge, Color.Black * alpha);
+				RectangleDrawer.Draw(sprite_batch, scaled_pos.X, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
+				RectangleDrawer.Draw(sprite_batch, scaled_pos.X + scaled_width - edge, scaled_pos.Y + edge, edge, scaled_height - edge * 2, Color.Black * alpha);
+			}
 
 			this.ExtraDrawingBegin?.Invoke(sprite_batch);
 
@@ -118,6 +122,7 @@ namespace Snake.Entities.UI
 			Snake,
 			Wall,
 			Food,
+			Portal
 		}
 	}
 }

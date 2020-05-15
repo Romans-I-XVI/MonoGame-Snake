@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Snake.Enums;
 
@@ -9,6 +10,7 @@ namespace Snake.Entities.UI
 		public readonly bool IsUnlocked;
 
 		public ButtonLevel(int x, int y, GameRooms game_room) : base(x, y, 150, 84) {
+			this.ShouldDrawBorder = false;
 			this.GameRoom = game_room;
 			this.IsUnlocked = this.DetermineIsUnlocked();
 		}
@@ -18,7 +20,36 @@ namespace Snake.Entities.UI
 			get {
 				if (this._drawData == null) {
 					if (this.IsUnlocked) {
-						this._drawData = new DrawLocations[0];
+						const float master_scale = 0.1792f;
+						const float offset_mod_x = -1;
+						const float offset_mod_y = -1;
+						var draw_data = new List<DrawLocations>();
+						var level_data = Levels.Load((int)this.GameRoom);
+
+						// Add the wall draw data
+						var wall_spawns_by_scale = new Dictionary<float, List<Vector2>>();
+						if (level_data.WallSpawns != null) {
+							foreach (var wall_spawn in level_data.WallSpawns) {
+								if (!wall_spawns_by_scale.ContainsKey(wall_spawn.Scale))
+									wall_spawns_by_scale[wall_spawn.Scale] = new List<Vector2>();
+								wall_spawns_by_scale[wall_spawn.Scale].Add(new Vector2(wall_spawn.X * master_scale + offset_mod_x, wall_spawn.Y * master_scale + offset_mod_y));
+							}
+
+							foreach (var kv in wall_spawns_by_scale) {
+								draw_data.Add(new DrawLocations(DrawDataTextures.Wall, kv.Key * master_scale, kv.Value.ToArray()));
+							}
+						}
+
+						// Add the portal draw data
+						if (level_data.PortalSpawns != null) {
+							var portal_spawn_positions = new List<Vector2>();
+							foreach (var portal_spawn in level_data.PortalSpawns) {
+								portal_spawn_positions.Add(new Vector2(portal_spawn.X * master_scale + offset_mod_x, portal_spawn.Y * master_scale + offset_mod_y));
+							}
+							draw_data.Add(new DrawLocations(DrawDataTextures.Portal, master_scale, portal_spawn_positions.ToArray()));
+						}
+
+						this._drawData = draw_data.ToArray();
 					} else {
 						this._drawData = new [] {
 							new DrawLocations(DrawDataTextures.Snake, 0.3125f, this.GetLockDrawLocations()),
