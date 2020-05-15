@@ -66,7 +66,7 @@ namespace Snake.Entities.UI
 			Settings.CurrentGameRoom = this.CurrentButton.GameRoom;
 
 			// Change to the level if select button is pressed
-			if (this.Input.ButtonSelect.IsPressed()) {
+			if (this.Input.ButtonSelect.IsPressed() && this.CurrentButton.IsUnlocked) {
 				Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
 					["start_delay"] = 250
 				});

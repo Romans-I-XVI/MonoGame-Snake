@@ -14,5 +14,8 @@ namespace Snake
 		public static AvailableTextures CurrentFood => Enum.Parse<AvailableTextures>("theme_" + Settings.CurrentTheme + "_food");
 		public static AvailableTextures CurrentWall => Enum.Parse<AvailableTextures>("theme_" + Settings.CurrentTheme + "_wall");
 		public static string CurrentSaveFilePath => Settings.CurrentGameRoom + "_" + Settings.CurrentGameplaySpeed + ".txt";
+		public static string GetSaveFilePath(GameRooms game_room, GameplaySpeeds gameplay_speed) => game_room + "_" + gameplay_speed + ".txt";
+
+		public static readonly int[] LevelScoreRequirements = {50, 50, 50, 50, 40, 40, 30, 30, 30, 30, 20};
 	}
 }
