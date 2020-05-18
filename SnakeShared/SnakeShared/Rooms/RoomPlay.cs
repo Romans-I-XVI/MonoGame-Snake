@@ -12,6 +12,7 @@ namespace Snake.Rooms
 	{
 		public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
 			Engine.SpawnInstance<ControlPause>();
+			Engine.SpawnInstance<ControlPortalAnimation>();
 
 			int start_delay = 0;
 			if (args != null && args.ContainsKey("start_delay")) {

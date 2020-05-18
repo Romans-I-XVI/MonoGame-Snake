@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlFullscreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlLevelConstructor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPause.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPortalAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Food.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Portal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />

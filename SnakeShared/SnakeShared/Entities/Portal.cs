@@ -9,8 +9,8 @@ namespace Snake.Entities
 	public class Portal : Entity
 	{
 		public const int Size = 30;
-		public const int AnimationSpeed = 250;
 		public readonly ColliderRectangle MainCollider;
+		public readonly AnimatedSprite MainSprite;
 		private readonly ReadOnlyDictionary<Directions, int> DestinationIDs;
 		private readonly ReadOnlyDictionary<Directions, bool> ReverseDirection;
 
@@ -30,8 +30,8 @@ namespace Snake.Entities
 				new Region(ContentHolder.Get(AvailableTextures.portal_0)),
 				new Region(ContentHolder.Get(AvailableTextures.portal_1)),
 			};
-			var sprite = new AnimatedSprite(regions, Portal.AnimationSpeed);
-			this.AddSprite("main", sprite);
+			this.MainSprite = new AnimatedSprite(regions);
+			this.AddSprite("main", this.MainSprite);
 			this.MainCollider = this.AddColliderRectangle("main", 0, 0, regions[0].GetWidth(), regions[0].GetHeight());
 		}
 
