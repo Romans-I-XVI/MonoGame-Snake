@@ -38,14 +38,6 @@ namespace Snake.Entities.UI
 			float draw_width = texture.Width * scale.X;
 			float draw_height = texture.Height * scale.Y;
 
-			// Draw horizontal selector parts
-			float draw_x = x;
-			while (draw_x < x + width) {
-				sprite_batch.Draw(texture, new Vector2(draw_x, y - draw_height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-				sprite_batch.Draw(texture, new Vector2(draw_x, y + height), null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-				draw_x += draw_width;
-			}
-
 			// Draw vertical selector parts
 			float draw_start_y = y - draw_height;
 			float draw_y = draw_start_y;
@@ -61,6 +53,23 @@ namespace Snake.Entities.UI
 				sprite_batch.Draw(texture, new Vector2(x - draw_width, draw_y), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
 				sprite_batch.Draw(texture, new Vector2(x + width, draw_y), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
 				draw_y += draw_height;
+			}
+
+			// Draw horizontal selector parts
+			float draw_start_x = x - draw_width;
+			float draw_x = draw_start_x;
+			float total_width = draw_start_x + width + draw_width * 2;
+			while (draw_x < total_width) {
+				Rectangle? source_rectangle = null;
+				if (draw_x + draw_width > total_width) {
+					float remaining_space = total_width - draw_x;
+					float draw_percent = remaining_space / draw_width;
+					source_rectangle = new Rectangle(0, 0, (int)(texture.Width * draw_percent), texture.Height);
+				}
+
+				sprite_batch.Draw(texture, new Vector2(draw_x, y - draw_height), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+				sprite_batch.Draw(texture, new Vector2(draw_x, y + height), source_rectangle, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+				draw_x += draw_width;
 			}
 		}
 
