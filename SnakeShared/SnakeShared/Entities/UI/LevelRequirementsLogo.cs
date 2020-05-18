@@ -25,6 +25,18 @@ namespace Snake.Entities.UI
 					var pos = LevelRequirementsLogo.BaseTextLocations[i];
 					sprite_batch.Draw(texture, pos, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 				}
+
+				string score_string = score_to_unlock_next_level.ToString();
+				const int start_x = 240 + 32 - 10 - 11 - 6;
+				const int start_y = 480 - 60 + 5;
+				const int spread_x = 23;
+				for (int i = 0; i < score_string.Length; i++) {
+					int integer = int.Parse(score_string[i].ToString());
+					var base_pos = new Vector2(start_x + spread_x * i, start_y);
+					foreach (var pos in LogoDrawData.ScoreNumberLocations[integer]) {
+						sprite_batch.Draw(texture, base_pos + pos, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+					}
+				}
 			}
 		}
 
