@@ -14,6 +14,7 @@ namespace Snake.Entities
 	public class Snake : Entity
 	{
 		public const int Size = 16;
+		public const int SwitchbackBuffer = 0; // This was set to 2 in the original Roku game
 
 		private int CurrentSpeed => this.MoveSpeeds[Settings.CurrentGameplaySpeed];
 		private readonly ReadOnlyDictionary<GameplaySpeeds, int> MoveSpeeds = new ReadOnlyDictionary<GameplaySpeeds, int>(new Dictionary<GameplaySpeeds, int> {
@@ -398,7 +399,7 @@ namespace Snake.Entities
 		}
 
 		private bool IsReadyToChangeDirections() {
-			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= Snake.Size + 2 || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= Snake.Size + 2);
+			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= Snake.Size + Snake.SwitchbackBuffer || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= Snake.Size + Snake.SwitchbackBuffer);
 		}
 
 		internal enum States {
