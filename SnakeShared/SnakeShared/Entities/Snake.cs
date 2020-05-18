@@ -30,6 +30,7 @@ namespace Snake.Entities
 		private readonly List<Directions> QueuedInput = new List<Directions>();
 
 		private States State;
+		private readonly string MouthColliderName = "mouth";
 		private readonly int InitialWaitDelay = 0;
 		private readonly GameTimeSpan InitialWaitTimer = new GameTimeSpan();
 		private int DeathPartsDestroyed = 0;
@@ -61,6 +62,7 @@ namespace Snake.Entities
 			this.AddColliderRectangle(Directions.Down.ToString(), -texture.Width / 2, texture.Height / 2 - 1, texture.Width, 1, false);
 			this.AddColliderRectangle(Directions.Left.ToString(), -texture.Width / 2, -texture.Height / 2, 1, texture.Height, false);
 			this.AddColliderRectangle(Directions.Right.ToString(), texture.Width / 2 - 1, -texture.Height / 2, 1, texture.Height, true);
+			this.AddColliderRectangle(this.MouthColliderName, -texture.Width / 2, -texture.Height / 2, texture.Width, texture.Height, true);
 
 			for (int i = 0; i < 2; i++) {
 				var tail = new SnakeTail {
@@ -230,19 +232,19 @@ namespace Snake.Entities
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
 			base.onCollision(collider, other_collider, other_instance);
 
-			if (other_instance is Food) {
+			if (other_instance is Food && collider.Name == this.MouthColliderName) {
 				this.AddToSnake();
 				SFXPlayer.Play(AvailableSounds.eat, 0.7f);
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
-			} else if (other_instance is SnakeTail || other_instance is Wall) {
+			} else if ((other_instance is SnakeTail || other_instance is Wall) && collider.Name != this.MouthColliderName) {
 				if (this.State == States.Alive) {
 					MediaPlayer.Stop();
 					SFXPlayer.Play(AvailableSounds.death_hit, 0.75f);
 					Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
 					this.BeginDeath();
 				}
-			} else if (other_instance is Portal) {
+			} else if (other_instance is Portal && collider.Name != this.MouthColliderName) {
 				var entrance_portal = (Portal)other_instance;
 				var exit_portal = entrance_portal.GetDestination(this.Direction);
 				var original_direction = this.Direction;
@@ -262,8 +264,9 @@ namespace Snake.Entities
 						travel_x += Portal.Size + Snake.Size;
 					}
 				} else {
-					foreach (var c in this.Colliders) c.Enabled = false;
-					this.GetCollider(this.Direction.ToString()).Enabled = true;
+					foreach (var c in this.Colliders) {
+						c.Enabled = (c.Name == this.Direction.ToString() || c.Name == this.MouthColliderName);
+					}
 				}
 
 				this.InternalLocation += new Vector2(travel_x, travel_y);
@@ -374,10 +377,9 @@ namespace Snake.Entities
 			this.InternalLocation = this.CurrentLocation.ToVector2();
 			this.DirectionChangeLocation = this.CurrentLocation;
 
-			foreach (var collider in this.Colliders) {
-				collider.Enabled = false;
+			foreach (var c in this.Colliders) {
+				c.Enabled = (c.Name == this.Direction.ToString() || c.Name == this.MouthColliderName);
 			}
-			this.GetCollider(direction.ToString()).Enabled = true;
 		}
 
 		private void AddToSnake() {
