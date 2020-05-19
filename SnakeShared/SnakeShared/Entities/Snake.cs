@@ -268,6 +268,8 @@ namespace Snake.Entities
 
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
 			base.onCollision(collider, other_collider, other_instance);
+			if (this.State != States.Alive)
+				return;
 
 			if (other_instance is Food && collider.Name == this.MouthColliderName) {
 				this.AddToSnake();
@@ -275,12 +277,10 @@ namespace Snake.Entities
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
 			} else if ((other_instance is SnakeTail || other_instance is Wall) && collider.Name != this.MouthColliderName) {
-				if (this.State == States.Alive) {
-					MediaPlayer.Stop();
-					SFXPlayer.Play(AvailableSounds.death_hit, 0.75f);
-					Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
-					this.BeginDeath();
-				}
+				MediaPlayer.Stop();
+				SFXPlayer.Play(AvailableSounds.death_hit, 0.75f);
+				Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
+				this.BeginDeath();
 			} else if (other_instance is Portal && collider.Name != this.MouthColliderName) {
 				var start_pos = this.CurrentLocation.ToVector2();
 				var entrance_portal = (Portal)other_instance;
