@@ -29,7 +29,6 @@ namespace Snake.Entities
 		});
 		private readonly List<SnakeTail> Tail = new List<SnakeTail>();
 		private readonly List<Directions> QueuedInput = new List<Directions>();
-		private readonly List<PortalAnimation> PortalAnimations = new List<PortalAnimation>();
 
 		private States State;
 		private readonly string MouthColliderName = "mouth";
@@ -156,17 +155,7 @@ namespace Snake.Entities
 				this.SnakeLocations["y"].Insert(0, this.CurrentLocation.Y);
 				this.Position = this.CurrentLocation.ToVector2();
 
-				for (int i = this.PortalAnimations.Count - 1; i >= 0; i--) {
-					var portal_animation = this.PortalAnimations[i];
-					portal_animation.AnimationTick++;
-					if (portal_animation.AnimationTick > Snake.Size - 1) {
-						portal_animation.AnimationTick = 0;
-						portal_animation.TailIndex++;
-						if (portal_animation.TailIndex > this.Tail.Count) {
-							this.PortalAnimations.RemoveAt(i);
-						}
-					}
-				}
+				Engine.PostGameEvent(new SnakeMoveEvent(this.CurrentLocation.X, this.CurrentLocation.Y, this.Direction));
 			}
 
 			for (int i = 0; i < this.Tail.Count; i++) {
@@ -243,29 +232,6 @@ namespace Snake.Entities
 			}
 		}
 
-		public override void onDraw(SpriteBatch sprite_batch) {
-			base.onDraw(sprite_batch);
-
-			if (this.State == States.Alive) {
-				var texture = ContentHolder.Get(Settings.CurrentSnake);
-				foreach (var item in this.PortalAnimations) {
-					float current_time = item.AnimationTick;
-					float duration = Snake.Size - 1;
-
-					float in_x = Tweening.LinearTween(item.InSnakePos.X, item.InPortalPos.X, current_time, duration);
-					float in_y = Tweening.LinearTween(item.InSnakePos.Y, item.InPortalPos.Y, current_time, duration);
-					float out_x = Tweening.LinearTween( item.OutPortalPos.X, item.OutSnakePos.X, current_time, duration);
-					float out_y = Tweening.LinearTween(item.OutPortalPos.Y, item.OutSnakePos.Y, current_time, duration);
-					float shrink_scale = Tweening.LinearTween(1, 0, current_time, duration);
-					float grow_scale = Tweening.LinearTween(0, 1, current_time, duration);
-
-					sprite_batch.Draw(texture, new Vector2(in_x, in_y), null, Color.White, 0, new Vector2(Snake.Size / 2f), new Vector2(shrink_scale), SpriteEffects.None, 1);
-					if (item.TailIndex < this.Tail.Count)
-						sprite_batch.Draw(texture, new Vector2(out_x, out_y), null, Color.White, 0, new Vector2(Snake.Size / 2f), new Vector2(grow_scale), SpriteEffects.None, 1);
-				}
-			}
-		}
-
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
 			base.onCollision(collider, other_collider, other_instance);
 			if (this.State != States.Alive)
@@ -337,7 +303,13 @@ namespace Snake.Entities
 					}
 				}
 
-				this.PortalAnimations.Add(new PortalAnimation(start_pos, this.CurrentLocation.ToVector2(), entrance_portal.Position + new Vector2(Portal.Size / 2f), exit_portal.Position + new Vector2(Portal.Size / 2f)));
+				var portal_animation = new SnakePortalAnimation(
+					start_pos,
+					this.CurrentLocation.ToVector2(),
+					entrance_portal.Position + new Vector2(Portal.Size / 2f),
+					exit_portal.Position + new Vector2(Portal.Size / 2f),
+					this.Tail.Count);
+				Engine.SpawnInstance(portal_animation);
 			}
 		}
 
@@ -434,6 +406,7 @@ namespace Snake.Entities
 
 		private void BeginDeath() {
 			this.State = States.Dead;
+			Engine.PostGameEvent(new SnakeDiedEvent());
 			this.DeathDestroyPartDelay = 2000 / (float)(this.Tail.Count + 1);
 			if (this.DeathDestroyPartDelay < 1000 / 60f)
 				this.DeathDestroyPartDelay = 1000 / 60f;
@@ -458,23 +431,6 @@ namespace Snake.Entities
 				var sprite = new Sprite(region);
 				this.AddSprite("main", sprite);
 				this.AddColliderRectangle("main", -texture.Width / 2, -texture.Height / 2, texture.Width, texture.Height);
-			}
-		}
-
-		internal class PortalAnimation
-		{
-			internal readonly Vector2 InSnakePos;
-			internal readonly Vector2 OutSnakePos;
-			internal readonly Vector2 InPortalPos;
-			internal readonly Vector2 OutPortalPos;
-			internal int TailIndex = 0;
-			internal int AnimationTick = -1;
-
-			internal PortalAnimation(Vector2 in_snake_pos, Vector2 out_snake_pos, Vector2 in_portal_pos, Vector2 out_portal_pos) {
-				this.InSnakePos = in_snake_pos;
-				this.OutSnakePos = out_snake_pos;
-				this.InPortalPos = in_portal_pos;
-				this.OutPortalPos = out_portal_pos;
 			}
 		}
 	}

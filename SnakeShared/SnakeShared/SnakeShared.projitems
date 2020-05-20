@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Portal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SnakePortalAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonClassic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\Button.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SpriteFontExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\FoodEatenEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeDestructionDoneEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeDiedEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeMoveEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakePartDestroyedEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Levels.cs" />
