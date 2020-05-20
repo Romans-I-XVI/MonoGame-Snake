@@ -6,6 +6,11 @@ namespace Snake.Entities.Controls
 {
 	public class ControlFoodSpawner : Entity
 	{
+		private const int MinSpawnX = 93 + Food.Size / 2;
+		private const int MinSpawnY = 71 + Food.Size / 2;
+		private const int MaxSpawnX = 854 - 93 - Food.Size / 2;
+		private const int MaxSpawnY = 480 - 71 - Food.Size / 2;
+
 		public ControlFoodSpawner(int first_x, int first_y) {
 			Engine.SpawnInstance(new Food(first_x, first_y));
 		}
@@ -21,8 +26,8 @@ namespace Snake.Entities.Controls
 
 		private void SpawnFood() {
 			new_random_position:
-			int x = 93 + 5 + Engine.Random.Next(658) + 1;
-			int y = 71 + 5 + Engine.Random.Next(328) + 1;
+			int x = ControlFoodSpawner.MinSpawnX + Engine.Random.Next(ControlFoodSpawner.MaxSpawnX - ControlFoodSpawner.MinSpawnX + 1);
+			int y = ControlFoodSpawner.MinSpawnY + Engine.Random.Next(ControlFoodSpawner.MaxSpawnY - ControlFoodSpawner.MinSpawnY + 1);
 			if (this.IsPositionInCollision(x, y))
 				goto new_random_position;
 
@@ -30,7 +35,7 @@ namespace Snake.Entities.Controls
 		}
 
 		private bool IsPositionInCollision(int x, int y) {
-			var rect = new Rectangle(x - 5, y - 5, 10, 10);
+			var rect = new Rectangle(x - Food.Size / 2, y - Food.Size / 2, Food.Size, Food.Size);
 
 			var entities = Engine.GetAllInstances<Entity>();
 			for (int i = 0; i < entities.Count; i++) {

@@ -5,6 +5,8 @@ namespace Snake.Entities
 {
 	public class Food : Entity
 	{
+		public const int Size = 10;
+
 		public Food(int x, int y) {
 			this.Position = new Vector2(x, y);
 			var texture = ContentHolder.Get(Settings.CurrentFood);
