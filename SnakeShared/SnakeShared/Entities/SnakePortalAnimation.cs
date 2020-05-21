@@ -27,6 +27,8 @@ namespace Snake.Entities
 		public override void onDraw(SpriteBatch sprite_batch) {
 			base.onDraw(sprite_batch);
 
+			// This animation processing is locked to the on screen movement of the the snake position (updated through posting of game events).
+			// So where tweening would normally be done with time and duration, here it is done with movement ticks related to the snake part size.
 			var texture = ContentHolder.Get(Settings.CurrentSnake);
 			float t = this.AnimationTick;
 			const float d = Snake.Size - 1;

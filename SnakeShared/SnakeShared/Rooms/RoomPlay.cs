@@ -14,11 +14,13 @@ namespace Snake.Rooms
 			Engine.SpawnInstance<ControlPause>();
 			Engine.SpawnInstance<ControlPortalAnimation>();
 
+			// Set start delay if passed in through args
 			int start_delay = 0;
 			if (args != null && args.ContainsKey("start_delay")) {
 				start_delay = (int)args["start_delay"];
 			}
 
+			// Load level data if called for by current game mode
 			LevelData level_data = null;
 			if (Settings.CurrentGameRoom == GameRooms.Classic) {
 				level_data = new ClassicLevelData();
@@ -26,6 +28,7 @@ namespace Snake.Rooms
 				level_data = Levels.Load((int)Settings.CurrentGameRoom);
 			}
 
+			// If level data exists either build level instantly if replaying room or spawn constructor if first entering room
 			if (level_data != null) {
 				if (previous_room is RoomPlay) {
 					if (level_data.WallSpawns != null) {
@@ -44,6 +47,7 @@ namespace Snake.Rooms
 				}
 			}
 
+			// Spawn first food piece
 			if (level_data?.FoodSpawn != null) {
 				var spawn = level_data.FoodSpawn.Value;
 				Engine.SpawnInstance(new ControlFoodSpawner(spawn.X, spawn.Y));
@@ -51,6 +55,7 @@ namespace Snake.Rooms
 				Engine.SpawnInstance<ControlFoodSpawner>();
 			}
 
+			// Spawn snake
 			if (level_data?.SnakeSpawn != null) {
 				var spawn = level_data.SnakeSpawn.Value;
 				Engine.SpawnInstance(new Entities.Snake(start_delay, spawn));
@@ -58,6 +63,7 @@ namespace Snake.Rooms
 				Engine.SpawnInstance(new Entities.Snake(start_delay));
 			}
 
+			// Spawn timed execution to start music at snake movement start
 			Engine.SpawnInstance(new TimedExecution(start_delay, () => {
 				MediaPlayer.IsRepeating = true;
 				MediaPlayer.Play(ContentHolder.Get(AvailableMusic.background_music));

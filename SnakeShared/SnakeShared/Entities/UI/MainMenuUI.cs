@@ -20,6 +20,8 @@ namespace Snake.Entities.Controls
 
 		public MainMenuUI() {
 			int rolodex_y = Engine.Game.CanvasHeight / 2 + 20;
+
+			// Spawn themes rolodex of buttons
 			var themes = new RolodexEntry[] {
 				new RolodexEntry(new ButtonTheme(0), 180, rolodex_y, 1, 0),
 				new RolodexEntry(new ButtonTheme(1), 180, rolodex_y + 90, 0.5f, 1),
@@ -38,6 +40,7 @@ namespace Snake.Entities.Controls
 			this.Rolodexes[0] = new Rolodex(themes, Settings.CurrentTheme);
 			this.Rolodexes[0].Collapse(0);
 
+			// Spawn game modes rolodex of buttons
 			var game_modes = new RolodexEntry[] {
 				new RolodexEntry(new ButtonClassic(), Engine.Game.CanvasWidth / 2, rolodex_y, 1, 0),
 				new RolodexEntry(new ButtonOpen(), Engine.Game.CanvasWidth / 2, rolodex_y + 100, 0.5f, 1),
@@ -55,6 +58,7 @@ namespace Snake.Entities.Controls
 				game_mode_index = 2;
 			this.Rolodexes[1] = new Rolodex(game_modes, game_mode_index);
 
+			// Spawn speed select rolodex of buttons
 			var speeds = new RolodexEntry[] {
 				new RolodexEntry(new ButtonMedium(), Engine.Game.CanvasWidth - 180, rolodex_y, 1, 0),
 				new RolodexEntry(new ButtonFast(), Engine.Game.CanvasWidth - 180, rolodex_y + 80, 0.5125f, 1),
@@ -73,6 +77,7 @@ namespace Snake.Entities.Controls
 			this.Rolodexes[2] = new Rolodex(speeds, speed_index);
 			this.Rolodexes[2].Collapse(0);
 
+			// Spawn the selector and move it instantly to the starting position
 			this.Selector = Engine.SpawnInstance<Selector>();
 			this.MoveSelector(0);
 		}
@@ -80,6 +85,7 @@ namespace Snake.Entities.Controls
 		public override void onUpdate(float dt) {
 			base.onUpdate(dt);
 
+			// Roll rolodex if up or down is press and handle results
 			if (this.Input.ButtonUp.IsPressed() || this.Input.ButtonDown.IsPressed()) {
 				if (this.Input.ButtonUp.IsPressed()) {
 					this.Rolodexes[this.Index].RollDown();
@@ -107,6 +113,7 @@ namespace Snake.Entities.Controls
 				}
 			}
 
+			// Move selector and handle rolodex collapse if pressing left/right
 			if (this.Input.ButtonRight.IsPressed()) {
 				if (this.Index < this.Rolodexes.Length - 1) {
 					this.Index++;
@@ -131,6 +138,7 @@ namespace Snake.Entities.Controls
 				}
 			}
 
+			// Handle select pressed if hovering on game mode buttons
 			if (this.Input.ButtonSelect.IsPressed()) {
 				var current_button = this.Rolodexes[this.Index].CurrentButton;
 				if (current_button is ButtonOpen) {

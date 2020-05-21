@@ -2,8 +2,5 @@ using MonoEngine;
 
 namespace Snake.GameEvents
 {
-	public class SnakeDestructionDoneEvent : GameEvent
-	{
-		
-	}
+	public class SnakeDestructionDoneEvent : GameEvent {}
 }

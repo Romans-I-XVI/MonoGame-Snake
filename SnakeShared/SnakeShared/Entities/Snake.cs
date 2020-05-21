@@ -14,6 +14,7 @@ namespace Snake.Entities
 {
 	public class Snake : Entity
 	{
+#region Constructors
 		public const int Size = 16;
 		public const int SwitchbackBuffer = 0; // This was set to 2 in the original Roku game
 
@@ -43,7 +44,7 @@ namespace Snake.Entities
 		private Point CurrentLocation;
 		private Point DirectionChangeLocation;
 
-		public Snake(int start_delay) : this(start_delay, new Point(170 - Snake.Size / 2, 480 / 2)) {}
+		public Snake(int start_delay) : this(start_delay, new Point(170 - Snake.Size / 2, Engine.Game.CanvasHeight / 2)) {}
 
 		public Snake(int start_delay, Point position) {
 			this.InitialWaitDelay = start_delay;
@@ -55,15 +56,15 @@ namespace Snake.Entities
 			this.State = (this.InitialWaitDelay == 0) ? States.Alive : States.Waiting;
 
 			var texture = ContentHolder.Get(Settings.CurrentSnake);
-			var region = new Region(texture, 0, 0, texture.Width, texture.Height, texture.Width / 2, texture.Height / 2);
+			var region = new Region(texture, 0, 0, Snake.Size, Snake.Size, Snake.Size / 2, Snake.Size / 2);
 			var sprite = new Sprite(region);
 			this.AddSprite("main", sprite);
 
-			this.AddColliderRectangle(Directions.Up.ToString(), -texture.Width / 2, -texture.Height / 2, texture.Width, 1, false);
-			this.AddColliderRectangle(Directions.Down.ToString(), -texture.Width / 2, texture.Height / 2 - 1, texture.Width, 1, false);
-			this.AddColliderRectangle(Directions.Left.ToString(), -texture.Width / 2, -texture.Height / 2, 1, texture.Height, false);
-			this.AddColliderRectangle(Directions.Right.ToString(), texture.Width / 2 - 1, -texture.Height / 2, 1, texture.Height, true);
-			this.AddColliderRectangle(this.MouthColliderName, -texture.Width / 2, -texture.Height / 2, texture.Width, texture.Height, true);
+			this.AddColliderRectangle(Directions.Up.ToString(), -Snake.Size / 2, -Snake.Size / 2, Snake.Size, 1, false);
+			this.AddColliderRectangle(Directions.Down.ToString(), -Snake.Size / 2, Snake.Size / 2 - 1, Snake.Size, 1, false);
+			this.AddColliderRectangle(Directions.Left.ToString(), -Snake.Size / 2, -Snake.Size / 2, 1, Snake.Size, false);
+			this.AddColliderRectangle(Directions.Right.ToString(), Snake.Size / 2 - 1, -Snake.Size / 2, 1, Snake.Size, true);
+			this.AddColliderRectangle(this.MouthColliderName, -Snake.Size / 2, -Snake.Size / 2, Snake.Size, Snake.Size, true);
 
 			for (int i = 0; i < 2; i++) {
 				var tail = new SnakeTail {
@@ -79,10 +80,13 @@ namespace Snake.Entities
 				this.SnakeLocations["y"].Add(this.CurrentLocation.Y);
 			}
 		}
+#endregion
 
+#region OverrideMethods
 		public override void onUpdate(float dt) {
 			base.onUpdate(dt);
 
+			// Call the appropriate onUpdate depending on the current state
 			if (this.State == States.Waiting)
 				this.onUpdate_Waiting(dt);
 			else if (this.State == States.Alive)
@@ -92,17 +96,20 @@ namespace Snake.Entities
 		}
 
 		private void onUpdate_Waiting(float dt) {
+			// Wait to switch state to Alive
 			if (this.InitialWaitTimer.TotalMilliseconds >= this.InitialWaitDelay) {
 				this.State = States.Alive;
 			}
 		}
 
 		private void onUpdate_Alive(float dt) {
+			// Process queued input if it exists
 			if (this.QueuedInput.Count > 0 && this.IsReadyToChangeDirections()) {
 				this.ChangeDirection(this.QueuedInput[0]);
 				this.QueuedInput.RemoveAt(0);
 			}
 
+			// Update the float position based on current speed and delta time
 			switch (this.Direction) {
 				case Directions.Left:
 					this.InternalLocation.X -= this.CurrentSpeed * 60 * dt;
@@ -118,11 +125,14 @@ namespace Snake.Entities
 					break;
 			}
 
+			// If the float position is greater than 1 in any direction update the integer position
+			// this is all in order to maintain an up to date array of integer positions with which to update the tail
 			while (this.InternalLocation.X <= this.CurrentLocation.X - 1 ||
 				this.InternalLocation.X >= this.CurrentLocation.X + 1 ||
 				this.InternalLocation.Y <= this.CurrentLocation.Y - 1 ||
 				this.InternalLocation.Y >= this.CurrentLocation.Y + 1) {
 
+				// Increment/Decrement current location
 				if (this.InternalLocation.X <= this.CurrentLocation.X - 1)
 					this.CurrentLocation.X -= 1;
 				else if (this.InternalLocation.X >= this.CurrentLocation.X + 1)
@@ -133,6 +143,7 @@ namespace Snake.Entities
 				else if (this.InternalLocation.Y >= this.CurrentLocation.Y + 1)
 					this.CurrentLocation.Y += 1;
 
+				// Move snake to other side of screen if traversing off screen
 				if (this.CurrentLocation.X - Snake.Size / 2 < 0) {
 					this.CurrentLocation.X = Engine.Game.CanvasWidth - Snake.Size / 2;
 					this.InternalLocation.X = this.CurrentLocation.X;
@@ -151,13 +162,16 @@ namespace Snake.Entities
 					this.InternalLocation.Y = this.CurrentLocation.Y;
 				}
 
+				// Add the new integer position to the SnakeLocations array and update the draw Position
 				this.SnakeLocations["x"].Insert(0, this.CurrentLocation.X);
 				this.SnakeLocations["y"].Insert(0, this.CurrentLocation.Y);
 				this.Position = this.CurrentLocation.ToVector2();
 
+				// Post event stating snake incremented its position
 				Engine.PostGameEvent(new SnakeMoveEvent(this.CurrentLocation.X, this.CurrentLocation.Y, this.Direction));
 			}
 
+			// Update each tail position if position exists in array
 			for (int i = 0; i < this.Tail.Count; i++) {
 				int array_pos = (i + 1) * Snake.Size;
 				if (this.SnakeLocations["x"].Count > array_pos) {
@@ -166,6 +180,7 @@ namespace Snake.Entities
 				}
 			}
 
+			// Discard unused positions when position array has grown longer than snake tail
 			while (this.SnakeLocations["x"].Count > this.Tail.Count * Snake.Size) {
 				this.SnakeLocations["x"].RemoveAt(this.SnakeLocations["x"].Count - 1);
 				this.SnakeLocations["y"].RemoveAt(this.SnakeLocations["y"].Count - 1);
@@ -180,11 +195,13 @@ namespace Snake.Entities
 			const int blink_count = 7;
 			const int blinking_finish_time = initial_delay + blink_duration * (blink_count - 1) + final_delay;
 
+			// Spawn scoreboard after doing initial pause, blink and delay
 			if (!this.DeathSpawnedScoreboard && current_time >= blinking_finish_time - final_delay) {
 				Engine.SpawnInstance(new Scoreboard());
 				this.DeathSpawnedScoreboard = true;
 			}
 
+			// Handle enabling/disabling of sprites while doing blink animation
 			if (current_time < blinking_finish_time) {
 				for (int i = 0; i < blink_count; i++) {
 					if (current_time < initial_delay + blink_duration * i) {
@@ -210,6 +227,7 @@ namespace Snake.Entities
 					}
 				}
 
+				// Handle sequentially destroying each snake part and finally restarting room
 				if (current_time >= blinking_finish_time + this.DeathDestroyPartDelay * this.DeathPartsDestroyed) {
 					this.DeathPartsDestroyed++;
 					SFXPlayer.Play(AvailableSounds.destroy_part, 0.75f);
@@ -234,19 +252,26 @@ namespace Snake.Entities
 
 		public override void onCollision(Collider collider, Collider other_collider, Entity other_instance) {
 			base.onCollision(collider, other_collider, other_instance);
+
+			// If the snake is not alive simply return, no collisions should be processed
 			if (this.State != States.Alive)
 				return;
 
+			// If collided with food add to snake, play sound, post event, and destroy food.
 			if (other_instance is Food && collider.Name == this.MouthColliderName) {
 				this.AddToSnake();
 				SFXPlayer.Play(AvailableSounds.eat, 0.7f);
 				Engine.PostGameEvent(new FoodEatenEvent((int)other_instance.Position.X, (int)other_instance.Position.Y));
 				other_instance.IsExpired = true;
+
+			// Else if collided with tail stop music, play sound, and begin death sequence
 			} else if ((other_instance is SnakeTail || other_instance is Wall) && collider.Name != this.MouthColliderName) {
 				MediaPlayer.Stop();
 				SFXPlayer.Play(AvailableSounds.death_hit, 0.75f);
 				Engine.SpawnInstance(new TimedExecution(1000, () => SFXPlayer.Play(AvailableSounds.death, 0.75f)));
 				this.BeginDeath();
+
+			// Else if collided with Portal handle porting to new location
 			} else if (other_instance is Portal && collider.Name != this.MouthColliderName) {
 				var start_pos = this.CurrentLocation.ToVector2();
 				var entrance_portal = (Portal)other_instance;
@@ -303,6 +328,7 @@ namespace Snake.Entities
 					}
 				}
 
+				// Spawn a new snake portal traversal animation entity
 				var portal_animation = new SnakePortalAnimation(
 					start_pos,
 					this.CurrentLocation.ToVector2(),
@@ -316,6 +342,7 @@ namespace Snake.Entities
 		public override void onKeyDown(KeyboardEventArgs e) {
 			base.onKeyDown(e);
 
+			// Handle all input from keyboard
 			switch (e.Key) {
 				case Keys.W:
 				case Keys.Up:
@@ -339,6 +366,7 @@ namespace Snake.Entities
 		public override void onButtonDown(GamePadEventArgs e) {
 			base.onButtonDown(e);
 
+			// Handle all input from gamepad
 			switch (e.Button) {
 			case Buttons.DPadUp:
 			case Buttons.LeftThumbstickUp:
@@ -361,10 +389,14 @@ namespace Snake.Entities
 
 		public override void onResume(int pause_time) {
 			base.onResume(pause_time);
+			// Remove pause time from running timers on resume
 			this.DeathSequenceTimer.RemoveTime(pause_time);
 		}
+#endregion
 
+#region FunctionalityMethods
 		private void OnInputDirection(Directions direction) {
+			// Determine if new direction is valid
 			var previous_direction = (this.QueuedInput.Count > 0) ? this.QueuedInput[this.QueuedInput.Count - 1] : this.Direction;
 			if (direction == previous_direction)
 				return;
@@ -379,6 +411,7 @@ namespace Snake.Entities
 			else
 				can_change = previous_direction != Directions.Up;
 
+			// Turn immediately if ready, otherwise add to queue
 			if (can_change) {
 				if (this.IsReadyToChangeDirections()) {
 					this.ChangeDirection(direction);
@@ -389,6 +422,7 @@ namespace Snake.Entities
 		}
 
 		private void ChangeDirection(Directions direction) {
+			// Change direction, normalize turn position, and update active directional collider
 			this.Direction = direction;
 			this.InternalLocation = this.CurrentLocation.ToVector2();
 			this.DirectionChangeLocation = this.CurrentLocation;
@@ -420,7 +454,9 @@ namespace Snake.Entities
 		private bool IsReadyToChangeDirections() {
 			return (Math.Abs(this.CurrentLocation.X - this.DirectionChangeLocation.X) >= Snake.Size + Snake.SwitchbackBuffer || Math.Abs(this.CurrentLocation.Y - this.DirectionChangeLocation.Y) >= Snake.Size + Snake.SwitchbackBuffer);
 		}
+#endregion
 
+#region EnumsAndClasses
 		internal enum States {
 			Waiting,
 			Alive,
@@ -431,11 +467,12 @@ namespace Snake.Entities
 		{
 			internal SnakeTail() {
 				var texture = ContentHolder.Get(Settings.CurrentSnake);
-				var region = new Region(texture, 0, 0, texture.Width, texture.Height, texture.Width / 2, texture.Height / 2);
+				var region = new Region(texture, 0, 0, Snake.Size, Snake.Size, Snake.Size / 2, Snake.Size / 2);
 				var sprite = new Sprite(region);
 				this.AddSprite("main", sprite);
-				this.AddColliderRectangle("main", -texture.Width / 2, -texture.Height / 2, texture.Width, texture.Height);
+				this.AddColliderRectangle("main", -Snake.Size / 2, -Snake.Size / 2, Snake.Size, Snake.Size);
 			}
 		}
+#endregion
 	}
 }
