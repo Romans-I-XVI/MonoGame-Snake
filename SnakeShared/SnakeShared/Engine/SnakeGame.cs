@@ -28,6 +28,10 @@ namespace Snake
 
 #if DEBUG
 			this.Graphics.IsFullScreen = false;
+	#if NETFX_CORE
+			if (App.IsXbox())
+				this.Graphics.IsFullScreen = true;
+	#endif
 #else
 			this.Graphics.IsFullScreen = true;
 #endif
