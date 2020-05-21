@@ -23,6 +23,7 @@ namespace Snake
 			this.Graphics.SynchronizeWithVerticalRetrace = false;
 #endif
 			this.IsFixedTimeStep = false;
+			this.IsMouseVisible = false;
 			this.Content.RootDirectory = "Content";
 
 #if DEBUG
@@ -32,7 +33,6 @@ namespace Snake
 #endif
 #if !ANDROID && !IOS && !PLAYSTATION4
 			this.Graphics.HardwareModeSwitch = false;
-			this.IsMouseVisible = true;
 #endif
 
 #if NETFX_CORE
