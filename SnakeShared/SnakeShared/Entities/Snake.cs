@@ -369,19 +369,15 @@ namespace Snake.Entities
 			// Handle all input from gamepad
 			switch (e.Button) {
 			case Buttons.DPadUp:
-			case Buttons.LeftThumbstickUp:
 				this.OnInputDirection(Directions.Up);
 				break;
 			case Buttons.DPadDown:
-			case Buttons.LeftThumbstickDown:
 				this.OnInputDirection(Directions.Down);
 				break;
 			case Buttons.DPadLeft:
-			case Buttons.LeftThumbstickLeft:
 				this.OnInputDirection(Directions.Left);
 				break;
 			case Buttons.DPadRight:
-			case Buttons.LeftThumbstickRight:
 				this.OnInputDirection(Directions.Right);
 				break;
 			}
