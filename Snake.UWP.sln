@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snake", "Snake.UWP\Snake.csproj", "{F83A071C-D07D-45FA-A780-98D4836CAD73}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MonoEngine", "monoEngine\MonoEngine\MonoEngine.shproj", "{21B5F966-179F-4871-A25A-FE80FAE9AFCF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SnakeShared", "SnakeShared\SnakeShared\SnakeShared.shproj", "{23D7538D-5B16-4996-B403-39E690723E54}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		monoEngine\MonoEngine\MonoEngine.projitems*{21b5f966-179f-4871-a25a-fe80fae9afcf}*SharedItemsImports = 13
+		SnakeShared\SnakeShared\SnakeShared.projitems*{23d7538d-5b16-4996-b403-39e690723e54}*SharedItemsImports = 13
+		monoEngine\MonoEngine\MonoEngine.projitems*{f83a071c-d07d-45fa-a780-98d4836cad73}*SharedItemsImports = 4
+		SnakeShared\SnakeShared\SnakeShared.projitems*{f83a071c-d07d-45fa-a780-98d4836cad73}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|ARM.Build.0 = Debug|ARM
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|ARM.Deploy.0 = Debug|ARM
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|x64.ActiveCfg = Debug|x64
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|x64.Build.0 = Debug|x64
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|x64.Deploy.0 = Debug|x64
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|x86.ActiveCfg = Debug|x86
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|x86.Build.0 = Debug|x86
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Debug|x86.Deploy.0 = Debug|x86
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|ARM.ActiveCfg = Release|ARM
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|ARM.Build.0 = Release|ARM
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|ARM.Deploy.0 = Release|ARM
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|x64.ActiveCfg = Release|x64
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|x64.Build.0 = Release|x64
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|x64.Deploy.0 = Release|x64
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|x86.ActiveCfg = Release|x86
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|x86.Build.0 = Release|x86
+		{F83A071C-D07D-45FA-A780-98D4836CAD73}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC8B6F3F-36FD-4784-BFC9-8AE627111A40}
+	EndGlobalSection
+EndGlobal
