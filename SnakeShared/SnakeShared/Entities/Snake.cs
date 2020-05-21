@@ -134,19 +134,19 @@ namespace Snake.Entities
 					this.CurrentLocation.Y += 1;
 
 				if (this.CurrentLocation.X - Snake.Size / 2 < 0) {
-					this.CurrentLocation.X = 854 - Snake.Size / 2;
+					this.CurrentLocation.X = Engine.Game.CanvasWidth - Snake.Size / 2;
 					this.InternalLocation.X = this.CurrentLocation.X;
 				}
-				else if (this.CurrentLocation.X + Snake.Size / 2 > 854) {
+				else if (this.CurrentLocation.X + Snake.Size / 2 > Engine.Game.CanvasWidth) {
 					this.CurrentLocation.X = Snake.Size / 2;
 					this.InternalLocation.X = this.CurrentLocation.X;
 				}
 
 				if (this.CurrentLocation.Y - Snake.Size / 2 < 0) {
-					this.CurrentLocation.Y = 480 - Snake.Size / 2;
+					this.CurrentLocation.Y = Engine.Game.CanvasHeight - Snake.Size / 2;
 					this.InternalLocation.Y = this.CurrentLocation.Y;
 				}
-				else if (this.CurrentLocation.Y + Snake.Size / 2 > 480) {
+				else if (this.CurrentLocation.Y + Snake.Size / 2 > Engine.Game.CanvasHeight) {
 					this.CurrentLocation.Y = Snake.Size / 2;
 					this.InternalLocation.Y = this.CurrentLocation.Y;
 				}

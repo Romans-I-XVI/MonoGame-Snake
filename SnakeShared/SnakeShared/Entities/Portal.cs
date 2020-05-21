@@ -27,12 +27,12 @@ namespace Snake.Entities
 			this.ReverseDirection = reverse_direction;
 
 			var regions = new Region[] {
-				new Region(ContentHolder.Get(AvailableTextures.portal_0)),
-				new Region(ContentHolder.Get(AvailableTextures.portal_1)),
+				new Region(ContentHolder.Get(AvailableTextures.portal_0), 0, 0, Portal.Size, Portal.Size, 0, 0),
+				new Region(ContentHolder.Get(AvailableTextures.portal_1), 0, 0, Portal.Size, Portal.Size, 0, 0),
 			};
 			this.MainSprite = new AnimatedSprite(regions);
 			this.AddSprite("main", this.MainSprite);
-			this.MainCollider = this.AddColliderRectangle("main", 0, 0, regions[0].GetWidth(), regions[0].GetHeight());
+			this.MainCollider = this.AddColliderRectangle("main", 0, 0, Portal.Size, Portal.Size);
 		}
 
 		public Portal(PortalSpawn spawn) : this(spawn.X, spawn.Y, spawn.ID, spawn.GotoUp, spawn.GotoDown, spawn.GotoLeft, spawn.GotoRight, spawn.ReverseDirection) {}

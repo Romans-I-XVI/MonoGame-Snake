@@ -6,16 +6,18 @@ namespace Snake.Entities.Controls
 {
 	public class ControlFoodSpawner : Entity
 	{
-		private const int MinSpawnX = 93 + Food.Size / 2;
-		private const int MinSpawnY = 71 + Food.Size / 2;
-		private const int MaxSpawnX = 854 - 93 - Food.Size / 2;
-		private const int MaxSpawnY = 480 - 71 - Food.Size / 2;
+		private const int SideBuffer = 93;
+		private const int TopBottomBuffer = 71;
+		private readonly int MinSpawnX = ControlFoodSpawner.SideBuffer + Food.Size / 2;
+		private readonly int MinSpawnY = ControlFoodSpawner.TopBottomBuffer + Food.Size / 2;
+		private readonly int MaxSpawnX = Engine.Game.CanvasWidth - ControlFoodSpawner.SideBuffer - Food.Size / 2;
+		private readonly int MaxSpawnY = Engine.Game.CanvasHeight - ControlFoodSpawner.TopBottomBuffer - Food.Size / 2;
 
 		public ControlFoodSpawner(int first_x, int first_y) {
 			Engine.SpawnInstance(new Food(first_x, first_y));
 		}
 
-		public ControlFoodSpawner() : this(854 / 2, 480 / 2) {}
+		public ControlFoodSpawner() : this(Engine.Game.CanvasWidth / 2, Engine.Game.CanvasHeight / 2) {}
 
 		public override void onGameEvent(GameEvent game_event) {
 			base.onGameEvent(game_event);
@@ -26,8 +28,8 @@ namespace Snake.Entities.Controls
 
 		private void SpawnFood() {
 			new_random_position:
-			int x = ControlFoodSpawner.MinSpawnX + Engine.Random.Next(ControlFoodSpawner.MaxSpawnX - ControlFoodSpawner.MinSpawnX + 1);
-			int y = ControlFoodSpawner.MinSpawnY + Engine.Random.Next(ControlFoodSpawner.MaxSpawnY - ControlFoodSpawner.MinSpawnY + 1);
+			int x = this.MinSpawnX + Engine.Random.Next(this.MaxSpawnX - this.MinSpawnX + 1);
+			int y = this.MinSpawnY + Engine.Random.Next(this.MaxSpawnY - this.MinSpawnY + 1);
 			if (this.IsPositionInCollision(x, y))
 				goto new_random_position;
 

@@ -10,10 +10,10 @@ namespace Snake.Entities
 		public Food(int x, int y) {
 			this.Position = new Vector2(x, y);
 			var texture = ContentHolder.Get(Settings.CurrentFood);
-			var region = new Region(texture, 0, 0, texture.Width, texture.Height, texture.Width / 2, texture.Height / 2);
+			var region = new Region(texture, 0, 0, Food.Size, Food.Size, Food.Size / 2, Food.Size / 2);
 			var sprite = new Sprite(region);
 			this.AddSprite("main", sprite);
-			this.AddColliderRectangle("main", -texture.Width / 2, -texture.Height / 2, texture.Width, texture.Height);
+			this.AddColliderRectangle("main", -Food.Size / 2, -Food.Size / 2, Food.Size, Food.Size);
 		}
 	}
 }

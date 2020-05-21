@@ -8,9 +8,9 @@ namespace Snake.Entities.UI
 	{
 		private readonly Vector2[] DrawPositions = new[] {
 			new Vector2(52, 30),
-			new Vector2(854 - 30 - 52, 30),
-			new Vector2(52, 480 - 30 - 30),
-			new Vector2(854 - 30 - 52, 480 - 30 - 30)
+			new Vector2(Engine.Game.CanvasWidth - 52 - Wall.Size, 30),
+			new Vector2(52, Engine.Game.CanvasHeight - 30 - Wall.Size),
+			new Vector2(Engine.Game.CanvasWidth - 52 - Wall.Size, Engine.Game.CanvasHeight - 30 - Wall.Size)
 		};
 
 		public WallDecoration() {
