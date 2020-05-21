@@ -4,7 +4,6 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <PublishTrimmed>true</PublishTrimmed>
-        <PublishSingleFile>true</PublishSingleFile>
         <LangVersion>6</LangVersion>
     </PropertyGroup>
 
