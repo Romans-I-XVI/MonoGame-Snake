@@ -7,6 +7,9 @@
         <LangVersion>6</LangVersion>
         <Company>Romans I XVI Gaming</Company>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
+        <SignAssembly>true</SignAssembly>
+        <DelaySign>false</DelaySign>
+        <AssemblyOriginatorKeyFile>Snake.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
     <ItemGroup>
