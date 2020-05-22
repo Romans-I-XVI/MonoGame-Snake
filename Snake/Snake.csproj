@@ -6,6 +6,7 @@
         <PublishTrimmed>true</PublishTrimmed>
         <LangVersion>6</LangVersion>
         <Company>Romans I XVI Gaming</Company>
+        <ApplicationIcon>Icon.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
