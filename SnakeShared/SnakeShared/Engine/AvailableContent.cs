@@ -59,7 +59,8 @@ namespace Snake
 		death,
 		death_hit,
 		destroy_part,
-		eat
+		eat,
+		navsingle
 	}
 
 	public static class CustomContentLocations

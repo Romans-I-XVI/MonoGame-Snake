@@ -88,10 +88,12 @@ namespace Snake.Entities.Controls
 			// Roll rolodex if up or down is press and handle results
 			if (this.Input.ButtonUp.IsPressed() || this.Input.ButtonDown.IsPressed()) {
 				if (this.Input.ButtonUp.IsPressed()) {
+					SFXPlayer.Play(AvailableSounds.navsingle);
 					this.Rolodexes[this.Index].RollDown();
 				}
 
 				if (this.Input.ButtonDown.IsPressed()) {
+					SFXPlayer.Play(AvailableSounds.navsingle);
 					this.Rolodexes[this.Index].RollUp();
 				}
 
@@ -116,6 +118,7 @@ namespace Snake.Entities.Controls
 			// Move selector and handle rolodex collapse if pressing left/right
 			if (this.Input.ButtonRight.IsPressed()) {
 				if (this.Index < this.Rolodexes.Length - 1) {
+					SFXPlayer.Play(AvailableSounds.navsingle);
 					this.Index++;
 					this.MoveSelector();
 					if (this.Index == 2) {
@@ -128,6 +131,7 @@ namespace Snake.Entities.Controls
 
 			if (this.Input.ButtonLeft.IsPressed()) {
 				if (this.Index > 0) {
+					SFXPlayer.Play(AvailableSounds.navsingle);
 					this.Index--;
 					this.MoveSelector();
 					if (this.Index == 1) {
@@ -148,6 +152,7 @@ namespace Snake.Entities.Controls
 						["start_delay"] = 250
 					});
 				} else if (current_button is ButtonLevels) {
+					SFXPlayer.Play(AvailableSounds.navsingle);
 					Engine.ChangeRoom<RoomLevels>();
 				}
 			}

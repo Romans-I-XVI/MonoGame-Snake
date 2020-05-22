@@ -75,17 +75,23 @@ namespace Snake.Entities.UI
 			if (this.Input.ButtonDown.IsPressed() && this.Index.Y < this.Buttons.Length - 1)
 				this.Index.Y++;
 
-			if (previous_index.X != this.Index.X || previous_index.Y != this.Index.Y)
+			if (previous_index.X != this.Index.X || previous_index.Y != this.Index.Y) {
+				SFXPlayer.Play(AvailableSounds.navsingle);
 				this.MoveSelector();
+			}
 
 			// Update the current game room based on the current hovered level
 			Settings.CurrentGameRoom = this.CurrentButton.GameRoom;
 
 			// Change to the level if select button is pressed
-			if (this.Input.ButtonSelect.IsPressed() && this.CurrentButton.IsUnlocked) {
-				Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
-					["start_delay"] = 250
-				});
+			if (this.Input.ButtonSelect.IsPressed()) {
+				if (this.CurrentButton.IsUnlocked) {
+					Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
+						["start_delay"] = 250
+					});
+				} else {
+					SFXPlayer.Play(AvailableSounds.death_hit, 0.75f / 2);
+				}
 			}
 		}
 

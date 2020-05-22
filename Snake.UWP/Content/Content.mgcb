@@ -49,6 +49,12 @@
 /processorParam:Quality=Best
 /build:../../SnakeContent/sounds/eat.wav;sounds/eat.wav
 
+#begin ../../SnakeContent/sounds/navsingle.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../SnakeContent/sounds/navsingle.wav;sounds/navsingle.wav
+
 #begin ../../SnakeContent/textures/loading.png
 /importer:TextureImporter
 /processor:TextureProcessor
