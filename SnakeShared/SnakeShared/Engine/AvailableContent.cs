@@ -46,7 +46,10 @@ namespace Snake
 		theme_8_wall,
 	}
 
-	public enum AvailableFonts {}
+	public enum AvailableFonts
+	{
+		retro_computer
+	}
 
 	public enum AvailableMusic
 	{

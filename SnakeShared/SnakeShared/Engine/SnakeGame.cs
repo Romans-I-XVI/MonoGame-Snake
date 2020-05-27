@@ -72,6 +72,13 @@ namespace Snake
 			Engine.SpawnInstance<ControlBack>();
 			Engine.SpawnInstance<Background>();
 
+#if XBOX_LIVE
+			// XboxLiveObject.SignOutCompleted += XboxLiveStatsManager.OnSignOutCompleted;
+			// XboxLiveObject.SignInCompleted += XboxLiveStatsManager.OnSignInCompleted;
+			// ExitEvent += XboxLiveStatsManager.OnExitGame;
+			// XboxLiveObject.SignIn();
+#endif
+
 			Engine.ChangeRoom<RoomMain>();
 		}
 

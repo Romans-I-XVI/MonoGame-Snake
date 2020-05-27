@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../SnakeContent/fonts/retro_computer.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:../../SnakeContent/fonts/retro_computer.spritefont;fonts/retro_computer.spritefont
+
 #begin ../../SnakeContent/music/background_music.m4a
 /importer:Mp3Importer
 /processor:SongProcessor

@@ -13,6 +13,10 @@ namespace Snake.Rooms
 			Engine.SpawnInstance<DeveloperLogo>();
 			Engine.SpawnInstance<WallDecoration>();
 			Engine.SpawnInstance<MainMenuUI>();
+
+#if XBOX_LIVE
+			Engine.SpawnInstance<XboxLiveIndicator>();
+#endif
 		}
 
 		public override void onSwitchAway(Room next_room) {}

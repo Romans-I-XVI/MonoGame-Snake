@@ -67,5 +67,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SFXPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VirtualInputButtons.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XboxLive\XboxLiveConnectedStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XboxLive\XboxLiveIndicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XboxLive\XboxLiveObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XboxLive\XboxLiveStats.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XboxLive\XboxLiveStatsManager.cs" />
   </ItemGroup>
 </Project>
