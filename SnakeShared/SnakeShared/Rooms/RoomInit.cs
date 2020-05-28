@@ -7,45 +7,44 @@ using Snake.Enums;
 
 namespace Snake.Rooms
 {
-    class RoomInit : Room
-    {
-        private const int MinimumSplashDuration = 2500;
+	class RoomInit : Room
+	{
+		private const int MinimumSplashDuration = 2500;
 
-        public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
-            Engine.SpawnInstance<LoadingSplash>();
+		public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
+			Engine.SpawnInstance<LoadingSplash>();
 
-            // Load all save data in to cache
-            var timer = new GameTimeSpan();
-            Action initialize_data = () => {
+			// Load all save data in to cache
+			var timer = new GameTimeSpan();
+			Action initialize_data = () => {
 #if XBOX_LIVE
-                const int xbox_live_timeout = 5000;
-                while (XboxLiveObject.CurrentlyAttemptingSignIn && timer.TotalMilliseconds <= xbox_live_timeout)
-                {
-                    System.Threading.Thread.Sleep(10);
-                }
+				const int xbox_live_timeout = 5000;
+				while (XboxLiveObject.CurrentlyAttemptingSignIn && timer.TotalMilliseconds <= xbox_live_timeout) {
+					System.Threading.Thread.Sleep(10);
+				}
 #endif
 
-                Debug.WriteLine("########### Loading Save Files In To Cache ##########");
-                foreach (GameRooms game_room in Enum.GetValues(typeof(GameRooms))) {
-                    foreach (GameplaySpeeds gameplay_speed in Enum.GetValues(typeof(GameplaySpeeds))) {
-                        string data = SaveDataHandler.LoadData(Settings.GetSaveFilePath(game_room, gameplay_speed));
-                        Debug.WriteLine(game_room + " - " + gameplay_speed + ": " + data);
-                    }
-                }
-                Debug.WriteLine("########### Loading Save Files In To Cache ##########");
+				Debug.WriteLine("########### Loading Save Files In To Cache ##########");
+				foreach (GameRooms game_room in Enum.GetValues(typeof(GameRooms))) {
+					foreach (GameplaySpeeds gameplay_speed in Enum.GetValues(typeof(GameplaySpeeds))) {
+						string data = SaveDataHandler.LoadData(Settings.GetSaveFilePath(game_room, gameplay_speed));
+						Debug.WriteLine(game_room + " - " + gameplay_speed + ": " + data);
+					}
+				}
+				Debug.WriteLine("########### Loading Save Files In To Cache ##########");
 
 
-                int remaining_time_to_wait = RoomInit.MinimumSplashDuration - (int)timer.TotalMilliseconds;
-                if (remaining_time_to_wait < 0)
-                    remaining_time_to_wait = 0;
+				int remaining_time_to_wait = RoomInit.MinimumSplashDuration - (int)timer.TotalMilliseconds;
+				if (remaining_time_to_wait < 0)
+					remaining_time_to_wait = 0;
 
-                Engine.SpawnInstance(new TimedExecution(remaining_time_to_wait, () => Engine.ChangeRoom<RoomMain>()));
-            };
+				Engine.SpawnInstance(new TimedExecution(remaining_time_to_wait, () => Engine.ChangeRoom<RoomMain>()));
+			};
 
-            Engine.SpawnInstance(new TimedExecution(100, initialize_data));
-        }
+			Engine.SpawnInstance(new TimedExecution(100, initialize_data));
+		}
 
-        public override void onSwitchAway(Room next_room) {
-        }
-    }
+		public override void onSwitchAway(Room next_room) {
+		}
+	}
 }
