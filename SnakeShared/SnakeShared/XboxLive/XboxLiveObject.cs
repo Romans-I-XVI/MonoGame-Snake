@@ -10,6 +10,7 @@ using Microsoft.Xbox.Services.System;
 using Microsoft.Xbox.Services;
 using Microsoft.Xbox.Services.Statistics.Manager;
 using Microsoft.Xna.Framework;
+using Snake.Entities;
 using Snake.Rooms;
 
 namespace Snake
@@ -32,16 +33,16 @@ namespace Snake
 			XboxLiveObject.CurrentUser = null;
 			XboxLiveObject.CurrentContext = null;
 			SaveDataHandler.ResetCache();
-			// StatTracker.Reset();
-			if (!(Engine.Room is RoomMain))
+			StatTracker.Reset();
+			if (!(Engine.Room is RoomMain) && !(Engine.Room is RoomInit))
 				Engine.ChangeRoom<RoomMain>();
 			XboxLiveObject.SignOutCompleted?.Invoke(sender, e);
 		}
 
 		private static void OnSignInCompleted(object sender, SignInCompletedEventArgs e) {
 			SaveDataHandler.ResetCache();
-			// StatTracker.LoadAsync();
-			if (!(Engine.Room is RoomMain))
+			StatTracker.LoadAsync();
+			if (!(Engine.Room is RoomMain) && !(Engine.Room is RoomInit))
 				Engine.ChangeRoom<RoomMain>();
 		}
 

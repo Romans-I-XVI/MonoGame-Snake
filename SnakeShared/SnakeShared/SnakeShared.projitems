@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SnakePortalAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\StatTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\TimedExecution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\ButtonClassic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UI\Button.cs" />

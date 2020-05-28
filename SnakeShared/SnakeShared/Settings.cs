@@ -13,6 +13,7 @@ namespace Snake
 		public static AvailableTextures CurrentSnake => Enum.Parse<AvailableTextures>("theme_" + Settings.CurrentTheme + "_snake");
 		public static AvailableTextures CurrentFood => Enum.Parse<AvailableTextures>("theme_" + Settings.CurrentTheme + "_food");
 		public static AvailableTextures CurrentWall => Enum.Parse<AvailableTextures>("theme_" + Settings.CurrentTheme + "_wall");
+		public const string StatTrackerSavePath = "game_stats.txt";
 		public static string CurrentSaveFilePath => Settings.CurrentGameRoom + "_" + Settings.CurrentGameplaySpeed + ".txt";
 		public static string GetSaveFilePath(GameRooms game_room, GameplaySpeeds gameplay_speed) => game_room + "_" + gameplay_speed + ".txt";
 

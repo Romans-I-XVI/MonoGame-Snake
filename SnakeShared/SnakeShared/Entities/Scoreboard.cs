@@ -99,6 +99,7 @@ namespace Snake.Entities
 			} else if (game_event is SnakeDestructionDoneEvent) {
 				if (this.IsNewHighscore) {
 					this.SaveHighscore();
+					StatTracker.PostStats(true);
 				}
 			}
 		}
