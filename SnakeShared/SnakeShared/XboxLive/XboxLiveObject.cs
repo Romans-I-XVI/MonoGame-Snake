@@ -25,8 +25,8 @@ namespace Snake
 		public delegate void SignOutCompletedDelegate(object sender, SignOutCompletedEventArgs e);
 		public static event SignOutCompletedDelegate SignOutCompleted;
 
-		private static bool CurrentlyAttemptingSignIn = false;
-		private static bool SubscribedToEvents = false;
+		public static bool CurrentlyAttemptingSignIn { get; private set; } = false;
+		public static bool SubscribedToEvents { get; private set; } = false;
 
 		private static void OnSignOutCompleted(object sender, SignOutCompletedEventArgs e) {
 			XboxLiveObject.CurrentUser = null;

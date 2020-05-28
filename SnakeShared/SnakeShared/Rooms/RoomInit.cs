@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoEngine;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Snake.Entities;
 using Snake.Enums;
 
@@ -16,11 +17,23 @@ namespace Snake.Rooms
             // Load all save data in to cache
             var timer = new GameTimeSpan();
             Action initialize_data = () => {
+#if XBOX_LIVE
+                const int xbox_live_timeout = 5000;
+                while (XboxLiveObject.CurrentlyAttemptingSignIn && timer.TotalMilliseconds <= xbox_live_timeout)
+                {
+                    System.Threading.Thread.Sleep(10);
+                }
+#endif
+
+                Debug.WriteLine("########### Loading Save Files In To Cache ##########");
                 foreach (GameRooms game_room in Enum.GetValues(typeof(GameRooms))) {
                     foreach (GameplaySpeeds gameplay_speed in Enum.GetValues(typeof(GameplaySpeeds))) {
-                        SaveDataHandler.LoadData(Settings.GetSaveFilePath(game_room, gameplay_speed));
+                        string data = SaveDataHandler.LoadData(Settings.GetSaveFilePath(game_room, gameplay_speed));
+                        Debug.WriteLine(game_room + " - " + gameplay_speed + ": " + data);
                     }
                 }
+                Debug.WriteLine("########### Loading Save Files In To Cache ##########");
+
 
                 int remaining_time_to_wait = RoomInit.MinimumSplashDuration - (int)timer.TotalMilliseconds;
                 if (remaining_time_to_wait < 0)
