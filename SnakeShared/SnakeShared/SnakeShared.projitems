@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPause.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Controls\ControlPortalAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Food.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\LoadingSplash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Portal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Scoreboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Snake.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Levels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogoDrawData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomInit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomLevels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rooms\RoomPlay.cs" />

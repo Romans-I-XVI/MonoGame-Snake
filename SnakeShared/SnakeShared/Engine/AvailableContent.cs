@@ -5,7 +5,7 @@ namespace Snake
 {
 	public enum AvailableTextures
 	{
-		loading,
+		splash,
 		portal_0,
 		portal_1,
 		theme_0_background,

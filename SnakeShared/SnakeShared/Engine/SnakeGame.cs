@@ -79,7 +79,7 @@ namespace Snake
 			XboxLiveObject.SignIn();
 #endif
 
-			Engine.ChangeRoom<RoomMain>();
+			Engine.ChangeRoom<RoomInit>();
 		}
 
 		protected override void Update(GameTime game_time) {
