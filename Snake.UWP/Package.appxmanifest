@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="08224d4a-aac7-4a52-80fe-e129080376f8"
-    Publisher="CN=Austin"
+    Name="RomansIXVIGamingLLC.SnakeTheGame"
+    Publisher="CN=1460E382-1222-42D8-AC98-5E3FAF26828C"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="08224d4a-aac7-4a52-80fe-e129080376f8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="535f7e51-2d8f-4ed0-96d1-882163c61be8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Snake</DisplayName>
-    <PublisherDisplayName>Austin</PublisherDisplayName>
+    <DisplayName>Snake: The Game</DisplayName>
+    <PublisherDisplayName>Romans I XVI Gaming, LLC</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -32,12 +32,13 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="Snake.App">
       <uap:VisualElements
-        DisplayName="Snake"
+        DisplayName="Snake: The Game"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
         Description="Snake"
         BackgroundColor="#464646">
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:DefaultTile/>
       </uap:VisualElements>
     </Application>
   </Applications>
