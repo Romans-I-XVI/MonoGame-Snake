@@ -6,7 +6,7 @@ namespace Snake
         FoodEaten,
         LongestSnakeOpenSlow,
         LongestSnakeOpenMedium,
-        LongestSnakeOpenFast,
+        LongestSnakeOpenFast
         // TODO: Add more stats here
     }
 }
