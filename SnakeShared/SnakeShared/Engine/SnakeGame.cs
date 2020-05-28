@@ -72,7 +72,14 @@ namespace Snake
 			Engine.SpawnInstance<ControlBack>();
 			Engine.SpawnInstance<Background>();
 
-			Engine.ChangeRoom<RoomMain>();
+#if XBOX_LIVE
+			XboxLiveObject.SignOutCompleted += XboxLiveStatsManager.OnSignOutCompleted;
+			XboxLiveObject.SignInCompleted += XboxLiveStatsManager.OnSignInCompleted;
+			ExitEvent += XboxLiveStatsManager.OnExitGame;
+			XboxLiveObject.SignIn();
+#endif
+
+			Engine.ChangeRoom<RoomInit>();
 		}
 
 		protected override void Update(GameTime game_time) {

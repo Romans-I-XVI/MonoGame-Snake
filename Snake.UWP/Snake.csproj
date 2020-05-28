@@ -18,8 +18,11 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Snake_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>
+    </PackageCertificateKeyFile>
     <MonoGamePlatform>WindowsStoreApp</MonoGamePlatform>
+    <PackageCertificateThumbprint>A90C131EA00E9BC3EBE0BB86D9FB1016718A81C7</PackageCertificateThumbprint>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -47,7 +50,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\WindowsUniversal\$(Platform)\$(Configuration)\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UAP;CODE_ANALYSIS;XBOX_LIVE;</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -57,7 +60,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\WindowsUniversal\$(Platform)\$(Configuration)\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP;CODE_ANALYSIS;XBOX_LIVE;</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -112,9 +115,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Snake_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -123,6 +126,9 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="xboxservices.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
@@ -141,6 +147,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.8</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Xbox.Live.SDK.WinRT.UWP">
+      <Version>2018.6.20181010.2</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
     </PackageReference>
@@ -151,73 +160,61 @@
       <Link>Content/json/level_1.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_2.json">
       <Link>Content/json/level_2.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_3.json">
       <Link>Content/json/level_3.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_4.json">
       <Link>Content/json/level_4.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_5.json">
       <Link>Content/json/level_5.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_6.json">
       <Link>Content/json/level_6.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_7.json">
       <Link>Content/json/level_7.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_8.json">
       <Link>Content/json/level_8.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_9.json">
       <Link>Content/json/level_9.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_10.json">
       <Link>Content/json/level_10.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_11.json">
       <Link>Content/json/level_11.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\SnakeContent\json\level_12.json">
       <Link>Content/json/level_12.json</Link>
     </EmbeddedResource>
   </ItemGroup>
-
   <Import Project="..\monoEngine\MonoEngine\MonoEngine.projitems" Label="Shared" />
   <Import Project="..\SnakeShared\SnakeShared\SnakeShared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

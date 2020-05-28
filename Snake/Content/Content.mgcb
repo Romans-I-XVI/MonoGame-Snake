@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../SnakeContent/fonts/retro_computer.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:../../SnakeContent/fonts/retro_computer.spritefont;fonts/retro_computer.spritefont
+
 #begin ../../SnakeContent/music/background_music.m4a
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -55,7 +62,7 @@
 /processorParam:Quality=Best
 /build:../../SnakeContent/sounds/navsingle.wav;sounds/navsingle.wav
 
-#begin ../../SnakeContent/textures/loading.png
+#begin ../../SnakeContent/textures/splash.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -65,19 +72,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../SnakeContent/textures/loading.png;textures/loading.png
-
-#begin ../../SnakeContent/textures/loading.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../SnakeContent/textures/loading.png;textures/loading.png
+/build:../../SnakeContent/textures/splash.png;textures/splash.png
 
 #begin ../../SnakeContent/textures/portal_0.png
 /importer:TextureImporter
