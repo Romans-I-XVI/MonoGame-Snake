@@ -4,10 +4,12 @@ namespace Snake
 	public enum XboxLiveStats
 	{
 		FoodEaten,
+		LongestSnakeClassicSlow,
+		LongestSnakeClassicMedium,
+		LongestSnakeClassicFast,
 		LongestSnakeOpenSlow,
 		LongestSnakeOpenMedium,
 		LongestSnakeOpenFast
-		// TODO: Add more stats here
 	}
 }
 #endif
