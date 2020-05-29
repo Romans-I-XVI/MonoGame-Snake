@@ -55,7 +55,7 @@ namespace Snake.Rooms
 				Engine.SpawnInstance(new TimedExecution(remaining_time_to_wait, () => Engine.ChangeRoom<RoomMain>()));
 			};
 
-			Engine.SpawnInstance(new TimedExecution(100, initialize));
+			Engine.SpawnInstance(new TimedExecution(500, initialize));
 		}
 
 		public override void onSwitchAway(Room next_room) {
