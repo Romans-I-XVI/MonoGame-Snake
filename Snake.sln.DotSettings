@@ -93,4 +93,5 @@
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Trackpad/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Tweener/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Unhover/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Xbox/@EntryIndexedValue">True</s:Boolean>
 </wpf:ResourceDictionary>

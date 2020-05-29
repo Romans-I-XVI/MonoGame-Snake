@@ -14,9 +14,8 @@ namespace Snake.Rooms
 		public override void onSwitchTo(Room previous_room, Dictionary<string, object> args) {
 			Engine.SpawnInstance<LoadingSplash>();
 
-			// Load all save data in to cache
 			var timer = new GameTimeSpan();
-			Action initialize_data = () => {
+			Action initialize = () => {
 #if XBOX_LIVE
 				// Wait for Xbox Live login to complete if attempting
 				const int xbox_live_timeout = 5000;
@@ -38,6 +37,15 @@ namespace Snake.Rooms
 				// Wait until initial data loading occurs to spawn persistent stat tracker entity
 				Engine.SpawnInstance<StatTracker>();
 
+				// Preload in game assemblies
+				for (int i = 0; i < this.AssembliesToPreload.Length; i++) {
+					try {
+						System.Reflection.Assembly.Load(this.AssembliesToPreload[i]);
+					} catch {
+						Debug.WriteLine("Unable to preload: " + this.AssembliesToPreload[i]);
+					}
+				}
+
 				// If time remains after doing these operations set the time to allow splash screen to remain
 				int remaining_time_to_wait = RoomInit.MinimumSplashDuration - (int)timer.TotalMilliseconds;
 				if (remaining_time_to_wait < 0)
@@ -47,10 +55,27 @@ namespace Snake.Rooms
 				Engine.SpawnInstance(new TimedExecution(remaining_time_to_wait, () => Engine.ChangeRoom<RoomMain>()));
 			};
 
-			Engine.SpawnInstance(new TimedExecution(100, initialize_data));
+			Engine.SpawnInstance(new TimedExecution(100, initialize));
 		}
 
 		public override void onSwitchAway(Room next_room) {
 		}
+
+		private readonly string[] AssembliesToPreload = {
+			"System.ObjectModel",
+			"netstandard",
+			"System.Runtime.Serialization.Formatters",
+			"System.Diagnostics.TraceSource",
+			"System.Linq.Expressions",
+			"System.ComponentModel.TypeConverter",
+			"System.Runtime.Numerics",
+			"System.Collections.Specialized",
+			"System.Drawing.Primitives",
+			"System.Runtime.Serialization.Primitives",
+			"System.Data.Common",
+			"System.Xml.ReaderWriter",
+			"System.Private.Xml",
+			"System.ComponentModel.Primitives"
+		};
 	}
 }
