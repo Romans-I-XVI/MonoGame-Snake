@@ -10,10 +10,11 @@ namespace Snake
 	public class XboxLiveIndicator : Entity
 	{
 		private readonly Regex _gamertagRegex = new Regex("[^a-zA-Z0-9 -]");
+		const float FontScale = 0.3125f;
 
 		public XboxLiveIndicator() {
 			this.Depth = -int.MaxValue + 1;
-			this.Position = new Vector2(5, 0);
+			this.Position = new Vector2(40 - 15, 22 - 13);
 		}
 
 		public override void onKeyDown(KeyboardEventArgs e) {
@@ -33,14 +34,10 @@ namespace Snake
 
 			if (XboxLiveObject.CurrentUser != null && XboxLiveObject.CurrentUser.IsSignedIn) {
 				string gamertag_string = this._gamertagRegex.Replace(XboxLiveObject.CurrentUser.Gamertag, "");
-				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), gamertag_string, this.Position, Color.Black);
+				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), gamertag_string, this.Position, Color.Black, scale: XboxLiveIndicator.FontScale);
 			} else {
-				var sign_in_font = ContentHolder.Get(AvailableFonts.retro_computer);
-				const string sign_in_string = "Sign In";
-				const string icon_string = "[X]";
-				var icon_position = this.Position + new Vector2(sign_in_font.MeasureString(sign_in_string).X + 10, 0);
-				sprite_batch.DrawString(sign_in_font, sign_in_string, this.Position, Color.Black);
-				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), icon_string, icon_position, Color.Black);
+				const string sign_in_string = "Sign In [X]";
+				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), sign_in_string, this.Position, Color.Black, scale: XboxLiveIndicator.FontScale);
 			}
 		}
 	}
