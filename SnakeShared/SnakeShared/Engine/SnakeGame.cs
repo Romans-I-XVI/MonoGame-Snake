@@ -18,7 +18,7 @@ namespace Snake
         public static Android.OS.Vibrator Vibrator;
 #endif
 
-		public SnakeGame() : base(854, 480, 40, 22) {
+		public SnakeGame() : base(854, 480, 0, 0) {
 #if !NETFX_CORE
 			this.Graphics.SynchronizeWithVerticalRetrace = false;
 #endif
@@ -71,6 +71,9 @@ namespace Snake
 #endif
 			Engine.SpawnInstance<ControlBack>();
 			Engine.SpawnInstance<Background>();
+#if DEBUG
+			Engine.SpawnInstance(new DebuggerWithTerminal(ContentHolder.Get(AvailableFonts.retro_computer)));
+#endif
 
 #if XBOX_LIVE
 			XboxLiveObject.SignOutCompleted += XboxLiveStatsManager.OnSignOutCompleted;
