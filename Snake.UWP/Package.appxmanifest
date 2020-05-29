@@ -33,12 +33,23 @@
       EntryPoint="Snake.App">
       <uap:VisualElements
         DisplayName="Snake: The Game"
-        Square150x150Logo="Assets\Logo.png"
-        Square44x44Logo="Assets\SmallLogo.png"
-        Description="Snake"
-        BackgroundColor="#464646">
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
-        <uap:DefaultTile/>
+        Square150x150Logo="Assets\MediumTile.png"
+        Square44x44Logo="Assets\AppIcon.png"
+        Description="Play the classic that transcends generations."
+        BackgroundColor="#b6e9ab">
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#b6e9ab"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\WideTile.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+            <uap:ShowOn Tile="square150x150Logo"/>
+            <uap:ShowOn Tile="square310x310Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile>
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/>
+          <uap:Rotation Preference="landscapeFlipped"/>
+        </uap:InitialRotationPreference>
+        <uap:LockScreen BadgeLogo="Assets\LockScreenLogo.png" Notification="badgeAndTileText"/>
       </uap:VisualElements>
     </Application>
   </Applications>
