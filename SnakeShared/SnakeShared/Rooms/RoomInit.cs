@@ -70,12 +70,18 @@ namespace Snake.Rooms
 			"System.ComponentModel.TypeConverter",
 			"System.Runtime.Numerics",
 			"System.Collections.Specialized",
+			"System.Collections.Concurrent",
 			"System.Drawing.Primitives",
 			"System.Runtime.Serialization.Primitives",
 			"System.Data.Common",
 			"System.Xml.ReaderWriter",
 			"System.Private.Xml",
-			"System.ComponentModel.Primitives"
+			"System.ComponentModel.Primitives",
+			"System.Reflection.Emit.ILGeneration",
+			"System.Reflection.Primitives",
+			"System.Reflection.Emit.Lightweight",
+			"System.Threading.Tasks",
+			"Newtonsoft.Json"
 		};
 	}
 }
