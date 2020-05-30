@@ -13,6 +13,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <TrimmerRootAssembly Include="mscorlib" />
+    </ItemGroup>
+
+    <ItemGroup>
         <MonoGameContentReference Include="**\*.mgcb" />
     </ItemGroup>
 
