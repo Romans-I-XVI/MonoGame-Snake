@@ -387,6 +387,7 @@ namespace Snake.Entities
 			base.onResume(pause_time);
 			// Remove pause time from running timers on resume
 			this.DeathSequenceTimer.RemoveTime(pause_time);
+			this.InitialWaitTimer.RemoveTime(pause_time);
 		}
 #endregion
 

@@ -43,6 +43,11 @@ namespace Snake.Entities.Controls
 			}
 		}
 
+		public override void onResume(int pause_time) {
+			base.onResume(pause_time);
+			this.Timer.RemoveTime(pause_time);
+		}
+
 		public static int TotalTimeToSpawnLevel(LevelData level_data) {
 			int time = 0;
 

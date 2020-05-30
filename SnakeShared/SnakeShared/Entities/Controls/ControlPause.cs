@@ -28,7 +28,7 @@ namespace Snake.Entities.Controls
 
 		public override void onKeyDown(KeyboardEventArgs e) {
 			base.onKeyDown(e);
-			if (e.Key == Keys.P)
+			if (e.Key == Keys.P || e.Key == Keys.MediaPlayPause || e.Key == Keys.Space )
 				this.PauseResume();
 		}
 
