@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
-    public interface IFastForwardable
-    {
-        void onFastForwardPressed();
-        void onFastForwardReleased();
-    }
+	public interface IFastForwardable
+	{
+		void onFastForwardPressed();
+		void onFastForwardReleased();
+	}
 }
