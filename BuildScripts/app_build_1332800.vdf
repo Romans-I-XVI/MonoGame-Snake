@@ -30,6 +30,7 @@
 	// The list of depots included in this build.
 	"depots"
 	{
+		"1332801" "depot_build_1332801.vdf"
 		"1332803" "depot_build_1332803.vdf"
 		"1332804" "depot_build_1332804.vdf"
 		"1332805" "depot_build_1332805.vdf"
