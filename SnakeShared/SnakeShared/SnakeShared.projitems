@@ -60,6 +60,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeDiedEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakeMoveEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameEvents\SnakePartDestroyedEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IFastForwardable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Levels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogoDrawData.cs" />

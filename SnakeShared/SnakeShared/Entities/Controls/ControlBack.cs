@@ -9,6 +9,8 @@ namespace Snake.Entities.Controls
 {
 	public class ControlBack : Entity
 	{
+		private readonly VirtualButton BackButton = new VirtualButton();
+
 		private readonly Dictionary<Type, Action> RoomBackActions = new Dictionary<Type, Action> {
 			[typeof(RoomMain)] = () => ((SnakeGame)Engine.Game).ExitGame = true,
 			[typeof(RoomPlay)] = () => {
@@ -26,25 +28,19 @@ namespace Snake.Entities.Controls
 		public ControlBack() {
 			this.IsPersistent = true;
 			this.IsPauseable = false;
+			this.BackButton.AddKey(Keys.Escape);
+			this.BackButton.AddKey(Keys.Back);
+			this.BackButton.AddButton(Buttons.B);
+			this.BackButton.AddButton(Buttons.Back);
 		}
 
-		public override void onKeyDown(KeyboardEventArgs e) {
-			base.onKeyDown(e);
-			if (e.Key == Keys.Escape || e.Key == Keys.Back)
-				this.OnBack();
-		}
-
-		public override void onButtonDown(GamePadEventArgs e) {
-			base.onButtonDown(e);
-
-			if (e.Button == Buttons.B || e.Button == Buttons.Back)
-				this.OnBack();
-		}
-
-		public void OnBack() {
-			Action action = null;
-			this.RoomBackActions.TryGetValue(Engine.Room.GetType(), out action);
-			action?.Invoke();
+		public override void onUpdate(float dt) {
+			base.onUpdate(dt);
+			if (this.BackButton.IsPressed()) {
+				Action action = null;
+				this.RoomBackActions.TryGetValue(Engine.Room.GetType(), out action);
+				action?.Invoke();
+			}
 		}
 	}
 }
