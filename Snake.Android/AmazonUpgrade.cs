@@ -14,6 +14,7 @@ using MonoEngine;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using com.amazon.device.iap.cpt;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Snake
@@ -21,118 +22,82 @@ namespace Snake
     public class AmazonUpgrade : Upgrade
     {
         private const string SKU = "com.romansixvigaming.snake.noads";
-
-        private bool _checked_with_server = false;
-
+        private bool CheckedWithServer = false;
         private IAmazonIapV2 amazonIapV2;
 
-        public AmazonUpgrade()
-        {
-            amazonIapV2 = AmazonIapV2Impl.Instance;
-            amazonIapV2.SetCurrentAndroidActivity(Microsoft.Xna.Framework.Game.Activity);
-            this.amazonIapV2.AddPurchaseResponseListener(purchaseResponseCallback);
-            this.amazonIapV2.AddGetPurchaseUpdatesResponseListener(getPurchaseUpdatesResponseCallback);
+        public AmazonUpgrade() {
+            this.amazonIapV2 = AmazonIapV2Impl.Instance;
+            this.amazonIapV2.SetCurrentAndroidActivity(Game.Activity);
+            this.amazonIapV2.AddPurchaseResponseListener(this.PurchaseResponseCallback);
+            this.amazonIapV2.AddGetPurchaseUpdatesResponseListener(this.GetPurchaseUpdatesResponseCallback);
 
-            checkUpgrade();
+            this.CheckUpgrade();
         }
 
-        public override void onKeyDown(KeyboardEventArgs e)
-        {
+        public override void onKeyDown(KeyboardEventArgs e) {
             base.onKeyDown(e);
             if (e.Key == Keys.Help)
-            {
-                if (!IsUpgraded)
-                {
-                    DoUpgrade();
-                }
+                if (!Upgrade.IsUpgraded)
+                    this.DoUpgrade();
+        }
+
+        public override void DoUpgrade() {
+            var sku = new SkuInput {
+                Sku = AmazonUpgrade.SKU
+            };
+            this.amazonIapV2.Purchase(sku);
+        }
+
+        private void CheckUpgrade() {
+            if (!Upgrade.IsUpgraded && !this.CheckedWithServer) {
+                this.CheckServerForUpgrade();
+                this.CheckedWithServer = true;
             }
         }
 
-        public override void DoUpgrade()
-        {
-            SkuInput sku = new SkuInput();
-            sku.Sku = SKU;
-            amazonIapV2.Purchase(sku);
-        }
-
-        private void checkUpgrade()
-        {
-            if (!IsUpgraded && !_checked_with_server)
-            {
-                checkServerForUpgrade();
-                _checked_with_server = true;
-            }
-        }
-
-        private void checkSaveForUpgrade()
-        {
-
-        }
-
-        private void checkServerForUpgrade()
-        {
-            ResetInput reset_input = new ResetInput();
+        private void CheckServerForUpgrade() {
+            var reset_input = new ResetInput();
             reset_input.Reset = true;
-            amazonIapV2.GetPurchaseUpdates(reset_input);
+            this.amazonIapV2.GetPurchaseUpdates(reset_input);
         }
 
-        private void purchaseResponseCallback(PurchaseResponse eventName)
-        {
-            if (eventName.PurchaseReceipt != null)
-            {
-                if (eventName.PurchaseReceipt.Sku == SKU)
-                {
-                    if (eventName.Status == "SUCCESSFUL" && eventName.PurchaseReceipt.CancelDate == 0)
-                    {
-                        IsUpgraded = true;
-                    }
+        private void PurchaseResponseCallback(PurchaseResponse event_name) {
+            if (event_name.PurchaseReceipt != null) {
+                if (event_name.PurchaseReceipt.Sku == AmazonUpgrade.SKU) {
+                    if (event_name.Status == "SUCCESSFUL" && event_name.PurchaseReceipt.CancelDate == 0)
+                        Upgrade.IsUpgraded = true;
                     else
-                    {
-                        IsUpgraded = false;
-                    }
-                    notifyFullfillment(eventName.PurchaseReceipt, true);
-                }
-                else
-                {
-                    notifyFullfillment(eventName.PurchaseReceipt, false);
+                        Upgrade.IsUpgraded = false;
+                    this.NotifyFullfillment(event_name.PurchaseReceipt, true);
+                } else {
+                    this.NotifyFullfillment(event_name.PurchaseReceipt, false);
                 }
             }
         }
 
-        private void getPurchaseUpdatesResponseCallback(GetPurchaseUpdatesResponse eventName)
-        {
-            if (eventName.Receipts.Count > 0)
-            {
+        private void GetPurchaseUpdatesResponseCallback(GetPurchaseUpdatesResponse event_name) {
+            if (event_name.Receipts.Count > 0) {
                 bool found_active_purchase = false;
-                foreach (var item in eventName.Receipts)
-                {
-                    if (item.Sku == SKU)
-                    {
-                        if (item.CancelDate == 0)
-                        {
-                            found_active_purchase = true;
-                        }
-                        notifyFullfillment(item, true);
+                foreach (var item in event_name.Receipts)
+                    if (item.Sku == AmazonUpgrade.SKU) {
+                        if (item.CancelDate == 0) found_active_purchase = true;
+                        this.NotifyFullfillment(item, true);
+                    } else {
+                        this.NotifyFullfillment(item, false);
                     }
-                    else
-                    {
-                        notifyFullfillment(item, false);
-                    }
-                }
-                IsUpgraded = found_active_purchase;
-            }
-            else
-            {
-                IsUpgraded = false;
+
+                Upgrade.IsUpgraded = found_active_purchase;
+            } else {
+                Upgrade.IsUpgraded = false;
             }
         }
 
-        private void notifyFullfillment(PurchaseReceipt receipt, bool fulfilled)
-        {
-            NotifyFulfillmentInput notify_fulfillment = new NotifyFulfillmentInput();
-            notify_fulfillment.ReceiptId = receipt.ReceiptId;
-            notify_fulfillment.FulfillmentResult = fulfilled ? "FULFILLED" : "UNAVAILABLE";
-            amazonIapV2.NotifyFulfillment(notify_fulfillment);
+        private void NotifyFullfillment(PurchaseReceipt receipt, bool fulfilled) {
+            var notify_fulfillment = new NotifyFulfillmentInput {
+                ReceiptId = receipt.ReceiptId,
+                FulfillmentResult = fulfilled ? "FULFILLED" : "UNAVAILABLE"
+            };
+            this.amazonIapV2.NotifyFulfillment(notify_fulfillment);
         }
     }
 }
