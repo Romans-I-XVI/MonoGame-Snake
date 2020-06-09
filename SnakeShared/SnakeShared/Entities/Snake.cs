@@ -240,6 +240,10 @@ namespace Snake.Entities
 						Engine.PostGameEvent(new SnakePartDestroyedEvent());
 						Engine.PostGameEvent(new SnakeDestructionDoneEvent());
 						Engine.SpawnInstance(new TimedExecution(2000, () => {
+#if ADS
+							var ad_object = Engine.GetFirstInstanceByType<Ads>();
+							ad_object?.Check();
+#endif
 							Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
 								["start_delay"] = 1000
 							});
