@@ -16,8 +16,8 @@ namespace Snake
 		public bool FetchingIsUpgraded { get; protected set; } = true;
 		protected Selector Selector = null;
 		protected int SelectorIndex = 0;
-		protected Rectangle SelectorRect0 => new Rectangle((int)this.Position.X - 150, (int)this.Position.Y + 75, 130, 85);
-		protected Rectangle SelectorRect1 => new Rectangle((int)this.Position.X + 20, (int)this.Position.Y + 75, 130, 85);
+		protected Rectangle SelectorRect0 => new Rectangle((int)this.Position.X - 145, (int)this.Position.Y + 80, 120, 80);
+		protected Rectangle SelectorRect1 => new Rectangle((int)this.Position.X + 25, (int)this.Position.Y + 80, 120, 80);
 		protected int Timout = 10000;
 		protected GameTimeSpan TimoutTimer = new GameTimeSpan();
 		protected readonly VirtualInputButtons Input = new VirtualInputButtons();
@@ -47,7 +47,7 @@ namespace Snake
 						Depth = -int.MaxValue
 					};
 					Engine.SpawnInstance(this.Selector);
-					var rect = this.SelectorRect1;
+					var rect = this.SelectorRect0;
 					this.Selector.Move(rect.X, rect.Y, rect.Width, rect.Height, 0, Tween.LinearTween);
 				}
 
@@ -67,11 +67,12 @@ namespace Snake
 				}
 
 				if (this.Input.ButtonSelect.IsPressed()) {
-					SFXPlayer.Play(AvailableSounds.navsingle);
-					if (this.SelectorIndex == 0)
+					if (this.SelectorIndex == 0) {
+						SFXPlayer.Play(AvailableSounds.navsingle);
 						this.Destroy();
-					else
+					} else {
 						this.DoUpgrade();
+					}
 				}
 			}
 
