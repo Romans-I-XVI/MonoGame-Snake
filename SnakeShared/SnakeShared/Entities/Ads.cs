@@ -48,7 +48,7 @@ namespace Snake
 				int current_time = (int)this.AdTimer.TotalMilliseconds + this._saved_ad_time;
 				this.SaveCurrentAdTime(current_time);
 				Debug.WriteLine("Ads::Check() - current_time = " + current_time + " _ad_interval = " + this._ad_interval);
-				if (current_time >= 0) {
+				if (current_time >= this._ad_interval) {
 					this.onShowBegin();
 					this.Show();
 				}
@@ -94,6 +94,7 @@ namespace Snake
 		protected int LoadSavedAdTime() {
 			string loaded_ad_time = SaveDataHandler.LoadData(Ads.AdTimeSavePath);
 			if (loaded_ad_time != null) {
+				Debug.WriteLine("Ads::LoadSavedAdTime() - loaded_ad_time = " + loaded_ad_time);
 				return int.Parse(loaded_ad_time);
 			}
 
@@ -112,7 +113,7 @@ namespace Snake
 				var data = JsonConvert.DeserializeObject<Dictionary<string, int>>(res);
 				if (data.ContainsKey(game_name))
 					this._ad_interval = data[game_name];
-				Debug.WriteLine("Fetched Ad Interval: " + this._ad_interval);
+				Debug.WriteLine("Ads::FetchAdInterval() - ad_interval = " + this._ad_interval);
 			} catch {
 				this._ad_interval = default_interval;
 			}

@@ -184,8 +184,7 @@ namespace Snake
 				this.NoAdsFoundTimer.Mark();
 				this.State = AdState.NoAdsFound;
 				Action exec = () => { this.Finish(); };
-				var timed_execution = new TimedExecution(2100, exec, true);
-				timed_execution.IsPauseable = false;
+				Engine.SpawnInstance(new TimedExecution(2100, exec, true, false));
 			} else {
 				this.Finish();
 			}
