@@ -17,16 +17,6 @@ namespace Snake.Rooms
 #if XBOX_LIVE
 			Engine.SpawnInstance<XboxLiveIndicator>();
 #endif
-
-#if ADS
-#if ANDROID
-#if AMAZON
-			if (previous_room is RoomInit) {
-				Engine.SpawnInstance<AmazonUpgrade>();
-			}
-#endif
-#endif
-#endif
 		}
 
 		public override void onSwitchAway(Room next_room) {}

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Snake.Entities.UI;
+using Snake.Rooms;
 
 namespace Snake
 {
@@ -23,6 +24,7 @@ namespace Snake
 		protected readonly VirtualInputButtons Input = new VirtualInputButtons();
 
 		protected Upgrade() {
+			this.IsPersistent = true;
 			Engine.SetInputLayer(InputLayer.Two);
 			this.Input.ButtonUp.InputLayer = InputLayer.Two;
 			this.Input.ButtonDown.InputLayer = InputLayer.Two;
@@ -38,6 +40,8 @@ namespace Snake
 
 		public override void onUpdate(float dt) {
 			base.onUpdate(dt);
+			if (!(Engine.Room is RoomMain))
+				return;
 
 			if (Upgrade.IsUpgraded) {
 				this.Destroy();
@@ -82,11 +86,17 @@ namespace Snake
 
 		public override void onDraw(SpriteBatch sprite_batch) {
 			base.onDraw(sprite_batch);
+			if (!(Engine.Room is RoomMain))
+				return;
+
 			if (!Upgrade.IsUpgraded) {
 				RectangleDrawer.Draw(sprite_batch, new Rectangle(0, 0, Engine.Game.CanvasWidth, Engine.Game.CanvasHeight), Color.Black * (216 / 255f));
-				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Please Wait", this.Position, Color.White * 0.25f, draw_from: DrawFrom.Center);
 
-				if (!this.FetchingIsUpgraded) {
+				if (this.FetchingIsUpgraded) {
+					sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Please Wait", this.Position, new Color(0xC9, 0XC9, 0XC9), scale: 1, draw_from: DrawFrom.BottomCenter);
+					sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Checking  Upgrade  Status", this.Position, new Color(0xC9, 0XC9, 0XC9), scale: 0.5f, draw_from: DrawFrom.TopCenter);
+				}
+				else {
 					var texture = ContentHolder.Get(AvailableTextures.upgrade);
 					var pos = this.Position - new Vector2(texture.Width / 2f, texture.Height / 2f);
 					sprite_batch.Draw(texture, pos, Color.White);
