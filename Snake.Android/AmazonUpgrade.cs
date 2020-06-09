@@ -59,6 +59,7 @@ namespace Snake
 			var reset_input = new ResetInput();
 			reset_input.Reset = true;
 			this.amazonIapV2.GetPurchaseUpdates(reset_input);
+			this.FetchingIsUpgraded = true;
 		}
 
 		private void PurchaseResponseCallback(PurchaseResponse event_name) {
@@ -80,7 +81,8 @@ namespace Snake
 				bool found_active_purchase = false;
 				foreach (var item in event_name.Receipts)
 					if (item.Sku == AmazonUpgrade.SKU) {
-						if (item.CancelDate == 0) found_active_purchase = true;
+						if (item.CancelDate == 0)
+							found_active_purchase = true;
 						this.NotifyFullfillment(item, true);
 					} else {
 						this.NotifyFullfillment(item, false);
@@ -90,6 +92,7 @@ namespace Snake
 			} else {
 				Upgrade.IsUpgraded = false;
 			}
+			this.FetchingIsUpgraded = false;
 		}
 
 		private void NotifyFullfillment(PurchaseReceipt receipt, bool fulfilled) {
