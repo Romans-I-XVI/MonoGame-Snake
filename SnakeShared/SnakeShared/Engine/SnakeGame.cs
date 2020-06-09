@@ -75,6 +75,14 @@ namespace Snake
 			Engine.SpawnInstance(new DebuggerWithTerminal(ContentHolder.Get(AvailableFonts.retro_computer)));
 #endif
 
+#if ADS
+#if ANDROID
+#if AMAZON
+			Engine.SpawnInstance<AndroidAds>();
+#endif
+#endif
+#endif
+
 #if XBOX_LIVE
 			XboxLiveObject.SignOutCompleted += XboxLiveStatsManager.OnSignOutCompleted;
 			XboxLiveObject.SignInCompleted += XboxLiveStatsManager.OnSignInCompleted;

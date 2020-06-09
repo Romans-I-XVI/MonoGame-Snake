@@ -151,6 +151,7 @@ namespace Snake
 
 				this._adUrl = this._adUrl.Replace("ADS_LIMIT_TRACKING", this.GetDoNotTrack().ToString());
 				this._adUrl = this._adUrl.Replace("ADS_TRACKING_ID", this.GetAdvertiserID());
+				System.Diagnostics.Debug.WriteLine("Set Ad Url: " + this._adUrl);
 			} catch {
 				this._adUrl = null;
 			}

@@ -33,6 +33,7 @@ namespace Snake
 		protected int _saved_ad_time;
 
 		protected Ads(string game_name) {
+			this.Depth = -int.MaxValue;
 			this.State = AdState.Done;
 			this.IsPersistent = true;
 			this.IsPauseable = false;
@@ -47,7 +48,7 @@ namespace Snake
 				int current_time = (int)this.AdTimer.TotalMilliseconds + this._saved_ad_time;
 				this.SaveCurrentAdTime(current_time);
 				Debug.WriteLine("Ads::Check() - current_time = " + current_time + " _ad_interval = " + this._ad_interval);
-				if (current_time >= this._ad_interval) {
+				if (current_time >= 0) {
 					this.onShowBegin();
 					this.Show();
 				}
@@ -77,7 +78,7 @@ namespace Snake
 
 				var splash_texture = ContentHolder.Get(AvailableTextures.splash_ad_buffer);
 				var splash_position = new Vector2(Engine.Game.CanvasWidth / 2 - splash_texture.Width / 2, 86);
-				sprite_batch.Draw(splash_texture, splash_position, layerDepth: 0.0001f);
+				sprite_batch.Draw(splash_texture, splash_position, Color.White);
 
 				string text;
 				if (this.State == AdState.Loading)
@@ -86,7 +87,7 @@ namespace Snake
 					text = "Loading Ad";
 				else
 					text = "No Ads Found";
-				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 120), new Color(0XCC, 0XCC, 0XCC), draw_from: DrawFrom.TopCenter);
+				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 60), new Color(0XCC, 0XCC, 0XCC), scale: 0.5f, draw_from: DrawFrom.TopCenter);
 			}
 		}
 
@@ -111,6 +112,7 @@ namespace Snake
 				var data = JsonConvert.DeserializeObject<Dictionary<string, int>>(res);
 				if (data.ContainsKey(game_name))
 					this._ad_interval = data[game_name];
+				Debug.WriteLine("Fetched Ad Interval: " + this._ad_interval);
 			} catch {
 				this._ad_interval = default_interval;
 			}
