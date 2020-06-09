@@ -12,109 +12,109 @@ using Newtonsoft.Json;
 
 namespace Snake
 {
-    public abstract class Ads : Entity
-    {
-        public enum AdState
-        {
-            Done,
-            Loading,
-            Playing,
-            NoAdsFound
-        }
+	public abstract class Ads : Entity
+	{
+		public enum AdState
+		{
+			Done,
+			Loading,
+			Playing,
+			NoAdsFound
+		}
 
-        public readonly GameTimeSpan AdTimer = new GameTimeSpan();
-        public readonly GameTimeSpan NoAdsFoundTimer = new GameTimeSpan();
-        public string GameName { get; protected set; }
-        public AdState State { get; protected set; }
-        public abstract string AdUrl { get; }
+		public readonly GameTimeSpan AdTimer = new GameTimeSpan();
+		public readonly GameTimeSpan NoAdsFoundTimer = new GameTimeSpan();
+		public string GameName { get; protected set; }
+		public AdState State { get; protected set; }
+		public abstract string AdUrl { get; }
 
-        protected const string AdTimeSavePath = "ad_timer.txt";
-        protected int _ad_interval = 300000;
-        protected int _saved_ad_time;
+		protected const string AdTimeSavePath = "ad_timer.txt";
+		protected int _ad_interval = 300000;
+		protected int _saved_ad_time;
 
-        protected Ads(string game_name) {
-            this.State = AdState.Done;
-            this.IsPersistent = true;
-            this.IsPauseable = false;
-            this.GameName = game_name;
+		protected Ads(string game_name) {
+			this.State = AdState.Done;
+			this.IsPersistent = true;
+			this.IsPauseable = false;
+			this.GameName = game_name;
 
-            this.FetchAdInterval("snake");
-            this._saved_ad_time = this.LoadSavedAdTime();
-        }
+			this.FetchAdInterval("snake");
+			this._saved_ad_time = this.LoadSavedAdTime();
+		}
 
-        public void Check() {
-            if (!Upgrade.IsUpgraded) {
-                int current_time = (int)this.AdTimer.TotalMilliseconds + this._saved_ad_time;
-                this.SaveCurrentAdTime(current_time);
-                Debug.WriteLine("Ads::Check() - current_time = " + current_time + " _ad_interval = " + this._ad_interval);
-                if (current_time >= this._ad_interval) {
-                    this.onShowBegin();
-                    this.Show();
-                }
-            }
-        }
+		public void Check() {
+			if (!Upgrade.IsUpgraded) {
+				int current_time = (int)this.AdTimer.TotalMilliseconds + this._saved_ad_time;
+				this.SaveCurrentAdTime(current_time);
+				Debug.WriteLine("Ads::Check() - current_time = " + current_time + " _ad_interval = " + this._ad_interval);
+				if (current_time >= this._ad_interval) {
+					this.onShowBegin();
+					this.Show();
+				}
+			}
+		}
 
-        public abstract void Show();
+		public abstract void Show();
 
-        public virtual void onShowBegin() {
-            Engine.Pause();
-            Utilities.Try(() => MediaPlayer.Pause());
-        }
+		public virtual void onShowBegin() {
+			Engine.Pause();
+			Utilities.Try(() => MediaPlayer.Pause());
+		}
 
-        public virtual void onShowEnd() {
-            Engine.Resume();
-            Utilities.Try(() => MediaPlayer.Resume());
-            this._saved_ad_time = 0;
-            this.SaveCurrentAdTime(0);
-            this.AdTimer.Mark();
-        }
+		public virtual void onShowEnd() {
+			Engine.Resume();
+			Utilities.Try(() => MediaPlayer.Resume());
+			this._saved_ad_time = 0;
+			this.SaveCurrentAdTime(0);
+			this.AdTimer.Mark();
+		}
 
-        public override void onDraw(SpriteBatch sprite_batch) {
-            base.onDraw(sprite_batch);
-            if (this.State == AdState.Loading || this.State == AdState.Playing || this.State == AdState.NoAdsFound) {
-                var rect = new Rectangle(0, 0, Engine.Game.CanvasWidth, Engine.Game.CanvasHeight);
-                RectangleDrawer.Draw(sprite_batch, rect, new Color(0X04, 0X04, 0X04), layerDepth: 0.001f);
+		public override void onDraw(SpriteBatch sprite_batch) {
+			base.onDraw(sprite_batch);
+			if (this.State == AdState.Loading || this.State == AdState.Playing || this.State == AdState.NoAdsFound) {
+				var rect = new Rectangle(0, 0, Engine.Game.CanvasWidth, Engine.Game.CanvasHeight);
+				RectangleDrawer.Draw(sprite_batch, rect, new Color(0X04, 0X04, 0X04), layerDepth: 0.001f);
 
-                var splash_texture = ContentHolder.Get(AvailableTextures.splash_ad_buffer);
-                var splash_position = new Vector2(Engine.Game.CanvasWidth / 2 - splash_texture.Width / 2, 86);
-                sprite_batch.Draw(splash_texture, splash_position, layerDepth: 0.0001f);
+				var splash_texture = ContentHolder.Get(AvailableTextures.splash_ad_buffer);
+				var splash_position = new Vector2(Engine.Game.CanvasWidth / 2 - splash_texture.Width / 2, 86);
+				sprite_batch.Draw(splash_texture, splash_position, layerDepth: 0.0001f);
 
-                string text;
-                if (this.State == AdState.Loading)
-                    text = "Fetching Ad Data...";
-                else if (this.State == AdState.Playing)
-                    text = "Loading Ad";
-                else
-                    text = "No Ads Found";
-                sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 120), new Color(0XCC, 0XCC, 0XCC), draw_from: DrawFrom.TopCenter);
-            }
-        }
+				string text;
+				if (this.State == AdState.Loading)
+					text = "Fetching Ad Data...";
+				else if (this.State == AdState.Playing)
+					text = "Loading Ad";
+				else
+					text = "No Ads Found";
+				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 120), new Color(0XCC, 0XCC, 0XCC), draw_from: DrawFrom.TopCenter);
+			}
+		}
 
-        protected int LoadSavedAdTime() {
-            string loaded_ad_time = SaveDataHandler.LoadData(Ads.AdTimeSavePath);
-            if (loaded_ad_time != null) {
-                return int.Parse(loaded_ad_time);
-            }
+		protected int LoadSavedAdTime() {
+			string loaded_ad_time = SaveDataHandler.LoadData(Ads.AdTimeSavePath);
+			if (loaded_ad_time != null) {
+				return int.Parse(loaded_ad_time);
+			}
 
-            this.SaveCurrentAdTime(0);
-            return 0;
-        }
+			this.SaveCurrentAdTime(0);
+			return 0;
+		}
 
-        protected void SaveCurrentAdTime(int time) {
-            SaveDataHandler.SaveData(time.ToString(), Ads.AdTimeSavePath);
-        }
+		protected void SaveCurrentAdTime(int time) {
+			SaveDataHandler.SaveData(time.ToString(), Ads.AdTimeSavePath);
+		}
 
-        protected async void FetchAdInterval(string game_name, int default_interval = 300000) {
-            try {
-                var http_client = new HttpClient();
-                string res = await http_client.GetStringAsync("http://romansixvigaming.com/ads/firetv_ad_intervals.json");
-                var data = JsonConvert.DeserializeObject<Dictionary<string, int>>(res);
-                if (data.ContainsKey(game_name))
-                    this._ad_interval = data[game_name];
-            } catch {
-                this._ad_interval = default_interval;
-            }
-        }
-    }
+		protected async void FetchAdInterval(string game_name, int default_interval = 300000) {
+			try {
+				var http_client = new HttpClient();
+				string res = await http_client.GetStringAsync("http://romansixvigaming.com/ads/firetv_ad_intervals.json");
+				var data = JsonConvert.DeserializeObject<Dictionary<string, int>>(res);
+				if (data.ContainsKey(game_name))
+					this._ad_interval = data[game_name];
+			} catch {
+				this._ad_interval = default_interval;
+			}
+		}
+	}
 }
 #endif
