@@ -6,6 +6,10 @@ namespace Snake
 	public enum AvailableTextures
 	{
 		splash,
+#if ADS
+		splash_ad_buffer,
+		upgrade,
+#endif
 		portal_0,
 		portal_1,
 		theme_0_background,

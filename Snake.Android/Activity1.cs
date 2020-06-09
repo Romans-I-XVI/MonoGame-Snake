@@ -31,7 +31,16 @@ namespace Snake
 			var game_view = (View)g.Services.GetService(typeof(View));
 			g.ExitEvent += () => this.MoveTaskToBack(true);
 
+#if ADS
+			var layout = new FrameLayout(this);
+			layout.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+			layout.AddView(game_view);
+			SetContentView(layout);
+			AndroidAds.Context = this;
+			AndroidAds.ViewGroup = layout;
+#else
 			this.SetContentView(game_view);
+#endif
 
 			g.Run();
 		}
@@ -42,7 +51,23 @@ namespace Snake
 			base.OnWindowFocusChanged(has_focus);
 		}
 
-		protected void MakeFullScreen() {
+#if ADS
+		protected override void OnResume()
+		{
+			if (AndroidAds.AdsManager != null)
+				AndroidAds.AdsManager.Resume();
+			base.OnResume();
+		}
+
+		protected override void OnPause()
+		{
+			if (AndroidAds.AdsManager != null)
+				AndroidAds.AdsManager.Pause();
+			base.OnPause();
+		}
+#endif
+
+		protected void MakeFullScreen()	{
 			var ui_options =
 				SystemUiFlags.HideNavigation |
 				SystemUiFlags.LayoutFullscreen |
