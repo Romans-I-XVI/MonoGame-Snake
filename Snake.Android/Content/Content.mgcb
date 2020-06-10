@@ -86,18 +86,6 @@
 /processorParam:TextureFormat=Color
 /build:../../SnakeContent/textures/splash_ad_buffer.png;textures/splash_ad_buffer.png
 
-#begin ../../SnakeContent/textures/upgrade.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../SnakeContent/textures/upgrade.png;textures/upgrade.png
-
 #begin ../../SnakeContent/textures/portal_0.png
 /importer:TextureImporter
 /processor:TextureProcessor

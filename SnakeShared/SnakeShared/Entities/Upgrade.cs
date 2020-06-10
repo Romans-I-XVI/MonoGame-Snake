@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Snake.Entities.UI;
 using Snake.Rooms;
+using Microsoft.Xna.Framework.Input;
+using Snake.Entities;
 
 namespace Snake
 {
@@ -21,19 +23,13 @@ namespace Snake
 		protected Rectangle SelectorRect1 => new Rectangle((int)this.Position.X + 25, (int)this.Position.Y + 80, 120, 80);
 		protected int Timout = 10000;
 		protected GameTimeSpan TimoutTimer = new GameTimeSpan();
-		protected readonly VirtualInputButtons Input = new VirtualInputButtons();
+		protected readonly VirtualButton UpgradeButton = new VirtualButton();
 
 		protected Upgrade() {
 			this.IsPersistent = true;
-			Engine.SetInputLayer(InputLayer.Two);
-			this.Input.ButtonUp.InputLayer = InputLayer.Two;
-			this.Input.ButtonDown.InputLayer = InputLayer.Two;
-			this.Input.ButtonLeft.InputLayer = InputLayer.Two;
-			this.Input.ButtonRight.InputLayer = InputLayer.Two;
-			this.Input.ButtonSelect.InputLayer = InputLayer.Two;
 			this.Depth = -int.MaxValue + 1;
-			this.Position.X = Engine.Game.CanvasWidth / 2f;
-			this.Position.Y = Engine.Game.CanvasHeight / 2f;
+			this.Position = new Vector2(52 + Wall.Size / 2, 30 + Wall.Size / 2);
+			this.UpgradeButton.AddKey(Keys.Help);
 		}
 
 		public abstract void DoUpgrade();
@@ -43,45 +39,10 @@ namespace Snake
 			if (!(Engine.Room is RoomMain))
 				return;
 
-			if (Upgrade.IsUpgraded) {
+			if (Upgrade.IsUpgraded)
 				this.Destroy();
-			} else if (!this.FetchingIsUpgraded) {
-				if (this.Selector == null) {
-					this.Selector = new Selector {
-						Depth = -int.MaxValue
-					};
-					Engine.SpawnInstance(this.Selector);
-					var rect = this.SelectorRect0;
-					this.Selector.Move(rect.X, rect.Y, rect.Width, rect.Height, 0, Tween.LinearTween);
-				}
-
-				if (this.Input.ButtonLeft.IsPressed() && this.SelectorIndex > 0) {
-					SFXPlayer.Play(AvailableSounds.navsingle);
-					var rect = this.SelectorRect0;
-					this.Selector.Move(rect.X, rect.Y, rect.Width, rect.Height, 200, Tween.SquareEaseOut);
-					this.SelectorIndex--;
-				}
-
-
-				if (this.Input.ButtonRight.IsPressed() && this.SelectorIndex < 1) {
-					SFXPlayer.Play(AvailableSounds.navsingle);
-					var rect = this.SelectorRect1;
-					this.Selector.Move(rect.X, rect.Y, rect.Width, rect.Height, 200, Tween.SquareEaseOut);
-					this.SelectorIndex++;
-				}
-
-				if (this.Input.ButtonSelect.IsPressed()) {
-					if (this.SelectorIndex == 0) {
-						SFXPlayer.Play(AvailableSounds.navsingle);
-						this.Destroy();
-					} else {
-						this.DoUpgrade();
-					}
-				}
-			}
-
-			if (this.FetchingIsUpgraded && this.TimoutTimer.TotalMilliseconds > this.Timout)
-				this.Destroy();
+			else if (!this.FetchingIsUpgraded && this.UpgradeButton.IsPressed())
+				this.DoUpgrade();
 		}
 
 		public override void onDraw(SpriteBatch sprite_batch) {
@@ -89,27 +50,52 @@ namespace Snake
 			if (!(Engine.Room is RoomMain))
 				return;
 
-			if (!Upgrade.IsUpgraded) {
-				RectangleDrawer.Draw(sprite_batch, new Rectangle(0, 0, Engine.Game.CanvasWidth, Engine.Game.CanvasHeight), Color.Black * (216 / 255f));
+			if (!Upgrade.IsUpgraded && !this.FetchingIsUpgraded) {
+				if (Settings.CurrentTheme == 6 || Settings.CurrentTheme == 7) {
+					Color wall_color;
+					if (Settings.CurrentTheme == 6)
+						wall_color = new Color(0xdf, 0x5a, 0x1f);
+					else
+						wall_color = new Color(0x84, 0xb0, 0x4e);
+					RectangleDrawer.Draw(sprite_batch, this.Position.X - Wall.Size / 2f, this.Position.Y - Wall.Size / 2f, Wall.Size, Wall.Size, wall_color);
+				}
 
-				if (this.FetchingIsUpgraded) {
-					sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Please Wait", this.Position, new Color(0xC9, 0XC9, 0XC9), scale: 1, draw_from: DrawFrom.BottomCenter);
-					sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Checking  Upgrade  Status", this.Position, new Color(0xC9, 0XC9, 0XC9), scale: 0.5f, draw_from: DrawFrom.TopCenter);
-				}
-				else {
-					var texture = ContentHolder.Get(AvailableTextures.upgrade);
-					var pos = this.Position - new Vector2(texture.Width / 2f, texture.Height / 2f);
-					sprite_batch.Draw(texture, pos, Color.White);
-				}
+				var background_color = Color.White;
+				if (Settings.CurrentTheme < this.BackgroundColors.Length)
+					background_color = this.BackgroundColors[Settings.CurrentTheme];
+				RectangleDrawer.Draw(sprite_batch, this.Position.X - Wall.Size / 2f + 4, this.Position.Y - Wall.Size / 2f + 4, Wall.Size - 8, Wall.Size - 8, background_color);
+
+				var text_color = Color.Black;
+				if (Settings.CurrentTheme < this.FoodColors.Length)
+					text_color = this.FoodColors[Settings.CurrentTheme];
+				for (int i = 0; i < 3; i++) RectangleDrawer.Draw(sprite_batch, this.Position.X - 9, this.Position.Y - 1.5f - 6 + 6 * i, 18, 3, text_color);
+				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Upgrade", this.Position + new Vector2(Wall.Size / 2 + 3, 0), text_color, scale: 0.3125f, draw_from: DrawFrom.LeftCenter);
 			}
 		}
 
-		public override void onDestroy() {
-			base.onDestroy();
-			if (this.Selector != null)
-				this.Selector.IsExpired = true;
-			Engine.SetInputLayer(InputLayer.One);
-		}
+		private readonly Color[] BackgroundColors = {
+			new Color(0xe1, 0xfc, 0xd3),
+			new Color(0x7f, 0xd0, 0xd6),
+			new Color(0xc5, 0xff, 0xfd),
+			new Color(0x26, 0x26, 0x26),
+			new Color(0x3a, 0x41, 0x44),
+			new Color(0xff, 0xe7, 0xbd),
+			new Color(0xe9, 0xb8, 0x64),
+			new Color(0xd7, 0xff, 0xa6),
+			new Color(0x81, 0xc6, 0xdd)
+		};
+
+		private readonly Color[] FoodColors = {
+			new Color(0x37, 0x53, 0x2a),
+			new Color(0x01, 0x6f, 0x82),
+			new Color(0xfe, 0x95, 0x00),
+			new Color(0xe9, 0x00, 0xfe),
+			new Color(0xff, 0xff, 0xff),
+			new Color(0xbf, 0x80, 0x4f),
+			new Color(0x2e, 0x06, 0x04),
+			new Color(0x1a, 0x22, 0x0f),
+			new Color(0xe4, 0x87, 0x43)
+		};
 	}
 }
 #endif

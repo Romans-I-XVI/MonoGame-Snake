@@ -34,13 +34,6 @@ namespace Snake
 			this.CheckUpgrade();
 		}
 
-		public override void onKeyDown(KeyboardEventArgs e) {
-			base.onKeyDown(e);
-			if (e.Key == Keys.Help)
-				if (!Upgrade.IsUpgraded)
-					this.DoUpgrade();
-		}
-
 		public override void DoUpgrade() {
 			var sku = new SkuInput {
 				Sku = AmazonUpgrade.SKU
