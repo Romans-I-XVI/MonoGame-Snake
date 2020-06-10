@@ -24,7 +24,8 @@ namespace Snake
 
 		public readonly GameTimeSpan AdTimer = new GameTimeSpan();
 		public readonly GameTimeSpan NoAdsFoundTimer = new GameTimeSpan();
-		public string GameName { get; protected set; }
+		public readonly string GameName;
+		public readonly string GameNameInternal;
 		public AdState State { get; protected set; }
 		public abstract string AdUrl { get; }
 
@@ -32,14 +33,15 @@ namespace Snake
 		protected int _ad_interval = 300000;
 		protected int _saved_ad_time;
 
-		protected Ads(string game_name) {
+		protected Ads(string game_name, string game_name_internal) {
 			this.Depth = -int.MaxValue;
 			this.State = AdState.Done;
 			this.IsPersistent = true;
 			this.IsPauseable = false;
 			this.GameName = game_name;
+			this.GameNameInternal = game_name_internal;
 
-			this.FetchAdInterval("snake");
+			this.FetchAdInterval(game_name_internal);
 			this._saved_ad_time = this.LoadSavedAdTime();
 		}
 

@@ -50,25 +50,29 @@ namespace Snake
 		private const string CustomGUIDSavePath = "CustomAndroidGUID.txt";
 
 		private string _adUrl;
-		public override string AdUrl {
-			get {
-				if (string.IsNullOrEmpty(this._adUrl))
-					this.GetAdUrl("snake");
-				return this._adUrl;
-			}
-		}
+		public override string AdUrl => this._adUrl;
 
+		private GameTimeSpan GetUrlTimer = new GameTimeSpan();
+		private float GetUrlRetryDelay = 5000;
 		private ImaSdkFactory mSdkFactory;
 		private IAdDisplayContainer mAdDisplayContainer;
 		private AdEventListener mAdEventListener;
 		private bool IsAdPaused = false;
 
-		public AndroidAds() : base("Snake") {
+		public AndroidAds() : base("Snake", "snake") {
 			this.mAdEventListener = new AdEventListener(this);
 			this.mSdkFactory = ImaSdkFactory.Instance;
 			this.mAdDisplayContainer = this.mSdkFactory.CreateAdDisplayContainer();
 			this.mAdDisplayContainer.AdContainer = AndroidAds.ViewGroup;
-			Engine.SpawnInstance(new TimedExecution(15000, () => { this.GetAdUrl("snake"); }, true, false));
+		}
+
+		public override void onUpdate(float dt)	{
+			base.onUpdate(dt);
+			if (string.IsNullOrEmpty(this.AdUrl) && this.GetUrlTimer.TotalMilliseconds >= this.GetUrlRetryDelay)
+			{
+				this.GetAdUrl(this.GameNameInternal);
+				this.GetUrlTimer.Mark();
+			}
 		}
 
 		public override void onButtonDown(GamePadEventArgs e) {
