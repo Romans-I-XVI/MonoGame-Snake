@@ -79,7 +79,7 @@ namespace Snake
 				RectangleDrawer.Draw(sprite_batch, rect, new Color(0X04, 0X04, 0X04), layerDepth: 0.001f);
 
 				var splash_texture = ContentHolder.Get(AvailableTextures.splash_ad_buffer);
-				var splash_position = new Vector2(Engine.Game.CanvasWidth / 2 - splash_texture.Width / 2, 86);
+				var splash_position = new Vector2(Engine.Game.CanvasWidth / 2 - splash_texture.Width / 2, 57);
 				sprite_batch.Draw(splash_texture, splash_position, Color.White);
 
 				string text;
@@ -89,7 +89,7 @@ namespace Snake
 					text = "Loading Ad";
 				else
 					text = "No Ads Found";
-				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 60), new Color(0XCC, 0XCC, 0XCC), scale: 0.5f, draw_from: DrawFrom.TopCenter);
+				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 80), new Color(0XCC, 0XCC, 0XCC), scale: 0.5f, draw_from: DrawFrom.TopCenter);
 			}
 		}
 
