@@ -22,7 +22,6 @@ namespace Snake
 	public class AmazonUpgrade : Upgrade
 	{
 		private const string SKU = "com.romansixvigaming.snake.noads";
-		private bool CheckedWithServer = false;
 		private IAmazonIapV2 amazonIapV2;
 
 		public AmazonUpgrade() {
@@ -42,13 +41,6 @@ namespace Snake
 		}
 
 		private void CheckUpgrade() {
-			if (!Upgrade.IsUpgraded && !this.CheckedWithServer) {
-				this.CheckServerForUpgrade();
-				this.CheckedWithServer = true;
-			}
-		}
-
-		private void CheckServerForUpgrade() {
 			var reset_input = new ResetInput();
 			reset_input.Reset = true;
 			this.amazonIapV2.GetPurchaseUpdates(reset_input);
