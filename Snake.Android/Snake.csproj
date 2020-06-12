@@ -87,7 +87,7 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup Condition="$(DefineConstants.Contains('AMAZON'))">
-    <Reference Include="AmazonIapV2Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AmazonIapV2Android">
       <HintPath>.\AmazonIapV2Android.dll</HintPath>
     </Reference>
   </ItemGroup>
