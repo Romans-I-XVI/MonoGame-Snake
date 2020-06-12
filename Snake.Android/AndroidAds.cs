@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Snake.Entities;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Snake
 {
@@ -145,6 +146,16 @@ namespace Snake
 
 			return id;
 		}
+		private async Task<string> getPublicIp()
+		{
+			try	{
+				var http_client = new System.Net.Http.HttpClient();
+				string res = await http_client.GetStringAsync("http://api.ipify.org");
+				return res;
+			} catch	{
+				return "";
+			}
+		}
 
 		private async void GetAdUrl(string game_name) {
 			try {
@@ -153,6 +164,12 @@ namespace Snake
 				var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(res);
 				if (data.ContainsKey(game_name)) this._adUrl = data[game_name];
 
+				if (this._adUrl.Contains("ADS_EXTERNAL_IP")) {
+					string external_ip = await this.getPublicIp();
+					this._adUrl = this._adUrl.Replace("ADS_EXTERNAL_IP", external_ip);
+				}
+				this._adUrl = this._adUrl.Replace("ADS_DISPLAY_WIDTH", this.mAdDisplayContainer.AdContainer.Width.ToString());
+				this._adUrl = this._adUrl.Replace("ADS_DISPLAY_HEIGHT", this.mAdDisplayContainer.AdContainer.Height.ToString());
 				this._adUrl = this._adUrl.Replace("ADS_LIMIT_TRACKING", this.GetDoNotTrack().ToString());
 				this._adUrl = this._adUrl.Replace("ADS_TRACKING_ID", this.GetAdvertiserID());
 				System.Diagnostics.Debug.WriteLine("Set Ad Url: " + this._adUrl);
