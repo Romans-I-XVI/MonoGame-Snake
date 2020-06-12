@@ -68,7 +68,8 @@ namespace Snake
 				var text_color = Color.Black;
 				if (Settings.CurrentTheme < this.FoodColors.Length)
 					text_color = this.FoodColors[Settings.CurrentTheme];
-				for (int i = 0; i < 3; i++) RectangleDrawer.Draw(sprite_batch, this.Position.X - 9, this.Position.Y - 1.5f - 6 + 6 * i, 18, 3, text_color);
+				for (int i = 0; i < 3; i++)
+					RectangleDrawer.Draw(sprite_batch, this.Position.X - 8, this.Position.Y - 1.5f - 5 + 5 * i, 16, 3, text_color);
 				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), "Upgrade", this.Position + new Vector2(Wall.Size / 2 + 3, 0), text_color, scale: 0.3125f, draw_from: DrawFrom.LeftCenter);
 			}
 		}
