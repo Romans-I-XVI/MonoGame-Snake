@@ -146,8 +146,7 @@ namespace Snake
 
 			return id;
 		}
-		private async Task<string> getPublicIp()
-		{
+		private async Task<string> GetPublicIp() {
 			try	{
 				var http_client = new System.Net.Http.HttpClient();
 				string res = await http_client.GetStringAsync("http://api.ipify.org");
@@ -155,6 +154,10 @@ namespace Snake
 			} catch	{
 				return "";
 			}
+		}
+
+		private string GetUserAgent() {
+			return Android.Webkit.WebSettings.GetDefaultUserAgent(Application.Context);
 		}
 
 		private async void GetAdUrl(string game_name) {
@@ -165,9 +168,10 @@ namespace Snake
 				if (data.ContainsKey(game_name)) this._adUrl = data[game_name];
 
 				if (this._adUrl.Contains("ADS_EXTERNAL_IP")) {
-					string external_ip = await this.getPublicIp();
+					string external_ip = await this.GetPublicIp();
 					this._adUrl = this._adUrl.Replace("ADS_EXTERNAL_IP", external_ip);
 				}
+				this._adUrl = this._adUrl.Replace("ADS_USER_AGENT", System.Net.WebUtility.UrlEncode(this.GetUserAgent()));
 				this._adUrl = this._adUrl.Replace("ADS_DISPLAY_WIDTH", this.mAdDisplayContainer.AdContainer.Width.ToString());
 				this._adUrl = this._adUrl.Replace("ADS_DISPLAY_HEIGHT", this.mAdDisplayContainer.AdContainer.Height.ToString());
 				this._adUrl = this._adUrl.Replace("ADS_LIMIT_TRACKING", this.GetDoNotTrack().ToString());
