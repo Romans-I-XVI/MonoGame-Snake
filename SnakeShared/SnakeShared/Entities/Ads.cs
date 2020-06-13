@@ -78,9 +78,12 @@ namespace Snake
 				var rect = new Rectangle(0, 0, Engine.Game.CanvasWidth, Engine.Game.CanvasHeight);
 				RectangleDrawer.Draw(sprite_batch, rect, new Color(0X04, 0X04, 0X04), layerDepth: 0.001f);
 
+				var font = ContentHolder.Get(AvailableFonts.retro_computer);
+				var font_color = new Color(0XCC, 0XCC, 0XCC);
 				var splash_texture = ContentHolder.Get(AvailableTextures.splash_ad_buffer);
 				var splash_position = new Vector2(Engine.Game.CanvasWidth / 2 - splash_texture.Width / 2, 57);
 				sprite_batch.Draw(splash_texture, splash_position, Color.White);
+				sprite_batch.DrawString(font, "Snake Will Be Right Back", splash_position + new Vector2(splash_texture.Width / 2f, 188), font_color, scale: 0.4375f, draw_from: DrawFrom.TopCenter);
 
 				string text;
 				if (this.State == AdState.Loading)
@@ -89,7 +92,7 @@ namespace Snake
 					text = "Loading Ad";
 				else
 					text = "No Ads Found";
-				sprite_batch.DrawString(ContentHolder.Get(AvailableFonts.retro_computer), text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 80), new Color(0XCC, 0XCC, 0XCC), scale: 0.5f, draw_from: DrawFrom.TopCenter);
+				sprite_batch.DrawString(font, text, new Vector2(Engine.Game.CanvasWidth / 2f, Engine.Game.CanvasHeight - 80), font_color, scale: 0.5f, draw_from: DrawFrom.TopCenter);
 			}
 		}
 
