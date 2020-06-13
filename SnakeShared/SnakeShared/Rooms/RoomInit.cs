@@ -16,6 +16,14 @@ namespace Snake.Rooms
 
 			var timer = new GameTimeSpan();
 			Action initialize = () => {
+#if ADS
+#if ANDROID
+#if AMAZON
+				Engine.SpawnInstance<AmazonUpgrade>();
+#endif
+#endif
+#endif
+
 #if XBOX_LIVE
 				// Wait for Xbox Live login to complete if attempting
 				const int xbox_live_timeout = 5000;

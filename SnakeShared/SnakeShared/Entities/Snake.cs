@@ -243,6 +243,11 @@ namespace Snake.Entities
 							Engine.ChangeRoom<RoomPlay>(new Dictionary<string, object> {
 								["start_delay"] = 1000
 							});
+
+#if ADS
+							var ad_object = Engine.GetFirstInstanceByType<Ads>();
+							ad_object?.Check();
+#endif
 						}));
 						this.Destroy();
 					}

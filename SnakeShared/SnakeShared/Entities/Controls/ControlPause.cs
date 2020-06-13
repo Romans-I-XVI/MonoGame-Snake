@@ -55,6 +55,15 @@ namespace Snake.Entities.Controls
 				return;
 #endif
 
+#if ADS
+			var ads_object = Engine.GetFirstInstanceByType<Ads>();
+			if (ads_object != null) {
+				if (ads_object.State != Ads.AdState.Done) {
+					return;
+				}
+			}
+#endif
+
 			if (!Engine.IsPaused()) {
 				Engine.Pause();
 				if (MediaPlayer.State == MediaState.Playing) {
