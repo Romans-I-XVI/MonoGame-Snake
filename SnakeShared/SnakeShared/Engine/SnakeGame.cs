@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using MonoEngine;
 using Snake.Entities;
 using Snake.Entities.Controls;
+using Snake.Enums;
 using Snake.Rooms;
 
 namespace Snake
@@ -53,6 +54,12 @@ namespace Snake
 
 		protected override void Initialize() {
 			base.Initialize();
+
+			// Setting to default values in case a previous game existed and was disposed
+			Settings.CurrentTheme = 0;
+			Settings.CurrentGameplaySpeed = GameplaySpeeds.Medium;
+			Settings.CurrentGameRoom = GameRooms.Open;
+
 #if ANDROID
 			SnakeGame.Accelerometer = new Microsoft.Devices.Sensors.Accelerometer();
             if (SnakeGame.Accelerometer.State != Microsoft.Devices.Sensors.SensorState.Ready && SnakeGame.Accelerometer.State != Microsoft.Devices.Sensors.SensorState.NotSupported)
