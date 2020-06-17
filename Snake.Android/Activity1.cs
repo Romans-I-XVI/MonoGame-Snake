@@ -105,6 +105,8 @@ namespace Snake
 
 		protected override void OnDestroy()
 		{
+			ContentHolder.Deinit();
+			SaveDataHandler.ResetCache();
 			MainActivity.Game = null;
 			base.OnDestroy();
 		}

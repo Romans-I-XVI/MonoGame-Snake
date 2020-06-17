@@ -14,7 +14,7 @@ namespace Snake
 		public delegate void dgExitEvent();
 		public event dgExitEvent ExitEvent;
 #if ANDROID
-        public static Microsoft.Devices.Sensors.Accelerometer Accelerometer = new Microsoft.Devices.Sensors.Accelerometer();
+        public static Microsoft.Devices.Sensors.Accelerometer Accelerometer;
         public static Android.OS.Vibrator Vibrator;
 #endif
 
@@ -54,6 +54,7 @@ namespace Snake
 		protected override void Initialize() {
 			base.Initialize();
 #if ANDROID
+			SnakeGame.Accelerometer = new Microsoft.Devices.Sensors.Accelerometer();
             if (SnakeGame.Accelerometer.State != Microsoft.Devices.Sensors.SensorState.Ready && SnakeGame.Accelerometer.State != Microsoft.Devices.Sensors.SensorState.NotSupported)
             {
                 SnakeGame.Accelerometer.Start();
