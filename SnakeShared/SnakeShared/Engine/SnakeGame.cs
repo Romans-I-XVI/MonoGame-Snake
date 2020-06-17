@@ -96,8 +96,13 @@ namespace Snake
 		protected override void Update(GameTime game_time) {
 			base.Update(game_time);
 
-			if (this.ExitGame)
-			{
+#if ANDROID
+			if (MainActivity.FixingSurfaceState) {
+				MainActivity.FixingSurfaceState = false;
+			}
+#endif
+
+			if (this.ExitGame) {
 				this.ExitGame = false;
 				this.ExitEvent?.Invoke();
 #if !ANDROID && !IOS && !PLAYSTATION4

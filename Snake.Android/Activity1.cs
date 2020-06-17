@@ -7,6 +7,7 @@ using Android.Widget;
 using MonoEngine;
 using System.Linq;
 using Android.Content;
+using Microsoft.Xna.Framework;
 
 namespace Snake
 {
@@ -21,15 +22,31 @@ namespace Snake
 	[IntentFilter(new[] { Intent.ActionMain }, Categories = new string[] { Intent.CategoryLauncher })]
 	public class MainActivity : Microsoft.Xna.Framework.AndroidGameActivity
 	{
+		public static bool FixingSurfaceState = false;
+		private static bool IsFirstOnResume = true;
+		private static Game Game = null;
+
 		protected override void OnCreate(Bundle bundle) {
 			base.OnCreate(bundle);
 
 			this.MakeFullScreen();
 
-			SnakeGame.Vibrator = (Vibrator)this.ApplicationContext.GetSystemService(Context.VibratorService);
-			var g = new SnakeGame();
-			var game_view = (View)g.Services.GetService(typeof(View));
-			g.ExitEvent += () => this.MoveTaskToBack(true);
+			View game_view;
+			if (MainActivity.Game == null) {
+				SnakeGame.Vibrator = (Vibrator)this.ApplicationContext.GetSystemService(Context.VibratorService);
+				var g = new SnakeGame();
+				game_view = (View)g.Services.GetService(typeof(View));
+				g.ExitEvent += () => this.MoveTaskToBack(true);
+				g.Run();
+
+				MainActivity.Game = g;
+			} else {
+				game_view = (View)MainActivity.Game.Services.GetService(typeof(View));
+				ViewGroup parent = (ViewGroup)game_view.Parent;
+				if (parent != null) {
+					parent.RemoveView(game_view);
+				}
+			}
 
 #if ADS
 			var layout = new FrameLayout(this);
@@ -42,7 +59,6 @@ namespace Snake
 			this.SetContentView(game_view);
 #endif
 
-			g.Run();
 		}
 
 		public override void OnWindowFocusChanged(bool has_focus) {
@@ -51,21 +67,44 @@ namespace Snake
 			base.OnWindowFocusChanged(has_focus);
 		}
 
-#if ADS
 		protected override void OnResume()
 		{
+#if ADS
 			if (AndroidAds.AdsManager != null)
 				AndroidAds.AdsManager.Resume();
+#endif
 			base.OnResume();
+
+			if (!MainActivity.IsFirstOnResume) {
+				MainActivity.FixingSurfaceState = true;
+				System.Threading.Tasks.Task.Run(() => {
+					while (MainActivity.FixingSurfaceState) {
+						if (MainActivity.Game != null && MainActivity.Game.GraphicsDevice != null) {
+							var game_view = (MonoGameAndroidGameView)((View)Game.Services.GetService(typeof(View)));
+							(game_view).SurfaceChanged(game_view.Holder, Android.Graphics.Format.Rgb565, Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
+						}
+						System.Threading.Thread.Sleep(10);
+					}
+				});
+			}
+
+			MainActivity.IsFirstOnResume = false;
 		}
 
 		protected override void OnPause()
 		{
+#if ADS
 			if (AndroidAds.AdsManager != null)
 				AndroidAds.AdsManager.Pause();
+#endif
 			base.OnPause();
 		}
-#endif
+
+		protected override void OnDestroy()
+		{
+			MainActivity.Game = null;
+			base.OnDestroy();
+		}
 
 		protected void MakeFullScreen()	{
 			var ui_options =
