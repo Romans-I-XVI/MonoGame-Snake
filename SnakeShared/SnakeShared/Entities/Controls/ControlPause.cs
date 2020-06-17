@@ -48,6 +48,12 @@ namespace Snake.Entities.Controls
 			this.Dispose();
 		}
 
+		public void TryPause() {
+			if (!Engine.IsPaused()) {
+				this.PauseResume();
+			}
+		}
+
 		private void PauseResume() {
 #if DEBUG
 			var debugger_with_terminal = Engine.GetFirstInstanceByType<DebuggerWithTerminal>();

@@ -93,6 +93,9 @@ namespace Snake
 
 		protected override void OnPause()
 		{
+			if (Engine.Room is Rooms.RoomPlay) {
+				Engine.GetFirstInstanceByType<Entities.Controls.ControlPause>()?.TryPause();
+			}
 #if ADS
 			if (AndroidAds.AdsManager != null)
 				AndroidAds.AdsManager.Pause();
