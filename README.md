@@ -4,6 +4,7 @@ This repository is public for convenience and for collaboration with authorized 
 First off, while I fully encourage building and tinkering with this game yourself via this repository the game is also available for purchase at the following locations. If you would like to support me and my projects your purchase, reviews, etc. on those storefronts would be very much appreciated. Thanks!
 * [Steam](https://store.steampowered.com/app/1332800) (Windows/Mac/Linux)
 * [Microsoft Store](https://www.microsoft.com/en-us/p/snake-the-game/9n5fthk1blvb) (Xbox One/Windows 10)
+* [FireTV](https://www.amazon.com/dp/B089RR8YVB)
 * [Roku](https://channelstore.roku.com/details/66795/snake)
 
 
