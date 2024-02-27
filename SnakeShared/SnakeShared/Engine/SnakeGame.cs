@@ -28,15 +28,7 @@ namespace Snake
 			this.IsMouseVisible = false;
 			this.Content.RootDirectory = "Content";
 
-#if DEBUG
-			this.Graphics.IsFullScreen = false;
-	#if NETFX_CORE
-			if (App.IsXbox())
-				this.Graphics.IsFullScreen = true;
-	#endif
-#else
 			this.Graphics.IsFullScreen = true;
-#endif
 #if !ANDROID && !IOS && !PLAYSTATION4
 			this.Graphics.HardwareModeSwitch = false;
 #endif
