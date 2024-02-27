@@ -50,6 +50,13 @@ namespace Snake
 		protected override void Initialize() {
 			base.Initialize();
 
+#if NETFX_CORE
+			// This fixes a bug with Xbox not being set to fullscreen properly
+			this.Graphics.PreferredBackBufferWidth = 1920;
+			this.Graphics.PreferredBackBufferHeight = 1080;
+			this.Graphics.ApplyChanges();
+#endif
+
 			// Setting to default values in case a previous game existed and was disposed
 			Settings.CurrentTheme = 0;
 			Settings.CurrentGameplaySpeed = GameplaySpeeds.Medium;
