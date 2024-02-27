@@ -11,6 +11,7 @@ namespace Snake
 {
 	public class SnakeGame : EngineGame
 	{
+		private const int FrameRateLimit = 360;
 		public bool ExitGame = false;
 		public delegate void dgExitEvent();
 		public event dgExitEvent ExitEvent;
@@ -50,6 +51,8 @@ namespace Snake
 			this.Window.AllowUserResizing = true;
 #endif
 			this.Window.AllowAltF4 = true;
+
+			this.SetFrameRateLimit(SnakeGame.FrameRateLimit);
 		}
 
 		protected override void Initialize() {
@@ -117,6 +120,20 @@ namespace Snake
 				this.Exit();
 #endif
 			}
+		}
+
+		public void SetFrameRateLimit(int frame_rate_limit) {
+#if NETCOREAPP
+			if (frame_rate_limit <= 0) {
+				this.IsFixedTimeStep = false;
+				this.TargetElapsedTime = TimeSpan.FromTicks(166667L); // This is the default MonoGame uses
+			} else {
+				this.IsFixedTimeStep = true;
+				this.TargetElapsedTime = TimeSpan.FromTicks((int)((1000 / (float)frame_rate_limit) * 10000));
+			}
+#else
+			this.IsFixedTimeStep = false;
+#endif
 		}
 	}
 }
