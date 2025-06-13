@@ -415,7 +415,7 @@ namespace Snake.Entities
 
 			// Turn immediately if ready, otherwise add to queue
 			if (can_change) {
-				if (this.IsReadyToChangeDirections()) {
+				if (this.QueuedInput.Count == 0 && this.IsReadyToChangeDirections()) {
 					this.ChangeDirection(direction);
 				} else {
 					this.QueuedInput.Add(direction);
