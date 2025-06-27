@@ -13,7 +13,7 @@ This is the MonoGame port of Snake which was originally released on the Roku. It
 
 #### Pre-Requisits
 * [MonoGame 3.7.1](https://community.monogame.net/t/monogame-3-7-1-release/11173)
-* [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+* [.NET SDK 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 #### Building
 ```

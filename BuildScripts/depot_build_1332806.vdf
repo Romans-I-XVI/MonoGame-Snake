@@ -8,7 +8,7 @@
 	// will be resolved relative to this root.
 	// If you don't define ContentRoot, then it will be assumed to be
 	// the location of this script file, which probably isn't what you want
-	"ContentRoot"	"../Snake/bin/Release/netcoreapp3.1/linux-x86/publish/"
+	"ContentRoot"	"../Snake/bin/Release/net8.0/linux-x86/publish/"
 
 	// Include all files recursively
 	"FileMapping"
